@@ -17,10 +17,8 @@ function Home() {
         {/* <Mentors/> */}
         <Reviews/>
         <Clients/>
-        <Batches/>
+        <Batches />
         <Placement/>
-
-       
     </section>
   )
 }

@@ -19,7 +19,15 @@ import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import { useAuth } from '../../../App';
 
 
- function BatchesCard({name,date,day,time,trainer,duration,mode,contact}) {
+ function BatchesCard({courseName,date,day,time,trainer,duration,mode,contact}) {
+
+  date=new Date(date).toLocaleDateString("en-US",{year:"numeric",
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",})
+
+
+  day =new Date(date).toLocaleDateString("en-US",{weekday:"long"})
     let {openModal}=useAuth()
   return (
     <Card sx={{}} className="card">
@@ -28,7 +36,7 @@ import { useAuth } from '../../../App';
           variant="h5"
           sx={{ mb: ".6rem" }}
           component="h5"
-          text={name}
+          text={courseName}
         />
       </Box>
       <CardContent className="card-content">
@@ -39,7 +47,7 @@ import { useAuth } from '../../../App';
           <BatchItem title="Duration" data={duration} icon={<AlarmOnIcon/>} />
           <BatchItem title="Mode" data={mode} icon={<LaptopIcon/>} />
           <BatchItem title="Trainer" data={trainer} icon={<PersonIcon/>} />
-          <BatchItem title="Contact" data={contact} icon={<CallIcon/>} />
+          {/* <BatchItem title="Contact" data={contact} icon={<CallIcon/>} /> */}
         </List>
        
       </CardContent>

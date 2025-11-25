@@ -9,7 +9,7 @@ import MentorsCard from './MentorsCard'
 function Mentors() {
     return (
         <Box className='mentors' my={5} mx={12} id="Mentors">
-        <TypoGraphyComponent variant='h3' text='Mentors' component='h3' sx={{textAlign:"center",fontWeight:"bold"}} />
+        <TypoGraphyComponent variant='h4' text='Mentors' component='h3' sx={{textAlign:"center",fontWeight:"bold"}} />
         <hr />
             <CardGrid>
                 <MentorsCard/>

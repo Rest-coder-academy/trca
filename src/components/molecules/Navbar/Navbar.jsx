@@ -20,8 +20,8 @@ import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { useAuth } from '../../../App';
 import { Link, animateScroll as scroll } from 'react-scroll';
 const drawerWidth = 240;
-// const navItems = ['Home', 'Fish', 'Stones','Plants','Food','Lights','Air Pumps','Tanks & Bowls'];
-const navItems = ['Courses',  'Reviews','Clients','Placements','Batches'];
+
+const navItems = ['Courses',  'Reviews','Clients','Batches','Placements'];
 
 
 function Navbar(props) {
@@ -75,13 +75,19 @@ function Navbar(props) {
           <Box sx={{ display: { xs: 'none', sm: 'block',marginLeft:"auto" } }}>
             {navItems.map((item) => (
               <ButtonComponent key={item} sx={{ color: '#fff', }} variant='text'>
-                  <Link to={item} smooth={true} offset={-62} activeClass='active' spy={true}>{item}</Link>
+                  <Link to={item} smooth={true} offset={-80} activeClass='active' spy={true}>{item}</Link>
                   
                 </ButtonComponent>
                 
             ))}
-             <ButtonComponent variant='contained' bgColor='bg-btn-blue' borderRadius='0px' paddingX={1.5} paddingY={.7} onBtnClick={openModal}>
-                    Apply Now
+             <ButtonComponent variant='outlined' textColor='color-dark-blue'    bgColor='bg-btn-blue' borderRadius='15px' 
+             sx={{fontSize:"11px",marginLeft:"30px","&:hover": {
+                    backgroundColor: "inherit !important",
+                      color: "inherit !important",
+              }}}     paddingX={1.3}  onBtnClick={openModal}>
+            
+                      {/* 📞 / WhatsApp: +91 98765 43210   <br /> */}
+                      Jayanagar 4th T Block, <br />  Bangalore
                 </ButtonComponent>
           </Box>
         </Toolbar>

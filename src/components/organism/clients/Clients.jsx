@@ -8,8 +8,8 @@ import ClientsCard from './ClientsCard'
 function Clients() {
     return (
         <Box className='clients' my={5} mx={12} p={2} id="Clients">
-        <TypoGraphyComponent variant='h3' text='Clients' component='h3' sx={{textAlign:"center",fontWeight:"bold"}} />
-        <TypoGraphyComponent variant='h4' text='Our Trusted Clients' component='h4' sx={{textAlign:"center",fontWeight:"bold"}} />
+        <TypoGraphyComponent variant='h4' text='Clients' component='h3' sx={{textAlign:"center",fontWeight:"bold",fontFamily:'Poppins, sans-serif'}} />
+        <TypoGraphyComponent variant='h5' text='Our Trusted Clients' component='h4' sx={{textAlign:"center",fontWeight:"bold"}} />
 
         <hr />
             <CardGrid>

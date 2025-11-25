@@ -17,17 +17,19 @@ import PersonIcon from '@mui/icons-material/Person';
 import CallIcon from '@mui/icons-material/Call';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import { useAuth } from '../../../App';
+import { formatFriendlyDate } from '../../../utils/batchDateFormatter';
 
 
- function BatchesCard({courseName,date,day,time,trainer,duration,mode,contact}) {
 
-  date=new Date(date).toLocaleDateString("en-US",{year:"numeric",
-  year: "numeric",
-  month: "numeric",
-  day: "numeric",})
+ function BatchesCard({courseName,date,time,trainer,duration,mode}) {
+
+console.log(date)
+ let batchDate=formatFriendlyDate(date);
 
 
-  day =new Date(date).toLocaleDateString("en-US",{weekday:"long"})
+
+
+ 
     let {openModal}=useAuth()
   return (
     <Card sx={{}} className="card">
@@ -41,8 +43,8 @@ import { useAuth } from '../../../App';
       </Box>
       <CardContent className="card-content">
         <List className="links">
-          <BatchItem title="Date" data={date} icon={<CalendarMonthIcon/>} />
-          <BatchItem title="Day" data={day} icon={<CalendarTodayIcon/>} />
+          <BatchItem title="Date" data={batchDate} icon={<CalendarMonthIcon/>} />
+          {/* <BatchItem title="Day" data={day} icon={<CalendarTodayIcon/>} /> */}
           <BatchItem title="Time" data={time}  icon={<AccessTimeIcon/>} />
           <BatchItem title="Duration" data={duration} icon={<AlarmOnIcon/>} />
           <BatchItem title="Mode" data={mode} icon={<LaptopIcon/>} />

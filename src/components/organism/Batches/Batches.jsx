@@ -8,7 +8,6 @@ import CardGrid from '../../molecules/Grid/CardGrid'
 import BatchesGrid from './BatchesGrid'
 import { getLatestBatches } from '../../../api/batchApi'
 import useFetch from '../../../hooks/useFetch'
-import { data } from 'react-router-dom'
 
 function Batches({limit=4}) { //?If the parent does NOT pass a limit, it will default to 5
     
@@ -24,7 +23,7 @@ function Batches({limit=4}) { //?If the parent does NOT pass a limit, it will de
 
     return (
         <Box className='batches' my={5} mx={12} id="Batches">
-        <TypoGraphyComponent variant='h3' text='Upcoming Batches' component='h3' sx={{textAlign:"center",fontWeight:"bold"}} />
+        <TypoGraphyComponent variant='h4' text='Upcoming Batches' component='h3' sx={{textAlign:"center",fontWeight:"bold"}} />
         <hr />
            
             <BatchesGrid xs={12} sm={12} md={6} lg={3}  mapdata={batches} />

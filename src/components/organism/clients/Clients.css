@@ -11,6 +11,10 @@
     height: .18rem;
     background-color: #1976d2;
 }
+.clients h3,h4
+{
+  font-family: "Tilt Neon", sans-serif!important;
+}
 .clients .MuiGrid-container
 {
     width: 100%!important;

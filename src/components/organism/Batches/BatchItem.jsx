@@ -8,7 +8,7 @@ function BatchItem({title, data,icon}) {
         <ListItemIcon>
          {icon}
         </ListItemIcon>
-        <ListItemText primary={`${title} : ${data}`} />
+        <ListItemText primary={`${title} : ${data}`} sx={{textTransform:"capitalize"}} />
       </ListItemButton>
     </ListItem>
   );

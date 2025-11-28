@@ -21,7 +21,7 @@ import { formatFriendlyDate } from '../../../utils/batchDateFormatter';
 
 
 
- function BatchesCard({courseName,date,time,trainer,duration,mode}) {
+ function BatchesCard({courseName,date,time,trainerName,duration,mode}) {
 
 console.log(date)
  let batchDate=formatFriendlyDate(date);
@@ -36,7 +36,7 @@ console.log(date)
       <Box className="course-header">
         <TypoGraphyComponent
           variant="h5"
-          sx={{ mb: ".6rem" }}
+          sx={{ mb: ".6rem",textTransform:"capitalize" }}
           component="h5"
           text={courseName}
         />
@@ -48,7 +48,7 @@ console.log(date)
           <BatchItem title="Time" data={time}  icon={<AccessTimeIcon/>} />
           <BatchItem title="Duration" data={duration} icon={<AlarmOnIcon/>} />
           <BatchItem title="Mode" data={mode} icon={<LaptopIcon/>} />
-          <BatchItem title="Trainer" data={trainer} icon={<PersonIcon/>} />
+          <BatchItem title="Trainer" data={trainerName} icon={<PersonIcon/>} />
           {/* <BatchItem title="Contact" data={contact} icon={<CallIcon/>} /> */}
         </List>
        

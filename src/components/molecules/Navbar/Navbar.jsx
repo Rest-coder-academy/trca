@@ -21,7 +21,7 @@ import { useAuth } from '../../../App';
 import { Link, animateScroll as scroll } from 'react-scroll';
 const drawerWidth = 240;
 
-const navItems = ['Courses',  'Reviews','Clients','Batches','Placements'];
+const navItems = ['Courses','Placements','Clients', 'Batches',"Mentors",'Reviews',];
 
 
 function Navbar(props) {

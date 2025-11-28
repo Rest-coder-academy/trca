@@ -14,11 +14,14 @@ function Home() {
     <section>
         <Banner/>
         <Courses/>
-        <Mentors/>
-        <Reviews/>
+        <Placement/>
         <Clients/>
         <Batches />
-        <Placement/>
+        <Mentors/>
+        <Reviews/>
+      
+     
+      
     </section>
   )
 }

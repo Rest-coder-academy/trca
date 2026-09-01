@@ -14,14 +14,16 @@ import { useBatches } from '../Batches/useBatches';
 import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDateUtils';
 
 
- function CoursesCard({name,slug,backend,audience,frontend,syllabus1,syllabus2}) {
-    let {openModal}=useAuth()
+ function CoursesCard({name,slug,courseId,paid,price,badge,backend,audience,frontend,syllabus1,syllabus2}) {
+    let {openEnroll}=useAuth()
     let batches=useBatches()
     let nextBatch=getNextBatchForCourse(name,batches)
+    let enroll=()=>openEnroll({courseId,name,paid,price})
   return (
     <Card sx={{ }} className='card'>
         <RouterLink to={`/courses/${slug}`} className="course-header-link">
         <Box className="course-header">
+            {badge && <Box component="span" className="course-badge">{badge}</Box>}
             <TypoGraphyComponent
             variant="h5"
             sx={{mb:".3rem"}}
@@ -31,6 +33,11 @@ import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDat
         <Box component="span" className="next-batch-tag">
             {nextBatch ? `Next batch · ${formatBatchDateShort(nextBatch.date)}` : "New dates coming soon"}
         </Box>
+        {paid && (
+          <Box component="span" className="course-price">
+            ₹{Number(price).toLocaleString("en-IN")} <span className="course-emi">· EMI available</span>
+          </Box>
+        )}
          <TypoGraphyComponent
             variant="text"
             sx={{}}
@@ -108,7 +115,7 @@ import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDat
         </RouterLink>
 <CardActions sx={{}} className='card-actions'>
 
-  <ButtonComponent size='small' variant='outlined' label='Enquire Now'  borderRadius='0' sx={{}} onBtnClick={()=>openModal(`I'm interested in the ${name} course.`)}/>
+  <ButtonComponent size='small' variant={paid?'contained':'outlined'} label='Enroll Now'  borderRadius='0' sx={{}} onBtnClick={enroll}/>
   <ButtonComponent size='small' variant='outlined' label='View Syllabus' borderRadius='0' sx={{}} component={RouterLink} to={`/courses/${slug}`}/>
 </CardActions>
 </Card>

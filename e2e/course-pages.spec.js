@@ -71,12 +71,15 @@ test("Register Now in the hero opens the enquiry form with an empty message", as
   await expect(page.locator('textarea[name="message"]')).toHaveValue("");
 });
 
-test("Enquire Now on a batch card pre-fills that batch's course name", async ({ page }) => {
+// Batch cards whose name matches a course in courses.js now funnel into the
+// Enroll flow (see #40) — only a batch with no matching course still falls
+// back to the enquiry form. "Reactjs & Nextjs" is that batch in the static
+// fallback data.
+test("Enquire Now on a batch card without a matching course pre-fills that batch's course name", async ({ page }) => {
   await page.goto("/");
   await page
-    .locator(".batches")
+    .locator(".batches .card", { hasText: "Reactjs & Nextjs" })
     .getByRole("button", { name: /enquire now|join the waitlist/i })
-    .first()
     .click();
   await expect(page.locator('textarea[name="message"]')).toHaveValue(/I'm interested in the .+ course\./);
 });

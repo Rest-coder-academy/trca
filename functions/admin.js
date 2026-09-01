@@ -84,6 +84,7 @@ function page(notice, count, body) {
   header { background:var(--navy); color:#fff; padding:1rem 1.25rem; display:flex; align-items:baseline; gap:.75rem; }
   header h1 { font-size:1.1rem; margin:0; }
   header .count { font-size:.85rem; opacity:.8; }
+  header a { color:#cdd6ea; font-size:.85rem; margin-left:.5rem; }
   .wrap { padding:1.25rem; overflow-x:auto; }
   table { border-collapse:collapse; width:100%; min-width:760px; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
   th,td { text-align:left; padding:.6rem .8rem; border-bottom:1px solid var(--line); vertical-align:top; font-size:.9rem; }
@@ -96,7 +97,7 @@ function page(notice, count, body) {
   .notice { padding:1rem 1.25rem; color:#b3261e; }
 </style></head>
 <body>
-  <header><h1>Enquiries</h1><span class="count">${count} total</span></header>
+  <header><h1>Enquiries</h1><span class="count">${count} total</span><a href="/admin/batches">Batches →</a></header>
   ${notice ? `<div class="notice">${esc(notice)}</div>` : ""}
   <div class="wrap">
     <table>

@@ -9,12 +9,13 @@ import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyCompo
 import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { List, ListItem, ListItemText } from '@mui/material';
 import { useAuth } from '../../../App';
-import { batches } from '../Batches/batches';
+import { useBatches } from '../Batches/useBatches';
 import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDateUtils';
 
 
  function CoursesCard({name,backend,audience,frontend,syllabus1,syllabus2}) {
     let {openModal}=useAuth()
+    let batches=useBatches()
     let nextBatch=getNextBatchForCourse(name,batches)
   return (
     <Card sx={{ }} className='card'>

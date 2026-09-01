@@ -2,10 +2,22 @@ import { describe, it, expect } from "vitest";
 import {
   escapeHtml,
   isValidBatchDate,
+  weekdayFromDate,
   safeEqual,
   parseBasicAuth,
   requireAdminAuth,
 } from "./serverUtil.js";
+
+describe("weekdayFromDate (derived, can't drift)", () => {
+  it("derives the correct weekday name", () => {
+    expect(weekdayFromDate("16-09-2026")).toBe("Wednesday");
+    expect(weekdayFromDate("20-09-2026")).toBe("Sunday");
+  });
+  it("returns '' for an invalid date", () => {
+    expect(weekdayFromDate("31-04-2026")).toBe("");
+    expect(weekdayFromDate("")).toBe("");
+  });
+});
 
 describe("escapeHtml (XSS)", () => {
   it("escapes the dangerous characters", () => {

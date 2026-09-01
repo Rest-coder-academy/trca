@@ -10,5 +10,6 @@ CREATE TABLE IF NOT EXISTS batches (
   mode       TEXT,
   contact    TEXT,
   sort_order INTEGER NOT NULL DEFAULT 0,
+  status     TEXT NOT NULL DEFAULT 'active',   -- 'active' (shown on site) | 'hidden'
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );

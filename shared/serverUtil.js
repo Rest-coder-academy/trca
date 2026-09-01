@@ -23,6 +23,15 @@ export function isValidBatchDate(s) {
   return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
 }
 
+// Derive the weekday name from a DD-MM-YYYY date, so the day shown on the site is
+// always computed from the date and can't drift out of sync with it. "" if invalid.
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+export function weekdayFromDate(s) {
+  if (!isValidBatchDate(s)) return "";
+  const [d, m, y] = String(s).split("-").map(Number);
+  return WEEKDAYS[new Date(y, m - 1, d).getDay()];
+}
+
 // Length-independent early-out plus constant-time compare of equal-length strings,
 // so a wrong admin password can't be discovered by timing.
 export function safeEqual(a, b) {

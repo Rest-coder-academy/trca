@@ -1,8 +1,11 @@
+// NOTE: dates below are placeholders pending the current schedule from Uday (see issue #3).
+// Update them here only — batchDateUtils derives "upcoming"/"closed" status and the
+// course-card "Next batch" tag from this file, so nothing else needs to change.
 export let batches=[
     {
         id:"1",
         name:"Java Full Stack",
-        date:"24-05-2025",
+        date:"16-09-2026",
         day:"Wednesday",
         time:"10:00 AM",
         trainer:"Uday pawar S",
@@ -13,7 +16,7 @@ export let batches=[
     {
         id:"2",
         name:"Python Full Stack",
-        date:"24-05-2025",
+        date:"23-09-2026",
         day:"Wednesday",
         time:"10:00 AM",
         trainer:"Uday pawar S",
@@ -24,7 +27,7 @@ export let batches=[
     {
         id:"3",
         name:"MERN Stack",
-        date:"24-05-2025",
+        date:"30-09-2026",
         day:"Wednesday",
         time:"10:00 AM",
         trainer:"Uday pawar S",
@@ -35,7 +38,7 @@ export let batches=[
       {
         id:"4",
         name:"Reactjs & Nextjs",
-        date:"24-05-2025",
+        date:"07-10-2026",
         day:"Wednesday",
         time:"10:00 AM",
         trainer:"Uday pawar S",

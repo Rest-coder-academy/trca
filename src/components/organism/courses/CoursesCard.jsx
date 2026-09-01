@@ -9,19 +9,25 @@ import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyCompo
 import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { List, ListItem, ListItemText } from '@mui/material';
 import { useAuth } from '../../../App';
+import { batches } from '../Batches/batches';
+import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDateUtils';
 
 
  function CoursesCard({name,backend,audience,frontend,syllabus1,syllabus2}) {
     let {openModal}=useAuth()
+    let nextBatch=getNextBatchForCourse(name,batches)
   return (
     <Card sx={{ }} className='card'>
         <Box className="course-header">
             <TypoGraphyComponent
             variant="h5"
-            sx={{mb:".6rem"}}
+            sx={{mb:".3rem"}}
             component="h5"
             text={name}
         />
+        <Box component="span" className="next-batch-tag">
+            {nextBatch ? `Next batch · ${formatBatchDateShort(nextBatch.date)}` : "New dates coming soon"}
+        </Box>
          <TypoGraphyComponent
             variant="text"
             sx={{}}

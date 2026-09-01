@@ -95,6 +95,27 @@ admin ->  /admin/batches (GET/POST)  (functions/admin/batches.js, password-prote
 - A past-dated batch auto-shows "new dates coming soon" on the site, so it can
   never advertise a stale date even if left unedited.
 
+## Trainers (admin-editable)
+
+The **Our Trainers** section on the homepage shows who teaches the courses —
+photo, title, experience, expertise, a short bio, their LinkedIn/GitHub, and an
+optional certificate link — so prospects can judge the trainers' credibility.
+The academy edits these at **`/admin/trainers`** (same login as `/admin`), no
+code change or redeploy.
+
+```
+site  ->  GET /api/trainers           (functions/api/trainers.js, public read from D1)
+admin ->  /admin/trainers (GET/POST)   (functions/admin/trainers.js, password-protected CRUD)
+```
+
+- Table: D1 `trainers` — see `schema-trainers.sql`. Only **Name** is required;
+  every other field is optional and simply hidden on the site when blank.
+- Photos are referenced by URL. Bundled assets live under `public/trainers/`
+  (e.g. `/trainers/uday.png`), or point `photo_url` at any hosted image.
+- The frontend (`useTrainers` hook) falls back to the bundled `trainers.js` if
+  the API is ever unreachable, so the section always renders.
+- Set a trainer to **Hidden** to keep the profile but take it off the site.
+
 ## History / context
 
 - The previous backend (`trcabe.onrender.com`) was a separate repo by the prior

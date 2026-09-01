@@ -99,7 +99,19 @@ function PlacementCard() {
               />
              </Box> */}
              <Box className="company">
-              <img src={company} alt="" width={200} height={50} />
+              {/* The logo is bundled, so it cannot 404 — but if a placement is
+                  ever added without one, the company name in text is far better
+                  than a broken image in the section that does the persuading. */}
+              {company?.logo ? (
+                <img
+                  src={company.logo}
+                  alt={company.name}
+                  width={200}
+                  height={50}
+                />
+              ) : (
+                <span className="company-name">{company?.name}</span>
+              )}
              </Box>
               </CardContent>
           </Card>

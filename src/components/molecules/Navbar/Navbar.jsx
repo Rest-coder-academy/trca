@@ -42,7 +42,7 @@ function Navbar(props) {
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemButton sx={{ textAlign: 'center', minHeight: 44 }}>
               <ListItemText primary={<Link to={item} smooth={true} offset={-62}  onClick={handleDrawerToggle} activeClass='active' spy={true}>{item}</Link>} />
             </ListItemButton>
           </ListItem>
@@ -65,14 +65,14 @@ function Navbar(props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'block',xs:"block"} }}
+            sx={{ mr: 2, display: { xs: 'block', md: 'none' } }}
           >
-            <MenuIcon  sx={{ color: { sm: 'black' ,xs:"black",lg:"white"} }} />
+            <MenuIcon sx={{ color: '#fff' }} />
           </IconButton>
-        
-           
+
+
           {/* </Typography> */}
-          <Box sx={{ display: { xs: 'none', sm: 'block',marginLeft:"auto" } }}>
+          <Box sx={{ display: { xs: 'none', md: 'block' }, marginLeft: "auto" }}>
             {navItems.map((item) => (
               <ButtonComponent key={item} sx={{ color: '#fff', }} variant='text'>
                   <Link to={item} smooth={true} offset={-62} activeClass='active' spy={true}>{item}</Link>
@@ -96,7 +96,7 @@ function Navbar(props) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { xs: 'block', md: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >

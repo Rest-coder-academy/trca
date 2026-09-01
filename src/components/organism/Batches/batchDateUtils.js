@@ -6,12 +6,23 @@ export function parseBatchDate(dateStr)
     {
         return null
     }
-    let [day,month,year]=dateStr.split("-").map(Number)
-    if(!day || !month || !year)
+    let parts=dateStr.split("-").map(Number)
+    if(parts.length!==3 || parts.some(Number.isNaN))
     {
         return null
     }
-    return new Date(year,month-1,day)
+    let [day,month,year]=parts
+    if(day<1 || day>31 || month<1 || month>12 || year<1000 || year>9999)
+    {
+        return null
+    }
+    let date=new Date(year,month-1,day)
+    // reject rollover dates (e.g. "31-04-2026" silently becoming 1 May)
+    if(date.getFullYear()!==year || date.getMonth()!==month-1 || date.getDate()!==day)
+    {
+        return null
+    }
+    return date
 }
 
 export function isBatchUpcoming(dateStr)

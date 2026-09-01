@@ -39,11 +39,13 @@ import { useAuth } from '../../../App';
       <CardContent className="card-content">
         <List className="links">
           {upcoming
-            ? <BatchItem title="Date" data={date} icon={<CalendarMonthIcon/>} />
+            ? <>
+                <BatchItem title="Date" data={date} icon={<CalendarMonthIcon/>} />
+                <BatchItem title="Day" data={day} icon={<CalendarTodayIcon/>} />
+                <BatchItem title="Time" data={time}  icon={<AccessTimeIcon/>} />
+              </>
             : <BatchItem title="Status" data="New dates coming soon" icon={<CalendarMonthIcon/>} />
           }
-          <BatchItem title="Day" data={day} icon={<CalendarTodayIcon/>} />
-          <BatchItem title="Time" data={time}  icon={<AccessTimeIcon/>} />
           <BatchItem title="Duration" data={duration} icon={<AlarmOnIcon/>} />
           <BatchItem title="Mode" data={mode} icon={<LaptopIcon/>} />
           <BatchItem title="Trainer" data={trainer} icon={<PersonIcon/>} />

@@ -2,11 +2,13 @@
 // GET renders the current batches with an edit form each + an "add" form.
 // POST handles add / update / delete, writes to D1, then redirects back.
 // Same Basic Auth as /admin (ADMIN_PASSWORD secret, fails closed if unset).
+import { escapeHtml, isValidBatchDate, requireAdminAuth } from "../../shared/serverUtil.js";
+
 const FIELDS = ["name", "date", "day", "time", "trainer", "duration", "mode", "contact"];
 
 export async function onRequestGet(context) {
   const { request, env } = context;
-  const auth = check(request, env);
+  const auth = requireAdminAuth(request, env);
   if (auth) return auth;
   if (!env.DB) return html(page([], "Storage not configured.", null), 500);
 
@@ -29,7 +31,7 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  const auth = check(request, env);
+  const auth = requireAdminAuth(request, env);
   if (auth) return auth;
   if (!env.DB) return redirect(request, "err", "Storage not configured.");
 
@@ -55,7 +57,7 @@ export async function onRequestPost(context) {
   const sortOrder = Number.isFinite(sort) ? sort : 0;
 
   if (!vals.name) return redirect(request, "err", "Course name is required.");
-  if (!isValidDate(vals.date))
+  if (!isValidBatchDate(vals.date))
     return redirect(request, "err", "Date must be a real date in DD-MM-YYYY format.");
 
   try {
@@ -82,43 +84,10 @@ export async function onRequestPost(context) {
   return redirect(request, "err", "Unknown action.");
 }
 
-// ---- auth (fails closed) ----
-function check(request, env) {
-  const challenge = () =>
-    new Response("Authentication required.", {
-      status: 401,
-      headers: { "WWW-Authenticate": 'Basic realm="Rest Coder Academy — Admin", charset="UTF-8"' },
-    });
-  if (!env.ADMIN_PASSWORD) return challenge();
-  const header = request.headers.get("Authorization") || "";
-  if (!header.startsWith("Basic ")) return challenge();
-  let user = "", pass = "";
-  try {
-    const d = atob(header.slice(6));
-    const i = d.indexOf(":");
-    user = d.slice(0, i);
-    pass = d.slice(i + 1);
-  } catch {
-    return challenge();
-  }
-  if (!safeEqual(user, env.ADMIN_USER || "admin") || !safeEqual(pass, env.ADMIN_PASSWORD)) return challenge();
-  return null;
-}
-
 function redirect(request, key, msg) {
   const u = new URL("/admin/batches", request.url);
   u.searchParams.set(key, msg);
   return Response.redirect(u.toString(), 303);
-}
-
-// ---- date validation (DD-MM-YYYY, real date) ----
-function isValidDate(s) {
-  const p = String(s).split("-").map(Number);
-  if (p.length !== 3 || p.some(Number.isNaN)) return false;
-  const [d, m, y] = p;
-  if (y < 1000 || y > 9999 || m < 1 || m > 12 || d < 1 || d > 31) return false;
-  const dt = new Date(y, m - 1, d);
-  return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
 }
 
 // ---- rendering ----
@@ -156,8 +125,8 @@ function page(rows, error, notice) {
 <body>
   <header><h1>Batches</h1><a href="/admin/batches">Batches</a><a href="/admin">Enquiries →</a></header>
   <div class="wrap">
-    ${error ? `<div class="banner err">${esc(error)}</div>` : ""}
-    ${notice ? `<div class="banner ok">${esc(notice)}</div>` : ""}
+    ${error ? `<div class="banner err">${escapeHtml(error)}</div>` : ""}
+    ${notice ? `<div class="banner ok">${escapeHtml(notice)}</div>` : ""}
     <p class="hint">Dates are <b>DD-MM-YYYY</b> (e.g. 16-09-2026). A batch whose date has passed automatically shows “new dates coming soon” on the site — so it can never advertise a stale date. The course-card “Next batch” tag matches on the <b>exact</b> course name.</p>
     ${editRows || '<div class="card">No batches yet — add one below.</div>'}
     <div class="card add">
@@ -176,7 +145,7 @@ function rowForm(r) {
   return `<div class="card">
     <form method="post">
       <input type="hidden" name="action" value="update"/>
-      <input type="hidden" name="id" value="${esc(r.id)}"/>
+      <input type="hidden" name="id" value="${escapeHtml(r.id)}"/>
       ${fieldGrid(r)}
       <div class="actions">
         <button class="save" type="submit">Save</button>
@@ -188,7 +157,7 @@ function rowForm(r) {
 
 function fieldGrid(r) {
   const F = (name, label, ph = "") =>
-    `<div><label>${label}</label><input name="${name}" value="${esc(r[name])}" placeholder="${esc(ph)}"/></div>`;
+    `<div><label>${label}</label><input name="${name}" value="${escapeHtml(r[name])}" placeholder="${escapeHtml(ph)}"/></div>`;
   return `<div class="grid">
     ${F("name", "Course name", "Java Full Stack")}
     ${F("date", "Date (DD-MM-YYYY)", "16-09-2026")}
@@ -198,22 +167,10 @@ function fieldGrid(r) {
     ${F("mode", "Mode", "offline")}
     ${F("trainer", "Trainer", "Uday pawar S")}
     ${F("contact", "Contact", "8073762257")}
-    <div><label>Sort order</label><input name="sort_order" value="${esc(r.sort_order)}" placeholder="1"/></div>
+    <div><label>Sort order</label><input name="sort_order" value="${escapeHtml(r.sort_order)}" placeholder="1"/></div>
   </div>`;
 }
 
-function esc(v) {
-  return String(v == null ? "" : v)
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-}
 function html(b, status) {
   return new Response(b, { status, headers: { "content-type": "text/html; charset=utf-8" } });
-}
-function safeEqual(a, b) {
-  a = String(a); b = String(b);
-  if (a.length !== b.length) return false;
-  let diff = 0;
-  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return diff === 0;
 }

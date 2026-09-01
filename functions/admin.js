@@ -2,38 +2,13 @@
 // Reads enquiries from D1 (binding `DB`) and server-renders an HTML table.
 // Auth: HTTP Basic Auth against the `ADMIN_PASSWORD` Pages secret (user = ADMIN_USER
 // or "admin"). Fails CLOSED — if ADMIN_PASSWORD isn't set, nobody gets in.
+import { escapeHtml, requireAdminAuth } from "../shared/serverUtil.js";
+
 export async function onRequestGet(context) {
   const { request, env } = context;
 
-  const challenge = () =>
-    new Response("Authentication required.", {
-      status: 401,
-      headers: {
-        "WWW-Authenticate": 'Basic realm="Rest Coder Academy — Admin", charset="UTF-8"',
-        "content-type": "text/plain; charset=utf-8",
-      },
-    });
-
-  // Fail closed if no password is configured.
-  if (!env.ADMIN_PASSWORD) return challenge();
-
-  const header = request.headers.get("Authorization") || "";
-  if (!header.startsWith("Basic ")) return challenge();
-
-  let user = "", pass = "";
-  try {
-    const decoded = atob(header.slice(6));
-    const i = decoded.indexOf(":");
-    user = decoded.slice(0, i);
-    pass = decoded.slice(i + 1);
-  } catch {
-    return challenge();
-  }
-
-  const expectedUser = env.ADMIN_USER || "admin";
-  if (!safeEqual(user, expectedUser) || !safeEqual(pass, env.ADMIN_PASSWORD)) {
-    return challenge();
-  }
+  const auth = requireAdminAuth(request, env);
+  if (auth) return auth;
 
   if (!env.DB) {
     return html(page("Storage not configured.", 0, ""), 500);
@@ -60,12 +35,12 @@ export async function onRequestGet(context) {
 function rowHtml(r) {
   return (
     "<tr>" +
-    `<td>${esc(r.fullname)}</td>` +
-    `<td><a href="tel:${esc(r.mobile)}">${esc(r.mobile)}</a></td>` +
-    `<td>${r.email ? `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>` : "—"}</td>` +
-    `<td>${esc(r.experience) || "—"}</td>` +
-    `<td class="msg">${esc(r.message) || "—"}</td>` +
-    `<td class="when">${esc(r.created_at)}</td>` +
+    `<td>${escapeHtml(r.fullname)}</td>` +
+    `<td><a href="tel:${escapeHtml(r.mobile)}">${escapeHtml(r.mobile)}</a></td>` +
+    `<td>${r.email ? `<a href="mailto:${escapeHtml(r.email)}">${escapeHtml(r.email)}</a>` : "—"}</td>` +
+    `<td>${escapeHtml(r.experience) || "—"}</td>` +
+    `<td class="msg">${escapeHtml(r.message) || "—"}</td>` +
+    `<td class="when">${escapeHtml(r.created_at)}</td>` +
     "</tr>"
   );
 }
@@ -98,7 +73,7 @@ function page(notice, count, body) {
 </style></head>
 <body>
   <header><h1>Enquiries</h1><span class="count">${count} total</span><a href="/admin/batches">Batches →</a></header>
-  ${notice ? `<div class="notice">${esc(notice)}</div>` : ""}
+  ${notice ? `<div class="notice">${escapeHtml(notice)}</div>` : ""}
   <div class="wrap">
     <table>
       <thead><tr><th>Name</th><th>Mobile</th><th>Email</th><th>Experience</th><th>Message</th><th>Received</th></tr></thead>
@@ -108,25 +83,6 @@ function page(notice, count, body) {
 </body></html>`;
 }
 
-function esc(v) {
-  return String(v == null ? "" : v)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
 function html(bodyStr, status) {
   return new Response(bodyStr, { status, headers: { "content-type": "text/html; charset=utf-8" } });
-}
-
-// Constant-time-ish string compare to avoid leaking the password via timing.
-function safeEqual(a, b) {
-  a = String(a);
-  b = String(b);
-  if (a.length !== b.length) return false;
-  let diff = 0;
-  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return diff === 0;
 }

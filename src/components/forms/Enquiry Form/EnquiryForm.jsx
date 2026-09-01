@@ -67,11 +67,11 @@ const handleSubmit = async (e)=>
     setIsSubmitting(true)
     try
     {
-      // https://trcabe.onrender.com/enquiries/get/enquiries
+      // Same-origin Cloudflare Pages Function (functions/api/enquiry.js) that
+      // writes to our own D1 database. Replaces the old trcabe.onrender.com backend.
       // axios only resolves for 2xx responses by default; anything else (and network
       // errors/timeouts) rejects and is handled in the catch block below.
-      await axios.post('https://trcabe.onrender.com/enquiries/create/enquiry',enquiryData,{timeout:SUBMIT_TIMEOUT_MS})
-      // await axios.post('http://localhost:4005/enquiries/create/enquiry',enquiryData)
+      await axios.post('/api/enquiry',enquiryData,{timeout:SUBMIT_TIMEOUT_MS})
 
       notify(`Enquiry received. We'll call you on ${enquiryData.mobile} within one working day.`)
       closeModal()

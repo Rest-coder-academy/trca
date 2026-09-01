@@ -22,3 +22,9 @@ node_modules
 *.njsproj
 *.sln
 *.sw?
+/test-results/
+/playwright-report/
+/coverage/
+/.wrangler/
+/playwright/.cache/
+dist

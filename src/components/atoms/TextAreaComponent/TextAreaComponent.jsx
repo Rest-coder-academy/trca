@@ -29,24 +29,24 @@ const TextAreaComponent = ({
         onBlur={() => {
           setTextAreaFocussed(false);
         }}
-        style={{ borderColor: error ? "#d32f2f" : "", paddingTop:"10px" }}
+        style={{ borderColor: error ? "var(--rca-danger)" : "", paddingTop:"10px" }}
       />
       <Typography
         className={`${Styles.labelStyle}`}
         style={{
           color: textAreaFocussed
             ? error
-              ? "#d32f2f"
-              : "#2196f3"
+              ? "var(--rca-danger)"
+              : "var(--rca-blue)"
             : error
-            ? "#d32f2f"
+            ? "var(--rca-danger)"
             : "",
         }}
       >
         {label}
       </Typography>
       {error && (
-        <Typography color="#d32f2f" fontSize={12}>
+        <Typography color="var(--rca-danger)" fontSize={12}>
           {helperText}
         </Typography>
       )}

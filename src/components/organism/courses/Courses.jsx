@@ -10,7 +10,7 @@ import CoursesGrid from './CoursesGrid'
 function Courses() {
     let mapdataContent=["","",""]
     return (
-        <Box className='courses' my={5} mx={12} id="Courses">
+        <Box className='courses rca-section' id="Courses">
         <TypoGraphyComponent variant='h3' text='Courses' component='h3' sx={{textAlign:"center",fontWeight:"bold"}} />
         <hr />
            

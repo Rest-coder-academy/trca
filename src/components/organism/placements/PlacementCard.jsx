@@ -84,7 +84,7 @@ function PlacementCard() {
                 variant="p"
                 text={designation}
                 component="p"
-                sx={{fontWeight: "bold",color:"#3c036b"}}
+                sx={{fontWeight: "bold",color:"var(--rca-navy)"}}
               />
           </Box>
              

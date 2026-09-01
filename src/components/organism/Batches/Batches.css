@@ -7,7 +7,7 @@
     width: 5%;
     margin: 1rem auto;
     height: .2rem;
-    background-color: #1976d2;
+    background-color: var(--rca-blue);
 }
 .batches .MuiGrid-container
 {
@@ -33,7 +33,7 @@
 {
     width: 100%!important;
     /* border: purple 2px solid; */
-    box-shadow: 1px 1px 10px 1px #071a2c33;
+    box-shadow: 1px 1px 10px 1px var(--rca-navy);
  
 }
 .batches .css-1qm8dkc
@@ -68,16 +68,16 @@
 .batches .css-cokf1l-MuiListItemIcon-root,.css-1k80kex
 {
     min-width: 2.2rem!important;
-    color: #06065abd!important;
+    color: var(--rca-navy)!important;
 
 }
 .batches .css-1umw9bq-MuiSvgIcon-root
 {
-    color: #06065abd;
+    color: var(--rca-navy);
 }
 .batches .course-header
 {
-    background-image: linear-gradient(to right,#2c6aa8,#3f4f66,#2c6aa8);
+    background-image: linear-gradient(to right,var(--rca-blue),var(--rca-ink-soft),var(--rca-blue));
     text-align: center; 
     padding: .5rem 0;
     color: white;
@@ -91,16 +91,16 @@
     display: inline-block;
     margin-top: .4rem;
     padding: .15rem .7rem;
-    border-radius: 999px;
-    background-color: rgba(255, 255, 255, 0.18);
-    color: #ffffff;
+    border-radius: var(--rca-radius-pill);
+    background-color: var(--rca-tint-on-dark);
+    color: var(--rca-surface);
     font-size: .75rem;
     font-weight: 600;
     letter-spacing: .02em;
 }
 .batches .card-actions
 {
-    border-top: .5px solid rgba(211, 211, 211, 0.582);
+    border-top: .5px solid var(--rca-border);
     display: flex;
     justify-content: center;
     padding-bottom: .8rem;
@@ -113,13 +113,13 @@
 {
     color: black!important;
     padding: .3rem 1rem;
-    border-radius: 3px;
+    border-radius: var(--rca-radius-sm);
     font-size: 1rem;
 }
 
 .batches .card-actions button:hover
 {
-    background-color: #1976d2!important;
+    background-color: var(--rca-blue)!important;
     color: white!important;
 }
 
@@ -141,7 +141,7 @@
             {
                 color: black!important;
                 padding: .5rem 3rem;
-                border-radius: 30px;
+                border-radius: var(--rca-radius-pill);
                 font-size: 1.2rem;
             }
             .batches .card-content

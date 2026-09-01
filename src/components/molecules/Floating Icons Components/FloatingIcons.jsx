@@ -39,19 +39,19 @@ function FloatingIcons() {
 
   const whatsappStyle = {
     backgroundColor: isScrolled ? 'white' : 'none',
-    // color: isScrolled ? '#06065abd' : 'white',
+    // color: isScrolled ? 'var(--rca-navy)' : 'white',
     transition: 'background-color 0.3s ease', // Smooth transition
   };
   const callStyle = {
     backgroundColor: isScrolled ? 'white' : 'none',
-    // color: isScrolled ? '#06065abd' : 'white',
+    // color: isScrolled ? 'var(--rca-navy)' : 'white',
     transition: 'background-color 0.3s ease', // Smooth transition
   };
 
   const arrowStyle = {
     backgroundColor: isScrolled ? 'white' : 'none',
     display:isScrolled?"block":"none",
-    color: isScrolled ? '#06065abd' : 'white',
+    color: isScrolled ? 'var(--rca-navy)' : 'white',
     transition: 'background-color 0.3s ease', // Smooth transition
   };
 

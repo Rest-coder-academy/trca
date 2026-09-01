@@ -74,7 +74,7 @@ function Navbar(props) {
           {/* </Typography> */}
           <Box sx={{ display: { xs: 'none', sm: 'block',marginLeft:"auto" } }}>
             {navItems.map((item) => (
-              <ButtonComponent key={item} sx={{ color: '#fff', }} variant='text'>
+              <ButtonComponent key={item} sx={{ color: 'var(--rca-surface)', }} variant='text'>
                   <Link to={item} smooth={true} offset={-62} activeClass='active' spy={true}>{item}</Link>
                   
                 </ButtonComponent>

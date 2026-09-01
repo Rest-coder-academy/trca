@@ -19,12 +19,12 @@ export default function InputBoxComponent({
       sx={{
         width: "100%",
         "& .MuiInputBase-input": {
-          backgroundColor: "#ffffff",
-          color: "#000000",
+          backgroundColor: "var(--rca-surface)",
+          color: "var(--rca-ink)",
         },
         "& .MuiInputBase-input:-webkit-autofill": {
-          WebkitBoxShadow: "0 0 0 1000px #ffffff inset",
-          WebkitTextFillColor: "#000000",
+          WebkitBoxShadow: "0 0 0 1000px var(--rca-surface) inset",
+          WebkitTextFillColor: "var(--rca-ink)",
         },
       }}
       name={name}

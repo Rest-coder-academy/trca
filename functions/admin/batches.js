@@ -1,4 +1,5 @@
 import { requireAdminAuth } from "../_shared/auth.js";
+import { ADMIN_STYLES } from "../_shared/adminStyles.js";
 
 // GET/POST /admin/batches — password-protected screen for RCA to add, edit,
 // or hide batch entries without a code change (issue #15). Reads/writes D1
@@ -142,10 +143,10 @@ function rowHtml(r) {
           <label>Trainer <input name="trainer" value="${esc(r.trainer || "")}"/></label>
           <label>Contact <input name="contact" value="${esc(r.contact || "")}"/></label>
           <label>Status <select name="status">${statusOptions(r.status)}</select></label>
-          <button type="submit">Save</button>
+          <button type="submit" class="primary">Save</button>
         </form>
       </details>
-      <form method="post" class="delete-form">
+      <form method="post" class="delete-form" onsubmit="return confirm('Delete this batch entry? This cannot be undone.')">
         <input type="hidden" name="action" value="delete"/>
         <input type="hidden" name="id" value="${r.id}"/>
         <button type="submit" class="danger">Delete</button>
@@ -166,57 +167,53 @@ function page({ notice, rows }) {
 <meta name="robots" content="noindex, nofollow"/>
 <title>Batch Dates — Rest Coder Academy</title>
 <style>
-  :root { --navy:#03084C; --line:#e4e6ef; --muted:#5b6472; --green:#0f9d58; --red:#c0392b; }
-  * { box-sizing:border-box; }
-  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; color:#1b2030; background:#f5f6fa; }
-  header { background:var(--navy); color:#fff; padding:1rem 1.25rem; display:flex; align-items:baseline; gap:.75rem; }
-  header h1 { font-size:1.1rem; margin:0; }
-  header nav { margin-left:auto; }
-  header nav a { color:#fff; opacity:.8; font-size:.85rem; text-decoration:underline; }
-  .wrap { padding:1.25rem; overflow-x:auto; }
-  table { border-collapse:collapse; width:100%; min-width:900px; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
-  th,td { text-align:left; padding:.6rem .8rem; border-bottom:1px solid var(--line); vertical-align:top; font-size:.9rem; }
-  th { background:#eef0f6; color:var(--navy); font-weight:600; white-space:nowrap; }
-  tr:last-child td { border-bottom:none; }
-  .muted { color:var(--muted); font-size:.8rem; }
-  .empty { text-align:center; color:var(--muted); padding:2rem; }
-  .notice { padding:1rem 1.25rem; color:var(--red); }
-  .badge { padding:.15rem .6rem; border-radius:999px; font-size:.75rem; font-weight:600; }
-  .badge.active { background:#e6f4ea; color:var(--green); }
-  .badge.hidden { background:#f1e6e6; color:var(--red); }
+${ADMIN_STYLES}
   .actions { white-space:nowrap; }
-  .actions form { margin-top:.4rem; }
-  .actions .edit-form label { display:block; margin-top:.4rem; font-size:.8rem; }
-  .actions .edit-form input, .actions .edit-form select { width:100%; padding:.3rem; margin-top:.15rem; }
-  button { cursor:pointer; padding:.3rem .7rem; border-radius:6px; border:1px solid var(--line); background:#fff; }
-  button.danger { color:var(--red); border-color:var(--red); }
-  .add-batch { margin-top:1.5rem; background:#fff; border:1px solid var(--line); border-radius:10px; padding:1rem; max-width:420px; }
-  .add-batch h2 { margin:0 0 .3rem; font-size:1rem; }
-  .add-batch label { display:block; margin-top:.6rem; font-size:.85rem; }
-  .add-batch input, .add-batch select { width:100%; padding:.4rem; margin-top:.2rem; }
-  .add-batch button { margin-top:1rem; background:var(--navy); color:#fff; border:none; padding:.5rem 1rem; }
+  .actions details { position:relative; display:inline-block; }
+  .actions summary { cursor:pointer; color:var(--navy); font-size:.82rem; font-weight:600; list-style:none; padding:.35rem .7rem; border:1px solid var(--line); border-radius:7px; }
+  .actions summary::-webkit-details-marker { display:none; }
+  .actions details[open] summary { background:#eef0f6; }
+  .actions .edit-form { position:absolute; right:0; top:calc(100% + .4rem); z-index:20; background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:0 14px 34px rgba(3,8,76,.2); padding:1rem; width:260px; text-align:left; }
+  .actions .edit-form label { display:block; margin-top:.5rem; font-size:.78rem; color:var(--muted); font-weight:600; }
+  .actions .edit-form input, .actions .edit-form select { width:100%; padding:.4rem; margin-top:.2rem; border:1px solid var(--line); border-radius:6px; font-size:.85rem; }
+  .actions .edit-form button { margin-top:.8rem; width:100%; }
+  .actions .delete-form { display:inline-block; margin-left:.4rem; }
+  .add-batch { margin-top:1.75rem; background:#fff; border:1px solid var(--line); border-radius:12px; padding:1.5rem; box-shadow:0 6px 24px rgba(3,8,76,.08); max-width:640px; }
+  .add-batch h2 { margin:0 0 1rem; font-size:1.05rem; color:var(--navy); }
+  .add-batch .grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .add-batch label { display:block; font-size:.82rem; color:var(--muted); font-weight:600; }
+  .add-batch input, .add-batch select { width:100%; padding:.55rem .6rem; margin-top:.3rem; border:1px solid var(--line); border-radius:7px; font-size:.9rem; }
+  .add-batch input:focus, .add-batch select:focus { outline:none; border-color:var(--navy); box-shadow:0 0 0 3px rgba(3,8,76,.1); }
+  .add-batch button { margin-top:1.25rem; }
+  @media (max-width: 560px) {
+    .add-batch .grid { grid-template-columns:1fr; }
+  }
 </style></head>
 <body>
-  <header><h1>Batch Dates</h1><nav><a href="/admin">Enquiries →</a></nav></header>
-  ${notice ? `<div class="notice">${esc(notice)}</div>` : ""}
-  <div class="wrap">
-    <table>
-      <thead><tr><th>Course</th><th>Date</th><th>Time</th><th>Mode</th><th>Duration</th><th>Trainer</th><th>Contact</th><th>Status</th><th>Actions</th></tr></thead>
-      <tbody>${body}</tbody>
-    </table>
+  <header class="admin-header"><h1>Batch Dates</h1><nav><a href="/admin">Enquiries →</a></nav></header>
+  <div class="admin-wrap">
+    ${notice ? `<div class="notice">${esc(notice)}</div>` : ""}
+    <div class="scroll">
+      <table class="admin-table">
+        <thead><tr><th>Course</th><th>Date</th><th>Time</th><th>Mode</th><th>Duration</th><th>Trainer</th><th>Contact</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>${body}</tbody>
+      </table>
+    </div>
 
     <form method="post" class="add-batch">
       <h2>Add a new batch</h2>
       <input type="hidden" name="action" value="create"/>
-      <label>Course <input name="course" required placeholder="e.g. Java Full Stack"/></label>
-      <label>Date <input type="date" name="batch_date" required/></label>
-      <label>Time <input name="time" placeholder="e.g. 10:00 AM"/></label>
-      <label>Mode <select name="mode">${modeOptions("offline")}</select></label>
-      <label>Duration <input name="duration" placeholder="e.g. 4 months"/></label>
-      <label>Trainer <input name="trainer" placeholder="e.g. Uday pawar S"/></label>
-      <label>Contact <input name="contact" placeholder="e.g. 8073762257"/></label>
-      <label>Status <select name="status">${statusOptions("active")}</select></label>
-      <button type="submit">Add batch</button>
+      <div class="grid">
+        <label>Course <input name="course" required placeholder="e.g. Java Full Stack"/></label>
+        <label>Date <input type="date" name="batch_date" required/></label>
+        <label>Time <input name="time" placeholder="e.g. 10:00 AM"/></label>
+        <label>Mode <select name="mode">${modeOptions("offline")}</select></label>
+        <label>Duration <input name="duration" placeholder="e.g. 4 months"/></label>
+        <label>Trainer <input name="trainer" placeholder="e.g. Uday pawar S"/></label>
+        <label>Contact <input name="contact" placeholder="e.g. 8073762257"/></label>
+        <label>Status <select name="status">${statusOptions("active")}</select></label>
+      </div>
+      <button type="submit" class="primary">Add batch</button>
     </form>
   </div>
 </body></html>`;

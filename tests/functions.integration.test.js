@@ -3,12 +3,18 @@ import { onRequestPost as enquiryPost } from "../functions/api/enquiry.js";
 import { onRequestGet as batchesGet } from "../functions/api/batches.js";
 import { onRequestGet as adminGet } from "../functions/admin.js";
 import { onRequestPost as batchAdminPost } from "../functions/admin/batches.js";
+import { onRequestGet as trainersGet } from "../functions/api/trainers.js";
+import { onRequestPost as trainerAdminPost } from "../functions/admin/trainers.js";
 
 // Fake D1 — mocks only the DB boundary (prepare/bind/run/all), so tests exercise
 // the real handler logic without a live database and without flake.
 function makeDB(seed = {}) {
-  const t = { enquiries: [...(seed.enquiries || [])], batches: [...(seed.batches || [])] };
-  let ids = { enquiries: 1000, batches: 1000 };
+  const t = {
+    enquiries: [...(seed.enquiries || [])],
+    batches: [...(seed.batches || [])],
+    trainers: [...(seed.trainers || [])],
+  };
+  let ids = { enquiries: 1000, batches: 1000, trainers: 2000 };
   return {
     tables: t,
     prepare(sql) {
@@ -25,12 +31,34 @@ function makeDB(seed = {}) {
             if (row) Object.assign(row, { name: args[0], date: args[1], day: args[2], time: args[3], trainer: args[4], duration: args[5], mode: args[6], contact: args[7], sort_order: args[8], status: args[9] });
           } else if (/DELETE FROM batches/i.test(sql)) {
             t.batches = t.batches.filter((b) => String(b.id) !== String(args[0]));
+          } else if (/INSERT INTO trainers/i.test(sql)) {
+            t.trainers.push({
+              id: ++ids.trainers, name: args[0], title: args[1], photo_url: args[2], experience: args[3],
+              expertise: args[4], linkedin_url: args[5], github_url: args[6], instagram_url: args[7],
+              facebook_url: args[8], website_url: args[9], certificate_url: args[10], bio: args[11],
+              sort_order: args[12], status: args[13],
+            });
+          } else if (/UPDATE trainers/i.test(sql)) {
+            const row = t.trainers.find((b) => String(b.id) === String(args[args.length - 1]));
+            if (row)
+              Object.assign(row, {
+                name: args[0], title: args[1], photo_url: args[2], experience: args[3], expertise: args[4],
+                linkedin_url: args[5], github_url: args[6], instagram_url: args[7], facebook_url: args[8],
+                website_url: args[9], certificate_url: args[10], bio: args[11], sort_order: args[12], status: args[13],
+              });
+          } else if (/DELETE FROM trainers/i.test(sql)) {
+            t.trainers = t.trainers.filter((b) => String(b.id) !== String(args[0]));
           }
           return { success: true };
         },
         async all() {
           if (/FROM batches/i.test(sql)) {
             let rows = t.batches;
+            if (/status\s*=\s*'active'/i.test(sql)) rows = rows.filter((b) => (b.status || "active") === "active");
+            return { results: rows };
+          }
+          if (/FROM trainers/i.test(sql)) {
+            let rows = t.trainers;
             if (/status\s*=\s*'active'/i.test(sql)) rows = rows.filter((b) => (b.status || "active") === "active");
             return { results: rows };
           }
@@ -153,5 +181,63 @@ describe("POST /admin/batches (CRUD)", () => {
     const res = await batchAdminPost(ctx(formReq("https://x/admin/batches", { action: "delete", id: "5" }), env(db)));
     expect(res.status).toBe(303);
     expect(db.tables.batches).toHaveLength(0);
+  });
+});
+
+describe("GET /api/trainers", () => {
+  it("returns only ACTIVE trainers as JSON", async () => {
+    const db = makeDB({
+      trainers: [
+        { id: 1, name: "Uday Pawar S", title: "Full-Stack Trainer", status: "active" },
+        { id: 2, name: "Hidden Person", status: "hidden" },
+      ],
+    });
+    const res = await trainersGet(ctx(new Request("https://x/api/trainers"), { DB: db }));
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data).toHaveLength(1); // hidden one excluded
+    expect(data[0].name).toBe("Uday Pawar S");
+  });
+  it("fails soft to [] when storage is unavailable", async () => {
+    const res = await trainersGet(ctx(new Request("https://x/api/trainers"), {}));
+    expect(await res.json()).toEqual([]);
+  });
+});
+
+describe("POST /admin/trainers (CRUD)", () => {
+  const env = (db) => ({ DB: db, ADMIN_PASSWORD: "secret" });
+  it("401 without auth", async () => {
+    const req = new Request("https://x/admin/trainers", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: "action=add" });
+    expect((await trainerAdminPost(ctx(req, env(makeDB())))).status).toBe(401);
+  });
+  it("adds a trainer with just a name (303 ok) — other fields optional", async () => {
+    const db = makeDB();
+    const res = await trainerAdminPost(
+      ctx(formReq("https://x/admin/trainers", { action: "add", name: "Uday Pawar S", title: "Full-Stack Trainer", linkedin_url: "https://linkedin.com/in/uday" }), env(db))
+    );
+    expect(res.status).toBe(303);
+    expect(res.headers.get("location")).toContain("ok=");
+    expect(db.tables.trainers).toHaveLength(1);
+    expect(db.tables.trainers[0].name).toBe("Uday Pawar S");
+    expect(db.tables.trainers[0].linkedin_url).toBe("https://linkedin.com/in/uday");
+    expect(db.tables.trainers[0].status).toBe("active");
+  });
+  it("rejects an add with no name (303 err) — no row added", async () => {
+    const db = makeDB();
+    const res = await trainerAdminPost(ctx(formReq("https://x/admin/trainers", { action: "add", title: "Trainer" }), env(db)));
+    expect(res.status).toBe(303);
+    expect(res.headers.get("location")).toContain("err=");
+    expect(db.tables.trainers).toHaveLength(0);
+  });
+  it("stores status=hidden when set", async () => {
+    const db = makeDB();
+    await trainerAdminPost(ctx(formReq("https://x/admin/trainers", { action: "add", name: "X", status: "hidden" }), env(db)));
+    expect(db.tables.trainers[0].status).toBe("hidden");
+  });
+  it("deletes a trainer by id", async () => {
+    const db = makeDB({ trainers: [{ id: 7, name: "X" }] });
+    const res = await trainerAdminPost(ctx(formReq("https://x/admin/trainers", { action: "delete", id: "7" }), env(db)));
+    expect(res.status).toBe(303);
+    expect(db.tables.trainers).toHaveLength(0);
   });
 });

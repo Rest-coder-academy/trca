@@ -64,18 +64,13 @@ const handleSubmit = async (e)=>
     try
     {
       // https://trcabe.onrender.com/enquiries/get/enquiries
-      let response=await axios.post('https://trcabe.onrender.com/enquiries/create/enquiry',enquiryData,{timeout:SUBMIT_TIMEOUT_MS})
+      // axios only resolves for 2xx responses by default; anything else (and network
+      // errors/timeouts) rejects and is handled in the catch block below.
+      await axios.post('https://trcabe.onrender.com/enquiries/create/enquiry',enquiryData,{timeout:SUBMIT_TIMEOUT_MS})
       // await axios.post('http://localhost:4005/enquiries/create/enquiry',enquiryData)
 
-      if(response.status>=200 && response.status<300)
-      {
-        notify(`Enquiry received. We'll call you on ${enquiryData.mobile} within one working day.`)
-        closeModal()
-      }
-      else
-      {
-        setSubmitFailed(true)
-      }
+      notify(`Enquiry received. We'll call you on ${enquiryData.mobile} within one working day.`)
+      closeModal()
     }
     catch(err)
     {
@@ -158,7 +153,7 @@ const handleSubmit = async (e)=>
           </ButtonComponent>
       </Box>
 
-      <Box className="enquiry-fields" p={2}>
+      <Box className="enquiry-fields">
         <Box className="enquiry-field">
           <InputBoxComponent
             value={enquiryData.fullname}

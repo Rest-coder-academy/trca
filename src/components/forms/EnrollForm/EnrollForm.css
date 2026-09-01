@@ -1,0 +1,73 @@
+.enroll-form {
+  background: #fff;
+  border-radius: 0.6rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.enroll-form .form-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #e4e6ef;
+  padding-bottom: 0.75rem;
+}
+.enroll-form .form-heading p {
+  color: #5b6472;
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+}
+
+.enroll-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  background: #f5f6fa;
+  border: 1px solid #e4e6ef;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+.enroll-price .amt {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #03084c;
+}
+.enroll-price .emi {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1b6b3a;
+  background: #e7f6ec;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+
+.enroll-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.enroll-fields .MuiTextField-root,
+.enroll-fields .MuiFormControl-root {
+  width: 100%;
+}
+
+.enroll-error {
+  background: #fdecea;
+  color: #b3261e;
+  border: 1px solid #f1b5ac;
+  border-radius: 0.4rem;
+  padding: 0.6rem 0.8rem;
+}
+
+.enroll-done {
+  text-align: center;
+  align-items: center;
+  gap: 1rem;
+}
+.enroll-done p {
+  color: #5b6472;
+}

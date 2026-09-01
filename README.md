@@ -116,6 +116,35 @@ admin ->  /admin/trainers (GET/POST)   (functions/admin/trainers.js, password-pr
   the API is ever unreachable, so the section always renders.
 - Set a trainer to **Hidden** to keep the profile but take it off the site.
 
+## Enrolments & payments (FDE)
+
+Course cards say **Enroll Now**. A paid course (FDE, ₹50,000) opens a Razorpay
+checkout; any other course opens a free "register interest" form. Enrolments
+(paid + registered) are viewable at **`/admin/enrollments`**.
+
+```
+Enroll Now (FDE)  -> checkout -> POST /api/enroll/order  (server creates the Razorpay order)
+                              -> Razorpay Checkout (EMI available)
+                              -> POST /api/enroll/verify (server verifies the signature, records it)
+Enroll Now (other) ->            POST /api/enroll/register (free interest, status='registered')
+```
+
+**Money rules (enforced in code):**
+- The amount is decided on the **server** (`shared/enroll.js` → `COURSE_PRICES`),
+  never taken from the browser. Add a course id + price there to make it payable.
+- The Razorpay **signature is verified server-side** before an enrolment is
+  recorded — a redirect alone can be forged.
+- Recording is **idempotent** (one row per Razorpay order id).
+- The referral (`?ref=…`) rides into the Razorpay order `notes` and the row.
+
+**Going live (you, in the Razorpay dashboard — the app never sees the keys):**
+1. Set the Pages secrets `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` (test first,
+   then live). Until they're set, `/api/enroll/order` returns 503 and the form
+   falls back to recording interest — nothing breaks.
+2. Enable **EMI** on the Razorpay account so it's offered at checkout.
+3. `npx wrangler d1 execute restcoder-enquiries --remote --file=schema-enrollments.sql`
+   to create the `enrollments` table.
+
 ## History / context
 
 - The previous backend (`trcabe.onrender.com`) was a separate repo by the prior

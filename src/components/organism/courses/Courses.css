@@ -166,3 +166,27 @@
 
            
         }
+/* FDE / paid-course accents on the course card */
+.courses .course-badge {
+  display: inline-block;
+  background: #ff9800;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+.courses .course-price {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #03084c;
+}
+.courses .course-price .course-emi {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1b6b3a;
+}

@@ -5,6 +5,9 @@ import { onRequestGet as adminGet } from "../functions/admin.js";
 import { onRequestPost as batchAdminPost } from "../functions/admin/batches.js";
 import { onRequestGet as trainersGet } from "../functions/api/trainers.js";
 import { onRequestPost as trainerAdminPost } from "../functions/admin/trainers.js";
+import { onRequestPost as enrollOrder } from "../functions/api/enroll/order.js";
+import { onRequestPost as enrollVerify } from "../functions/api/enroll/verify.js";
+import { onRequestPost as enrollRegister } from "../functions/api/enroll/register.js";
 
 // Fake D1 — mocks only the DB boundary (prepare/bind/run/all), so tests exercise
 // the real handler logic without a live database and without flake.
@@ -13,8 +16,9 @@ function makeDB(seed = {}) {
     enquiries: [...(seed.enquiries || [])],
     batches: [...(seed.batches || [])],
     trainers: [...(seed.trainers || [])],
+    enrollments: [...(seed.enrollments || [])],
   };
-  let ids = { enquiries: 1000, batches: 1000, trainers: 2000 };
+  let ids = { enquiries: 1000, batches: 1000, trainers: 2000, enrollments: 3000 };
   return {
     tables: t,
     prepare(sql) {
@@ -48,6 +52,19 @@ function makeDB(seed = {}) {
               });
           } else if (/DELETE FROM trainers/i.test(sql)) {
             t.trainers = t.trainers.filter((b) => String(b.id) !== String(args[0]));
+          } else if (/INSERT INTO enrollments/i.test(sql)) {
+            if (/'paid'/.test(sql)) {
+              t.enrollments.push({
+                id: ++ids.enrollments, fullname: args[0], mobile: args[1], email: args[2], experience: args[3],
+                course: args[4], course_name: args[5], batch: args[6], referral: args[7], amount: args[8],
+                razorpay_order_id: args[9], razorpay_payment_id: args[10], status: "paid",
+              });
+            } else {
+              t.enrollments.push({
+                id: ++ids.enrollments, fullname: args[0], mobile: args[1], email: args[2], experience: args[3],
+                course: args[4], course_name: args[5], batch: args[6], referral: args[7], status: "registered",
+              });
+            }
           }
           return { success: true };
         },
@@ -62,8 +79,18 @@ function makeDB(seed = {}) {
             if (/status\s*=\s*'active'/i.test(sql)) rows = rows.filter((b) => (b.status || "active") === "active");
             return { results: rows };
           }
+          if (/FROM enrollments/i.test(sql)) return { results: t.enrollments };
           if (/FROM enquiries/i.test(sql)) return { results: t.enquiries };
           return { results: [] };
+        },
+        async first() {
+          // The only .first() query is the idempotency lookup in verify.js:
+          // SELECT id FROM enrollments WHERE razorpay_order_id = ?1
+          if (/FROM enrollments/i.test(sql) && /razorpay_order_id\s*=/i.test(sql)) {
+            return t.enrollments.find((e) => e.razorpay_order_id === args[0]) || null;
+          }
+          const r = await stmt.all();
+          return (r.results && r.results[0]) || null;
         },
       };
       return stmt;
@@ -74,6 +101,14 @@ const ctx = (request, env) => ({ request, env });
 const authH = (u = "admin", p = "secret") => ({ Authorization: "Basic " + btoa(`${u}:${p}`) });
 const jsonReq = (body) =>
   new Request("https://x/api/enquiry", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+const jsonReqTo = (url, body) =>
+  new Request(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+async function rzpSign(orderId, paymentId, secret) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const mac = await crypto.subtle.sign("HMAC", key, enc.encode(`${orderId}|${paymentId}`));
+  return [...new Uint8Array(mac)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
 const formReq = (url, obj) =>
   new Request(url, { method: "POST", headers: { ...authH(), "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(obj).toString() });
 
@@ -239,5 +274,62 @@ describe("POST /admin/trainers (CRUD)", () => {
     const res = await trainerAdminPost(ctx(formReq("https://x/admin/trainers", { action: "delete", id: "7" }), env(db)));
     expect(res.status).toBe(303);
     expect(db.tables.trainers).toHaveLength(0);
+  });
+});
+
+describe("POST /api/enroll/order", () => {
+  it("503 when Razorpay keys are not configured (inert until keys)", async () => {
+    const res = await enrollOrder(ctx(jsonReqTo("https://x/api/enroll/order", { course: "fde" }), { DB: makeDB() }));
+    expect(res.status).toBe(503);
+  });
+  it("400 for a course that has no online price, even with keys", async () => {
+    const env = { DB: makeDB(), RAZORPAY_KEY_ID: "k", RAZORPAY_KEY_SECRET: "s" };
+    const res = await enrollOrder(ctx(jsonReqTo("https://x/api/enroll/order", { course: "java-fs" }), env));
+    expect(res.status).toBe(400);
+  });
+});
+
+describe("POST /api/enroll/register (free interest)", () => {
+  it("records a registration (201)", async () => {
+    const db = makeDB();
+    const res = await enrollRegister(
+      ctx(jsonReqTo("https://x/api/enroll/register", { fullname: "Asha", mobile: "9000000000", course: "java-fs", course_name: "Java Full Stack" }), { DB: db })
+    );
+    expect(res.status).toBe(201);
+    expect(db.tables.enrollments).toHaveLength(1);
+    expect(db.tables.enrollments[0].status).toBe("registered");
+  });
+  it("400 without name/mobile", async () => {
+    const res = await enrollRegister(ctx(jsonReqTo("https://x/api/enroll/register", { fullname: "" }), { DB: makeDB() }));
+    expect(res.status).toBe(400);
+  });
+});
+
+describe("POST /api/enroll/verify", () => {
+  const env = (db) => ({ DB: db, RAZORPAY_KEY_SECRET: "sekret" });
+  it("400 on an invalid signature — no row written", async () => {
+    const db = makeDB();
+    const res = await enrollVerify(
+      ctx(jsonReqTo("https://x/api/enroll/verify", { razorpay_order_id: "o1", razorpay_payment_id: "p1", razorpay_signature: "bad", course: "fde" }), env(db))
+    );
+    expect(res.status).toBe(400);
+    expect(db.tables.enrollments).toHaveLength(0);
+  });
+  it("records a verified paid enrolment, idempotently (no duplicate on retry)", async () => {
+    const db = makeDB();
+    const sig = await rzpSign("o1", "p1", "sekret");
+    const body = {
+      razorpay_order_id: "o1", razorpay_payment_id: "p1", razorpay_signature: sig,
+      course: "fde", course_name: "Forward Deployed Engineering", fullname: "Asha", mobile: "9", email: "a@b.c",
+    };
+    const r1 = await enrollVerify(ctx(jsonReqTo("https://x/api/enroll/verify", body), env(db)));
+    expect(r1.status).toBe(200);
+    expect(db.tables.enrollments).toHaveLength(1);
+    expect(db.tables.enrollments[0].status).toBe("paid");
+    expect(db.tables.enrollments[0].amount).toBe(5000000); // server-decided, not from the body
+
+    const r2 = await enrollVerify(ctx(jsonReqTo("https://x/api/enroll/verify", body), env(db)));
+    expect(r2.status).toBe(200);
+    expect(db.tables.enrollments).toHaveLength(1); // still one — idempotent
   });
 });

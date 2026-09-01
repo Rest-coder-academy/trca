@@ -9,6 +9,7 @@ import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyCompo
 import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import BatchItem from './BatchItem';
+import { isBatchUpcoming } from './batchDateUtils';
 import LaptopIcon from '@mui/icons-material/Laptop';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -21,6 +22,7 @@ import { useAuth } from '../../../App';
 
  function BatchesCard({name,date,day,time,trainer,duration,mode,contact}) {
     let {openModal}=useAuth()
+    let upcoming=isBatchUpcoming(date)
   return (
     <Card sx={{}} className="card">
       <Box className="course-header">
@@ -30,10 +32,16 @@ import { useAuth } from '../../../App';
           component="h5"
           text={name}
         />
+        {!upcoming && (
+          <Box component="span" className="batch-status-chip">Batch closed</Box>
+        )}
       </Box>
       <CardContent className="card-content">
         <List className="links">
-          <BatchItem title="Date" data={date} icon={<CalendarMonthIcon/>} />
+          {upcoming
+            ? <BatchItem title="Date" data={date} icon={<CalendarMonthIcon/>} />
+            : <BatchItem title="Status" data="New dates coming soon" icon={<CalendarMonthIcon/>} />
+          }
           <BatchItem title="Day" data={day} icon={<CalendarTodayIcon/>} />
           <BatchItem title="Time" data={time}  icon={<AccessTimeIcon/>} />
           <BatchItem title="Duration" data={duration} icon={<AlarmOnIcon/>} />
@@ -41,13 +49,13 @@ import { useAuth } from '../../../App';
           <BatchItem title="Trainer" data={trainer} icon={<PersonIcon/>} />
           <BatchItem title="Contact" data={contact} icon={<CallIcon/>} />
         </List>
-       
+
       </CardContent>
       <CardActions sx={{}} className="card-actions">
         <ButtonComponent
           size="large"
           variant="outlined"
-          label="Enquire Now"
+          label={upcoming ? "Enquire Now" : "Join the Waitlist"}
           borderRadius="0"
           sx={{}}
           onBtnClick={openModal}

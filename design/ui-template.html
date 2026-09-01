@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rest Coder Academy — UI Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--rca-font);
+    font-size: var(--rca-fs-body);
+    line-height: var(--rca-lh-body);
+    color: var(--rca-ink);
+    background: var(--rca-surface-subtle);
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: var(--rca-space-7) var(--rca-gutter) var(--rca-space-8); }
+  header.page {
+    background: var(--rca-navy); color: var(--rca-ink-invert);
+    padding: var(--rca-space-7) var(--rca-gutter);
+  }
+  header.page .inner { max-width: 1080px; margin: 0 auto; }
+  header.page h1 { font-size: var(--rca-fs-h2); line-height: var(--rca-lh-tight); margin: 0 0 var(--rca-space-3); font-weight: var(--rca-fw-bold); }
+  header.page p { margin: 0; max-width: 62ch; opacity: .85; }
+
+  section { margin-bottom: var(--rca-space-8); }
+  h2.sec {
+    font-size: var(--rca-fs-h4); font-weight: var(--rca-fw-bold); color: var(--rca-navy);
+    margin: 0 0 var(--rca-space-2); line-height: var(--rca-lh-tight);
+  }
+  .sec-note { margin: 0 0 var(--rca-space-5); color: var(--rca-ink-muted); font-size: var(--rca-fs-small); max-width: 70ch; }
+  .card {
+    background: var(--rca-surface); border: 1px solid var(--rca-border);
+    border-radius: var(--rca-radius-lg); box-shadow: var(--rca-shadow-card);
+    padding: var(--rca-space-5);
+  }
+  .grid { display: grid; gap: var(--rca-space-4); }
+  .g4 { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+  /* swatches */
+  .sw { border: 1px solid var(--rca-border); border-radius: var(--rca-radius-md); overflow: hidden; background: var(--rca-surface); }
+  .sw .chip { height: 76px; }
+  .sw .meta { padding: var(--rca-space-3); }
+  .sw b { display: block; font-size: var(--rca-fs-small); font-weight: var(--rca-fw-semibold); }
+  .sw code { font-size: var(--rca-fs-caption); color: var(--rca-ink-muted); }
+  .sw small { display: block; margin-top: 6px; font-size: var(--rca-fs-caption); color: var(--rca-ink-muted); line-height: 1.45; }
+
+  /* buttons — the real spec */
+  .btn {
+    font-family: var(--rca-font); font-size: var(--rca-fs-body); font-weight: var(--rca-fw-semibold);
+    height: var(--rca-control-h); padding: 0 var(--rca-space-5);
+    border: 1px solid transparent; border-radius: var(--rca-radius-md);
+    background: var(--rca-navy); color: var(--rca-ink-invert);
+    cursor: pointer; transition: background var(--rca-transition), border-color var(--rca-transition);
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--rca-space-2);
+  }
+  .btn:hover              { background: var(--rca-navy-hover); }
+  .btn.is-pressed         { background: var(--rca-navy-pressed); }
+  .btn.is-focus           { box-shadow: var(--rca-focus-ring); outline: none; }
+  .btn[disabled]          { background: var(--rca-disabled-bg); color: var(--rca-disabled-ink); cursor: not-allowed; }
+  .btn.is-loading         { background: var(--rca-navy-pressed); cursor: progress; }
+  .btn--outline           { background: transparent; color: var(--rca-navy); border-color: var(--rca-navy); }
+  .btn--outline:hover     { background: rgba(3, 8, 76, .06); }
+  .spinner {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.35); border-top-color: #fff;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state-row { display: flex; flex-direction: column; gap: var(--rca-space-2); align-items: flex-start; }
+  .state-row span { font-size: var(--rca-fs-caption); color: var(--rca-ink-muted); }
+
+  /* fields */
+  .field { display: block; margin-bottom: var(--rca-space-4); }
+  .field label { display: block; font-size: var(--rca-fs-small); font-weight: var(--rca-fw-medium); margin-bottom: 6px; }
+  .field input {
+    width: 100%; height: var(--rca-control-h); padding: 0 var(--rca-space-3);
+    font-family: var(--rca-font); font-size: var(--rca-fs-body);
+    border: 1px solid var(--rca-border-strong); border-radius: var(--rca-radius-md);
+    background: var(--rca-surface); color: var(--rca-ink);
+    transition: border-color var(--rca-transition), box-shadow var(--rca-transition);
+  }
+  .field input:focus { outline: none; border-color: var(--rca-blue); box-shadow: var(--rca-focus-ring); }
+  .field.err input { border-color: var(--rca-danger); }
+  .field.ok  input { border-color: var(--rca-success); }
+  .help { font-size: var(--rca-fs-caption); margin-top: 6px; color: var(--rca-ink-muted); }
+  .help.err { color: var(--rca-danger); }
+  .help.ok  { color: var(--rca-success); }
+
+  /* banners */
+  .banner { border-radius: var(--rca-radius-md); padding: var(--rca-space-3) var(--rca-space-4); font-size: var(--rca-fs-small); margin-bottom: var(--rca-space-3); }
+  .banner.ok  { background: var(--rca-success-bg); color: var(--rca-success); border: 1px solid var(--rca-success); }
+  .banner.err { background: var(--rca-danger-bg);  color: var(--rca-danger);  border: 1px solid var(--rca-danger); }
+
+  /* course card */
+  .course { display: flex; flex-direction: column; height: 100%; }
+  .course .hd { background: var(--rca-navy); color: #fff; margin: calc(var(--rca-space-5) * -1) calc(var(--rca-space-5) * -1) var(--rca-space-4); padding: var(--rca-space-4) var(--rca-space-5); border-radius: var(--rca-radius-lg) var(--rca-radius-lg) 0 0; }
+  .course .hd h3 { margin: 0 0 4px; font-size: var(--rca-fs-h5); font-weight: var(--rca-fw-bold); line-height: var(--rca-lh-tight); }
+  .course .hd p  { margin: 0; font-size: var(--rca-fs-caption); opacity: .85; }
+  .course .price { font-size: var(--rca-fs-h4); font-weight: var(--rca-fw-bold); color: var(--rca-navy); margin: 0 0 var(--rca-space-1); }
+  .course .price small { font-size: var(--rca-fs-caption); font-weight: var(--rca-fw-regular); color: var(--rca-ink-muted); }
+  .course ul { margin: 0 0 var(--rca-space-4); padding-left: 1.1em; font-size: var(--rca-fs-small); color: var(--rca-ink-muted); }
+  .course ul li { margin-bottom: 2px; }
+  .course .foot { margin-top: auto; }
+  .course .foot .btn { width: 100%; }
+  .tag { display: inline-block; background: rgba(255,152,0,.14); color: #8A5200; font-size: var(--rca-fs-caption); font-weight: var(--rca-fw-semibold); padding: 3px 10px; border-radius: var(--rca-radius-pill); margin-bottom: var(--rca-space-3); }
+
+  /* type scale */
+  .type-row { display: flex; align-items: baseline; gap: var(--rca-space-4); padding: var(--rca-space-3) 0; border-bottom: 1px dashed var(--rca-border); }
+  .type-row code { flex: 0 0 190px; font-size: var(--rca-fs-caption); color: var(--rca-ink-muted); }
+
+  /* scales */
+  .bar { background: var(--rca-blue); height: 20px; border-radius: var(--rca-radius-sm); }
+  .rad { height: 72px; background: var(--rca-navy); display: flex; align-items: center; justify-content: center; color: #fff; font-size: var(--rca-fs-caption); }
+
+  /* do / don't */
+  .dd { border-left: 3px solid; padding: var(--rca-space-3) var(--rca-space-4); border-radius: 0 var(--rca-radius-md) var(--rca-radius-md) 0; background: var(--rca-surface); margin-bottom: var(--rca-space-3); }
+  .dd.no  { border-color: var(--rca-danger); }
+  .dd.yes { border-color: var(--rca-success); }
+  .dd b { display: block; font-size: var(--rca-fs-small); margin-bottom: 2px; }
+  .dd p { margin: 0; font-size: var(--rca-fs-small); color: var(--rca-ink-muted); }
+
+  table { width: 100%; border-collapse: collapse; background: var(--rca-surface); font-size: var(--rca-fs-small); border-radius: var(--rca-radius-lg); overflow: hidden; }
+  th, td { text-align: left; padding: var(--rca-space-3) var(--rca-space-4); border-bottom: 1px solid var(--rca-border); }
+  th { background: var(--rca-surface-subtle); font-weight: var(--rca-fw-semibold); color: var(--rca-navy); }
+  tr:last-child td { border-bottom: none; }
+  code.k { background: var(--rca-surface-subtle); border: 1px solid var(--rca-border); border-radius: var(--rca-radius-sm); padding: 1px 5px; font-size: var(--rca-fs-caption); }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <div class="inner">
+    <h1>Rest Coder Academy — UI Template</h1>
+    <p>The one reference for every screen on restcoderacademy. Colours, type, spacing and component states are defined once in <code>design/tokens.css</code> and used everywhere. If a value isn't on this page, it doesn't go in the app.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section>
+    <h2 class="sec">1 · Colour</h2>
+    <p class="sec-note">This is the palette already in <code>src/styles/colors.css</code> — nothing new was invented. It is written as variables so the same navy is the same navy on every screen.</p>
+    <div class="grid g4">
+      <div class="sw"><div class="chip" style="background:var(--rca-navy)"></div><div class="meta"><b>Navy</b><code>#03084C</code><small>Primary buttons, headings, navbar.</small></div></div>
+      <div class="sw"><div class="chip" style="background:var(--rca-blue)"></div><div class="meta"><b>Blue</b><code>#146389</code><small>Links, secondary surfaces, focus ring.</small></div></div>
+      <div class="sw"><div class="chip" style="background:var(--rca-orange)"></div><div class="meta"><b>Orange</b><code>#FF9800</code><small>Accent only — badges, highlights. Never a full button fill; it fails contrast with white text.</small></div></div>
+      <div class="sw"><div class="chip" style="background:var(--rca-ink)"></div><div class="meta"><b>Ink</b><code>#333333</code><small>Body copy.</small></div></div>
+      <div class="sw"><div class="chip" style="background:var(--rca-ink-soft)"></div><div class="meta"><b>Ink soft</b><code>#45545D</code><small>Long paragraphs.</small></div></div>
+      <div class="sw"><div class="chip" style="background:var(--rca-border-strong)"></div><div class="meta"><b>Border</b><code>#AEBAC0</code><small>Input outlines, dividers.</small></div></div>
+      <div class="sw"><div class="chip" style="background:var(--rca-success)"></div><div class="meta"><b>Success</b><code>#2E7D32</code><small>Only when something actually succeeded.</small></div></div>
+      <div class="sw"><div class="chip" style="background:var(--rca-danger)"></div><div class="meta"><b>Danger</b><code>#D32F2F</code><small>Validation errors, failed submits.</small></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">2 · Type</h2>
+    <p class="sec-note">Montserrat, one family, everywhere. Today the app loads Montserrat but <code>src/index.css:8</code> forces <code>Segoe UI</code> with <code>!important</code>, the navbar and footer use Tilt Neon, and Dancing Script is loaded and never used. Three faces go; Montserrat stays.</p>
+    <div class="card">
+      <div class="type-row"><code>--rca-fs-h1 · 48/32px · 700</code><span style="font-size:var(--rca-fs-h1);font-weight:700;line-height:1.2;color:var(--rca-navy)">Hero headline</span></div>
+      <div class="type-row"><code>--rca-fs-h2 · 38px · 700</code><span style="font-size:var(--rca-fs-h2);font-weight:700;line-height:1.2;color:var(--rca-navy)">Section title</span></div>
+      <div class="type-row"><code>--rca-fs-h3 · 30px · 700</code><span style="font-size:var(--rca-fs-h3);font-weight:700;line-height:1.2">Subsection</span></div>
+      <div class="type-row"><code>--rca-fs-h4 · 24px · 600</code><span style="font-size:var(--rca-fs-h4);font-weight:600">Card heading</span></div>
+      <div class="type-row"><code>--rca-fs-h5 · 20px · 600</code><span style="font-size:var(--rca-fs-h5);font-weight:600">Course name</span></div>
+      <div class="type-row"><code>--rca-fs-lead · 18px · 400</code><span style="font-size:var(--rca-fs-lead)">Intro paragraph</span></div>
+      <div class="type-row"><code>--rca-fs-body · 16px · 400</code><span>Body copy — the floor for anything a person reads.</span></div>
+      <div class="type-row"><code>--rca-fs-small · 14px · 400</code><span style="font-size:var(--rca-fs-small)">Meta, list items</span></div>
+      <div class="type-row" style="border:none"><code>--rca-fs-caption · 12px · 400</code><span style="font-size:var(--rca-fs-caption)">Helper text, labels</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">3 · Buttons</h2>
+    <p class="sec-note">Six states, each a distinct fill — no opacity tricks. 48px tall on desktop, 44px on mobile, never smaller. Transition on background only: no lift, no scale.</p>
+    <div class="card grid g4">
+      <div class="state-row"><button class="btn">Enquire Now</button><span>Default</span></div>
+      <div class="state-row"><button class="btn" style="background:var(--rca-navy-hover)">Enquire Now</button><span>Hover · #0A1270</span></div>
+      <div class="state-row"><button class="btn is-pressed">Enquire Now</button><span>Pressed · #01062F</span></div>
+      <div class="state-row"><button class="btn is-focus">Enquire Now</button><span>Focus · 3px blue ring</span></div>
+      <div class="state-row"><button class="btn" disabled>Enquire Now</button><span>Disabled</span></div>
+      <div class="state-row"><button class="btn is-loading"><span class="spinner"></span>Sending…</button><span>Loading — label changes, width does not jump</span></div>
+      <div class="state-row"><button class="btn btn--outline">View Syllabus</button><span>Secondary / outline</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">4 · Form fields &amp; feedback</h2>
+    <p class="sec-note">The enquiry form is the only place a lead is captured, so its states carry the most weight on the site. <strong>Success is shown only after the server confirms.</strong> Today the form shows "Thanks, we will reach you soon" even when the request fails — every one of those leads is lost with nobody knowing.</p>
+    <div class="grid g2">
+      <div class="card">
+        <div class="field"><label>Full Name</label><input value="" placeholder="Your name"><div class="help">As it should appear on the certificate.</div></div>
+        <div class="field"><label>Mobile</label><input value="98765 43210" style="border-color:var(--rca-blue);box-shadow:var(--rca-focus-ring)"><div class="help">Focused</div></div>
+        <div class="field err"><label>Email</label><input value="pavan@"><div class="help err">Enter a valid email address.</div></div>
+        <div class="field ok" style="margin-bottom:0"><label>Experience</label><input value="College student — Final year"><div class="help ok">Looks good.</div></div>
+      </div>
+      <div class="card">
+        <p style="margin:0 0 var(--rca-space-4);font-weight:var(--rca-fw-semibold);color:var(--rca-navy)">Submit outcomes</p>
+        <div class="banner ok">✓ Enquiry received. We'll call you on 98765 43210 within one working day.</div>
+        <p class="help" style="margin:0 0 var(--rca-space-5)">Only after a <code class="k">2xx</code> response. Modal closes after this is read.</p>
+        <div class="banner err">We couldn't send that just now. Message us on WhatsApp and we'll pick it up straight away.</div>
+        <p class="help" style="margin:0 0 var(--rca-space-4)">Server unreachable or non-<code class="k">2xx</code>. The modal <strong>stays open</strong>, the typed details are kept, and the WhatsApp link is offered so the lead still reaches someone.</p>
+        <button class="btn is-loading" style="width:100%"><span class="spinner"></span>Sending…</button>
+        <p class="help" style="margin-top:var(--rca-space-2)">In flight — button disabled so it can't be double-submitted.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">5 · Course card</h2>
+    <p class="sec-note">Fixed skeleton so every card in a row is the same height regardless of how many technologies it lists. The price row is a reserved slot: it holds the fee once pricing is public, and a neutral "Fee on request" line until then, so adding the price later moves nothing.</p>
+    <div class="grid g3">
+      <div class="card course">
+        <div class="hd"><h3>Java Full Stack</h3><p>For freshers &amp; working professionals</p></div>
+        <span class="tag">Next batch · 15 Sep</span>
+        <p class="price">₹35,000 <small>· 4 months · offline</small></p>
+        <ul><li>Core &amp; Advanced Java</li><li>Spring, Hibernate</li><li>Microservices, REST API</li><li>HTML, CSS, JavaScript, Tailwind</li></ul>
+        <div class="foot"><button class="btn">Enquire Now</button></div>
+      </div>
+      <div class="card course">
+        <div class="hd"><h3>Python Full Stack</h3><p>For freshers &amp; working professionals</p></div>
+        <span class="tag">Next batch · 15 Sep</span>
+        <p class="price" style="font-size:var(--rca-fs-lead);font-weight:var(--rca-fw-medium);color:var(--rca-ink-muted)">Fee on request <small>· 4 months</small></p>
+        <ul><li>Python &amp; Advanced Python</li><li>Django</li><li>Microservices, REST API</li><li>HTML, CSS, JavaScript, Tailwind</li></ul>
+        <div class="foot"><button class="btn">Enquire Now</button></div>
+      </div>
+      <div class="card course">
+        <div class="hd"><h3>MERN Stack</h3><p>For freshers &amp; working professionals</p></div>
+        <span class="tag" style="background:var(--rca-disabled-bg);color:var(--rca-disabled-ink)">Batch full</span>
+        <p class="price">₹35,000 <small>· 4 months · offline</small></p>
+        <ul><li>MongoDB, Express, Node</li><li>React, Next.js, TypeScript</li><li>Microservices, REST API</li><li>HTML, CSS, Tailwind</li></ul>
+        <div class="foot"><button class="btn btn--outline">Join the waitlist</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">6 · Spacing, radius, elevation</h2>
+    <div class="grid g2">
+      <div class="card">
+        <p style="margin:0 0 var(--rca-space-4);font-weight:var(--rca-fw-semibold);color:var(--rca-navy)">Spacing — 4px base</p>
+        <div style="display:grid;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px"><code style="width:130px;font-size:12px;color:var(--rca-ink-muted)">--rca-space-1 · 4</code><div class="bar" style="width:4px"></div></div>
+          <div style="display:flex;align-items:center;gap:12px"><code style="width:130px;font-size:12px;color:var(--rca-ink-muted)">--rca-space-2 · 8</code><div class="bar" style="width:8px"></div></div>
+          <div style="display:flex;align-items:center;gap:12px"><code style="width:130px;font-size:12px;color:var(--rca-ink-muted)">--rca-space-3 · 12</code><div class="bar" style="width:12px"></div></div>
+          <div style="display:flex;align-items:center;gap:12px"><code style="width:130px;font-size:12px;color:var(--rca-ink-muted)">--rca-space-4 · 16</code><div class="bar" style="width:16px"></div></div>
+          <div style="display:flex;align-items:center;gap:12px"><code style="width:130px;font-size:12px;color:var(--rca-ink-muted)">--rca-space-5 · 24</code><div class="bar" style="width:24px"></div></div>
+          <div style="display:flex;align-items:center;gap:12px"><code style="width:130px;font-size:12px;color:var(--rca-ink-muted)">--rca-space-6 · 32</code><div class="bar" style="width:32px"></div></div>
+          <div style="display:flex;align-items:center;gap:12px"><code style="width:130px;font-size:12px;color:var(--rca-ink-muted)">--rca-space-7 · 48</code><div class="bar" style="width:48px"></div></div>
+          <div style="display:flex;align-items:center;gap:12px"><code style="width:130px;font-size:12px;color:var(--rca-ink-muted)">--rca-space-8 · 64</code><div class="bar" style="width:64px"></div></div>
+        </div>
+        <p class="help" style="margin-top:var(--rca-space-4)">Gap between page sections is <code class="k">--rca-space-8</code> (40px on mobile). Page gutter 24px desktop / 16px mobile.</p>
+      </div>
+      <div class="card">
+        <p style="margin:0 0 var(--rca-space-4);font-weight:var(--rca-fw-semibold);color:var(--rca-navy)">Radius — four values, not ten</p>
+        <div class="grid" style="grid-template-columns:repeat(4,1fr);gap:10px">
+          <div class="rad" style="border-radius:var(--rca-radius-sm)">4</div>
+          <div class="rad" style="border-radius:var(--rca-radius-md)">8</div>
+          <div class="rad" style="border-radius:var(--rca-radius-lg)">12</div>
+          <div class="rad" style="border-radius:var(--rca-radius-pill)">pill</div>
+        </div>
+        <p class="help" style="margin-top:var(--rca-space-3)">Chips 4 · buttons and inputs 8 · cards and modals 12 · tags pill. The app currently ships 0, 3px, 4px, 5px, 10px, .3rem, 30px, 50% and 100% — all of it collapses into these.</p>
+        <p style="margin:var(--rca-space-5) 0 var(--rca-space-3);font-weight:var(--rca-fw-semibold);color:var(--rca-navy)">Elevation</p>
+        <div style="display:flex;gap:var(--rca-space-4)">
+          <div style="flex:1;background:#fff;border:1px solid var(--rca-border);border-radius:var(--rca-radius-lg);padding:var(--rca-space-4);box-shadow:var(--rca-shadow-card);font-size:var(--rca-fs-caption)">Card at rest</div>
+          <div style="flex:1;background:#fff;border:1px solid var(--rca-border);border-radius:var(--rca-radius-lg);padding:var(--rca-space-4);box-shadow:var(--rca-shadow-hover);font-size:var(--rca-fs-caption)">Card on hover</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">7 · Breakpoints</h2>
+    <p class="sec-note">Every screen is checked at these four widths before a PR is raised. Most traffic to a Bangalore coaching site arrives on a phone, so 375 is the primary target, not an afterthought.</p>
+    <table>
+      <tr><th>Width</th><th>Layout</th><th>Rules</th></tr>
+      <tr><td><b>375</b> mobile</td><td>1 column</td><td>Drawer nav. Controls 44px. Hero H1 32px. 16px gutter. Cards full width.</td></tr>
+      <tr><td><b>768</b> tablet</td><td>2 columns</td><td>Drawer nav still. 24px gutter. Course cards 2-up.</td></tr>
+      <tr><td><b>1024</b> laptop</td><td>3 columns</td><td>Inline nav, hamburger hidden. Course cards 3-up.</td></tr>
+      <tr><td><b>1440</b> desktop</td><td>3 columns, centred</td><td>Container caps at 1200px. Controls 48px.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2 class="sec">8 · Rules</h2>
+    <div class="dd no"><b>Don't tell a person something worked when it didn't.</b><p>No success toast before a <code class="k">2xx</code>. A silent failure on the enquiry form costs a ₹35,000 enrolment and produces no error anywhere.</p></div>
+    <div class="dd no"><b>Don't ship a control that does nothing.</b><p>The navbar hamburger currently renders at every width from 600px up, but the drawer it opens is <code class="k">xs</code>-only — on tablet and desktop it is a dead button sitting next to a working nav.</p></div>
+    <div class="dd no"><b>Don't ship an uncompressed screenshot.</b><p>One review image is 3.8MB and the page totals about 7MB. Target the whole page under 1MB. Export at 2× display size, WebP, and set width and height so nothing reflows.</p></div>
+    <div class="dd no"><b>Don't hard-code a date in a component.</b><p>Batch dates read 24-05-2025 today. Dates live in one data file, and a past date renders as "Batch closed", never as an upcoming batch.</p></div>
+    <div class="dd yes"><b>Do put the proof above the fold.</b><p>Company placements and student outcomes are the reason someone enrols. They currently sit four sections down, under a generic mission paragraph.</p></div>
+    <div class="dd yes"><b>Do use a token for every value.</b><p>If a colour, size or radius isn't in <code class="k">design/tokens.css</code>, it doesn't go in a component. New value needed? Add it here first.</p></div>
+    <div class="dd yes"><b>Do keep every tap target at 44px or more.</b><p>Including the floating WhatsApp button and the drawer menu rows.</p></div>
+  </section>
+
+  <p class="help" style="text-align:center;margin-top:var(--rca-space-8)">
+    Scope note — this template covers the UI only. Hosting (Cloudflare) and SEO are owned by Nik and are deliberately not specified here.
+  </p>
+
+</div>
+</body>
+</html>

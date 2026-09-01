@@ -19,7 +19,7 @@ function FooterComponent() {
 
 
   return (
-    <Box className="footer" bgcolor="#032353" px={10}>
+    <Box className="footer" bgcolor="var(--rca-navy)" px={10}>
 
          <GenericGridComponents xs={12} sm={12} lg={3} spacing={6}
          mapdata={mapdataContent} sx={{textAlign:"center",mb:"2rem"}} />

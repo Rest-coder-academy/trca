@@ -1,7 +1,7 @@
 .footer
 {
     padding: 50px;
-    color: #ffffff;
+    color: var(--rca-surface);
     /* position: fixed;
     bottom: 0; */
     position: relative;
@@ -19,7 +19,7 @@
 }
 .footer .grid-content-box h5,.footer .grid-content-box p
 {
-    font-family: "Tilt Neon", sans-serif;
+    font-family: var(--rca-font);
 }
 
 .footer .grid-content-box p
@@ -41,7 +41,7 @@
 
 .footer .links li span
 {
-    font-family: "Tilt Neon", sans-serif;
+    font-family: var(--rca-font);
 }
 .footer .links li a
 {
@@ -50,7 +50,7 @@
 hr
 {
     height: 1px;
-    background-color: rgba(180, 178, 178, 0.644);
+    background-color: var(--rca-border-strong);
     border: none;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -59,7 +59,7 @@ hr
 .footer hr + p
 {
     text-align: center;
-    /* font-family: "Tilt Neon", sans-serif; */
+    
 
 }
 
@@ -88,10 +88,10 @@ hr
 }
 @keyframes map
 {
-    0% {transform:scale(1.1);color: #e54033;}
-    25% {transform:scale(1.2); color: #f6b606;}
-    75% {transform:scale(1.1);color: #32a352;}
-    100% {transform:scale(1.2); color: #4181ee;}
+    0% {transform:scale(1.1);color: var(--rca-danger);}
+    25% {transform:scale(1.2); color: var(--rca-orange);}
+    75% {transform:scale(1.1);color: var(--rca-success);}
+    100% {transform:scale(1.2); color: var(--rca-blue);}
 }
 /* ? media quries */
         /* Custom, iPhone Retina */ 
@@ -102,7 +102,7 @@ hr
             }
             .footer .grid-item:not(:last-child)
             {
-                /* border-bottom: 1px solid #bcb4b4; */
+                /* border-bottom: 1px solid var(--rca-border); */
                 padding-bottom: 10px;
                 justify-content: space-around;
             }
@@ -125,7 +125,7 @@ hr
             }
             .footer .arrow1
             {
-                color: #06065abd;
+                color: var(--rca-navy);
                 margin-top: 1rem;
                 border-radius: 100%;
                 background-color: white;
@@ -161,7 +161,7 @@ hr
             }
             .footer .grid-item:not(:last-child)
             {
-                border-bottom: 1px solid #bcb4b4;
+                border-bottom: 1px solid var(--rca-border);
                 padding-bottom: 10px;
                 justify-content: space-around;
             }

@@ -7,7 +7,7 @@ import ReviewsCard from './ReviewsCard'
 
 function Reviews() {
     return (
-        <Box className='reviews' my={5} mx={12} p={2} id="Reviews">
+        <Box className='reviews rca-section' id="Reviews">
         <TypoGraphyComponent variant='h3' text='Reviews' component='h3' sx={{textAlign:"center",fontWeight:"bold"}} />
         <TypoGraphyComponent variant='h4' text='What they are saying about us' component='h4' sx={{textAlign:"center",fontWeight:"bold"}} />
 

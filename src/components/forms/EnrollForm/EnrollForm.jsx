@@ -130,7 +130,7 @@ function EnrollForm({ course }) {
       image: "/favicon.png",
       prefill: { name: data.fullname, email: data.email, contact: data.mobile },
       notes: { course: course.courseId, referral: data.referral },
-      theme: { color: "#03084C" },
+      theme: { color: "var(--rca-navy)" },
       handler: async (resp) => {
         const v = await verifyPayment({ ...resp, ...payload() });
         setBusy(false);
@@ -221,7 +221,7 @@ function EnrollForm({ course }) {
           disabled={busy}
           label={busy ? "" : paid ? `Pay ₹${Number(course.price).toLocaleString("en-IN")}` : "Register my seat"}
         >
-          {busy && <CircularProgress size={20} sx={{ color: "#fff" }} />}
+          {busy && <CircularProgress size={20} sx={{ color: "var(--rca-surface)" }} />}
         </ButtonComponent>
         {paid && (
           <TypoGraphyComponent

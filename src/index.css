@@ -3,24 +3,23 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  /* font-family: "Tilt Neon", sans-serif!important; */
-  /* font-family: Avenir Next Demi, sans-serif!important; */
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif!important;
-  /* font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif!important; */
-
+  /* Montserrat, from --rca-font. This line used to force 'Segoe UI' with
+     !important on every element, which is why the brand face was loaded but
+     never rendered anywhere except the few elements carrying .ff-MS. */
+  font-family: var(--rca-font);
 
   min-height: 0;
   min-width: 0;
 }
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: var(--rca-font);
+  line-height: var(--rca-lh-body);
   font-weight: 400;
 
   color-scheme: light;
-  color: rgba(255, 255, 255, 0.87);
-  /* background-color: #042c68; */
+  color: var(--rca-ink);
+  /* background-color: var(--rca-navy); */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -45,4 +44,32 @@ html,body {
 a
 {
   text-decoration: none!important;
+}
+
+/* ==========================================================================
+   Section shell (#6)
+
+   Every top-level section used `mx={12}` — 96px of fixed horizontal margin at
+   every width, including a 375px phone, where it left barely half the screen
+   for content. This replaces it with the container and gutter from the token
+   scale: capped at 1200px and centred above that, gutters below it.
+   ========================================================================== */
+
+.rca-section {
+  max-width: var(--rca-container);
+  margin-inline: auto;
+  padding-inline: var(--rca-gutter);
+  padding-block: var(--rca-space-8);
+  /* The slick carousels render a track wider than their container and rely on
+     the section to clip it. With `mx={12}` the 96px margins happened to absorb
+     it; a centred container does not, and the page gained a horizontal
+     scrollbar at 768 and up. `clip` rather than `hidden` so nothing inside
+     becomes a scroll container. */
+  overflow-x: clip;
+}
+
+@media (max-width: 767px) {
+  .rca-section {
+    padding-inline: var(--rca-gutter-mobile);
+  }
 }

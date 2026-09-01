@@ -78,6 +78,23 @@ Edit `schema.sql`, then apply it:
 npx wrangler d1 execute restcoder-enquiries --remote --file=schema.sql
 ```
 
+## Batch schedule (admin-editable)
+
+The **Upcoming Batches** section and the course-card "Next batch" tags read live
+from D1 — the academy edits them at **`/admin/batches`** (same login as `/admin`),
+no code change or redeploy.
+
+```
+site  ->  GET /api/batches          (functions/api/batches.js, public read from D1)
+admin ->  /admin/batches (GET/POST)  (functions/admin/batches.js, password-protected CRUD)
+```
+
+- Table: D1 `batches` — see `schema-batches.sql`. Dates are **DD-MM-YYYY**.
+- The frontend (`useBatches` hook) falls back to the bundled `batches.js` if the
+  API is ever unreachable, so the section always renders.
+- A past-dated batch auto-shows "new dates coming soon" on the site, so it can
+  never advertise a stale date even if left unedited.
+
 ## History / context
 
 - The previous backend (`trcabe.onrender.com`) was a separate repo by the prior

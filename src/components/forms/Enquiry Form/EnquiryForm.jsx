@@ -10,7 +10,8 @@ import { useAuth } from '../../../App';
 import { regex } from '../../../regex/regex';
 import axios from 'axios';
 
-const WHATSAPP_FALLBACK_URL="https://wa.me/918073762257"
+const WHATSAPP_FALLBACK_NUMBERS=["918073762257","919110424403"]
+const WHATSAPP_PREFILL=encodeURIComponent("Hi Rest Coder Academy, I'd like to enquire about a course.")
 const SUBMIT_TIMEOUT_MS=10000
 
 function EnquiryForm() {
@@ -218,14 +219,19 @@ const handleSubmit = async (e)=>
               variant="body2"
               text="We couldn't send that just now. Message us on WhatsApp and we'll pick it up straight away."
             />
-            <a
-              className="enquiry-whatsapp-fallback"
-              href={WHATSAPP_FALLBACK_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Message us on WhatsApp
-            </a>
+            <div className="enquiry-whatsapp-links">
+              {WHATSAPP_FALLBACK_NUMBERS.map((num) => (
+                <a
+                  key={num}
+                  className="enquiry-whatsapp-fallback"
+                  href={`https://wa.me/${num}?text=${WHATSAPP_PREFILL}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  WhatsApp {num.replace(/^91/, "").replace(/(\d{5})(\d{5})/, "$1 $2")}
+                </a>
+              ))}
+            </div>
           </Box>
         )}
         <Box className="enquiry-field-button">

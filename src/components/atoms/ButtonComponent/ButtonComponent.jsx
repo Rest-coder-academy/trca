@@ -32,7 +32,8 @@ const ButtonComponent = ({
   sx = {},
   onMouseLeave = () => {},
   onMouseEnter = () => {},
-  type="button"
+  type="button",
+  ...rest
 }) => {
   const classes = useStyles();
 
@@ -76,7 +77,7 @@ const ButtonComponent = ({
       disableFocusRipple
       disableElevation
       type={type}
-      
+      {...rest}
     >
       {label}
       {children}

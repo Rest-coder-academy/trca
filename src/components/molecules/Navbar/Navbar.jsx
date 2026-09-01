@@ -19,6 +19,7 @@ import logo from "../../../assets/new logo1.png";
 import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { useAuth } from '../../../App';
 import { Link, animateScroll as scroll } from 'react-scroll';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 const drawerWidth = 240;
 // const navItems = ['Home', 'Fish', 'Stones','Plants','Food','Lights','Air Pumps','Tanks & Bowls'];
 const navItems = ['Courses',  'Reviews','Clients','Placements','Batches'];
@@ -28,10 +29,21 @@ function Navbar(props) {
     let {openModal}=useAuth()
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+
+  // On the homepage the nav items smooth-scroll to their in-page section.
+  // On any other route (e.g. a course page) that section doesn't exist, so
+  // route back to "/" with the section as a hash instead — Home.jsx scrolls
+  // to it once it mounts. Keeps every nav item working from every page.
+  const navLink = (item) =>
+    isHome
+      ? <Link to={item} smooth={true} offset={-62} activeClass='active' spy={true}>{item}</Link>
+      : <RouterLink to={`/#${item}`}>{item}</RouterLink>;
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -41,9 +53,9 @@ function Navbar(props) {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <ListItem key={item} disablePadding onClick={handleDrawerToggle}>
             <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={<Link to={item} smooth={true} offset={-62}  onClick={handleDrawerToggle} activeClass='active' spy={true}>{item}</Link>} />
+              <ListItemText primary={navLink(item)} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -59,7 +71,9 @@ function Navbar(props) {
       <AppBar component="nav">
         <Toolbar>
 
-        <img src={logo} alt=""  />
+        <RouterLink to="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <img src={logo} alt=""  />
+        </RouterLink>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -75,10 +89,9 @@ function Navbar(props) {
           <Box sx={{ display: { xs: 'none', sm: 'block',marginLeft:"auto" } }}>
             {navItems.map((item) => (
               <ButtonComponent key={item} sx={{ color: '#fff', }} variant='text'>
-                  <Link to={item} smooth={true} offset={-62} activeClass='active' spy={true}>{item}</Link>
-                  
+                  {navLink(item)}
                 </ButtonComponent>
-                
+
             ))}
              <ButtonComponent variant='contained' bgColor='bg-btn-blue' borderRadius='0px' paddingX={1.5} paddingY={.7} onBtnClick={openModal}>
                     Apply Now

@@ -1,8 +1,10 @@
 import { createContext, useContext, useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Navbar from "./components/molecules/Navbar/Navbar"
 import Footer from "./components/organism/Footer/FooterComponent"
 import Banner from './components/organism/Banner/Banner'
 import Home from "./components/Pages/Home";
+import CoursePage from "./components/Pages/CoursePage";
 import Modal from 'react-modal';
 import EnquiryForm from './components/forms/Enquiry Form/EnquiryForm';
 import "./App.css"
@@ -13,8 +15,10 @@ import { ToastContainer, toast } from 'react-toastify';
 
 function App() {
   const [modalIsOpen, setIsOpen] = useState(false);
-  
-  let openModal=()=> {
+  const [enquiryPrefill, setEnquiryPrefill] = useState("");
+
+  let openModal=(prefillMessage="")=> {
+    setEnquiryPrefill(prefillMessage);
     setIsOpen(true);
   }
 
@@ -41,7 +45,7 @@ function App() {
   
 
   return (
-    <AuthContext.Provider className="app" value={{ openModal, closeModal,notify }}>
+    <AuthContext.Provider className="app" value={{ openModal, closeModal,notify,enquiryPrefill }}>
       <Navbar />
       <ToastContainer className={"toast"} autoClose={2500}/>
       <Modal
@@ -49,11 +53,14 @@ function App() {
         onRequestClose={closeModal}
         className="modal-enquiry-form"
         style={customStyles}
-        
+
       >
         <EnquiryForm />
       </Modal>
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/courses/:slug" element={<CoursePage />} />
+      </Routes>
       <FloatingIcons/>
       <Footer />
     </AuthContext.Provider>

@@ -16,13 +16,16 @@ const SUBMIT_TIMEOUT_MS=10000
 
 function EnquiryForm() {
 
-  let [enquiryData,setenquiryData]=useState({fullname:"",mobile:"",email:"",experience:"",message:""})
+  let {closeModal,notify,enquiryPrefill}=useAuth()
+
+  // Lazy initial state: re-evaluated each time this component mounts, which
+  // happens each time the modal opens, so a fresh openModal(prefill) call
+  // (e.g. from a course page's "Enquire Now") is picked up correctly.
+  let [enquiryData,setenquiryData]=useState(()=>({fullname:"",mobile:"",email:"",experience:"",message:enquiryPrefill||""}))
   // const { register, handleSubmit, watch, formState: { errors } , control, reset} = useForm();
   let [enquiryErrors,setenquiryErrors]=useState({})
   let [isSubmitting,setIsSubmitting]=useState(false)
   let [submitFailed,setSubmitFailed]=useState(false)
-
-  let {closeModal,notify}=useAuth()
 
     let  options =[
         { label: "Working professional - Technical roles", id: 1 },

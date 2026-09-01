@@ -8,17 +8,19 @@ import Typography from '@mui/material/Typography';
 import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyComponent';
 import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { List, ListItem, ListItemText } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../../../App';
 import { useBatches } from '../Batches/useBatches';
 import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDateUtils';
 
 
- function CoursesCard({name,backend,audience,frontend,syllabus1,syllabus2}) {
+ function CoursesCard({name,slug,backend,audience,frontend,syllabus1,syllabus2}) {
     let {openModal}=useAuth()
     let batches=useBatches()
     let nextBatch=getNextBatchForCourse(name,batches)
   return (
     <Card sx={{ }} className='card'>
+        <RouterLink to={`/courses/${slug}`} className="course-header-link">
         <Box className="course-header">
             <TypoGraphyComponent
             variant="h5"
@@ -36,6 +38,7 @@ import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDat
             text={audience}
         />
         </Box>
+        </RouterLink>
     <CardContent className='card-content'>
     
           <List className='links' sx={{listStyleType:"disc"}}>
@@ -104,8 +107,9 @@ import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDat
   </Typography> */}
 </CardContent>
 <CardActions sx={{}} className='card-actions'>
-  
-  <ButtonComponent size='large' variant='outlined' label='Enquire Now'  borderRadius='0' sx={{}} onBtnClick={openModal}/>
+
+  <ButtonComponent size='large' variant='outlined' label='Enquire Now'  borderRadius='0' sx={{}} onBtnClick={()=>openModal(`I'm interested in the ${name} course.`)}/>
+  <ButtonComponent size='large' variant='text' label='View Syllabus' borderRadius='0' sx={{}} component={RouterLink} to={`/courses/${slug}`}/>
 </CardActions>
 </Card>
   );

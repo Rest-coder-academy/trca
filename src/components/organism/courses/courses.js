@@ -1,6 +1,7 @@
 export let courses=[
     {
         id:"1",
+        slug:"java-full-stack",
         name:"Java Full Stack",
         audience:"For Freshers & Working Professionals",
         backend:["Core Java","Advance Java","Springs","Hibernate","Microservices","Rest Api"],
@@ -8,6 +9,7 @@ export let courses=[
     },
     {
         id:"2",
+        slug:"python-full-stack",
         name:"Python Full Stack",
         audience:"For Freshers & Working Professionals",
         backend:["Python","Advance Python","Django","Microservices","Rest Api"],
@@ -15,6 +17,7 @@ export let courses=[
     },
     {
         id:"3",
+        slug:"mern-stack",
         name:"MERN Stack",
         audience:"For Freshers & Working Professionals",
         backend:["MongoDB","ExpressJs","NodeJs","Microservices","Rest Api"],

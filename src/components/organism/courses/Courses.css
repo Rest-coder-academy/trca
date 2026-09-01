@@ -52,6 +52,12 @@
 {
     padding: 0;
 }
+.courses .course-header-link
+{
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
 .courses .course-header
 {
     background-image: linear-gradient(to right,#0f1a2b,#244668);

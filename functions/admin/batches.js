@@ -2,9 +2,10 @@
 // GET renders the current batches with an edit form each + an "add" form.
 // POST handles add / update / delete, writes to D1, then redirects back.
 // Same Basic Auth as /admin (ADMIN_PASSWORD secret, fails closed if unset).
-import { escapeHtml, isValidBatchDate, requireAdminAuth } from "../../shared/serverUtil.js";
+import { escapeHtml, isValidBatchDate, requireAdminAuth, weekdayFromDate } from "../../shared/serverUtil.js";
 
-const FIELDS = ["name", "date", "day", "time", "trainer", "duration", "mode", "contact"];
+// `day` is derived from the date (not entered), and `status` is handled separately.
+const FIELDS = ["name", "date", "time", "trainer", "duration", "mode", "contact"];
 
 export async function onRequestGet(context) {
   const { request, env } = context;
@@ -15,7 +16,7 @@ export async function onRequestGet(context) {
   let rows = [];
   try {
     const res = await env.DB.prepare(
-      "SELECT id, name, date, day, time, trainer, duration, mode, contact, sort_order " +
+      "SELECT id, name, date, day, time, trainer, duration, mode, contact, sort_order, status " +
         "FROM batches ORDER BY sort_order ASC, date ASC"
     ).all();
     rows = res.results || [];
@@ -60,21 +61,24 @@ export async function onRequestPost(context) {
   if (!isValidBatchDate(vals.date))
     return redirect(request, "err", "Date must be a real date in DD-MM-YYYY format.");
 
+  const day = weekdayFromDate(vals.date); // derived, never entered — can't drift
+  const status = form.get("status") === "hidden" ? "hidden" : "active";
+
   try {
     if (action === "update") {
       if (!id) return redirect(request, "err", "Missing id.");
       await env.DB.prepare(
-        "UPDATE batches SET name=?1, date=?2, day=?3, time=?4, trainer=?5, duration=?6, mode=?7, contact=?8, sort_order=?9, updated_at=datetime('now') WHERE id=?10"
+        "UPDATE batches SET name=?1, date=?2, day=?3, time=?4, trainer=?5, duration=?6, mode=?7, contact=?8, sort_order=?9, status=?10, updated_at=datetime('now') WHERE id=?11"
       )
-        .bind(vals.name, vals.date, vals.day, vals.time, vals.trainer, vals.duration, vals.mode, vals.contact, sortOrder, id)
+        .bind(vals.name, vals.date, day, vals.time, vals.trainer, vals.duration, vals.mode, vals.contact, sortOrder, status, id)
         .run();
       return redirect(request, "ok", "Batch updated.");
     }
     if (action === "add") {
       await env.DB.prepare(
-        "INSERT INTO batches (name, date, day, time, trainer, duration, mode, contact, sort_order) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9)"
+        "INSERT INTO batches (name, date, day, time, trainer, duration, mode, contact, sort_order, status) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)"
       )
-        .bind(vals.name, vals.date, vals.day, vals.time, vals.trainer, vals.duration, vals.mode, vals.contact, sortOrder)
+        .bind(vals.name, vals.date, day, vals.time, vals.trainer, vals.duration, vals.mode, vals.contact, sortOrder, status)
         .run();
       return redirect(request, "ok", "Batch added.");
     }
@@ -158,16 +162,20 @@ function rowForm(r) {
 function fieldGrid(r) {
   const F = (name, label, ph = "") =>
     `<div><label>${label}</label><input name="${name}" value="${escapeHtml(r[name])}" placeholder="${escapeHtml(ph)}"/></div>`;
+  const status = r.status === "hidden" ? "hidden" : "active";
   return `<div class="grid">
     ${F("name", "Course name", "Java Full Stack")}
     ${F("date", "Date (DD-MM-YYYY)", "16-09-2026")}
-    ${F("day", "Day", "Wednesday")}
     ${F("time", "Time", "10:00 AM")}
     ${F("duration", "Duration", "4 months")}
     ${F("mode", "Mode", "offline")}
     ${F("trainer", "Trainer", "Uday pawar S")}
     ${F("contact", "Contact", "8073762257")}
     <div><label>Sort order</label><input name="sort_order" value="${escapeHtml(r.sort_order)}" placeholder="1"/></div>
+    <div><label>Status</label><select name="status">
+      <option value="active"${status === "active" ? " selected" : ""}>Active (shown on site)</option>
+      <option value="hidden"${status === "hidden" ? " selected" : ""}>Hidden</option>
+    </select></div>
   </div>`;
 }
 

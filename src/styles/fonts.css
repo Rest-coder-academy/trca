@@ -1,4 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
+/* ⚠️ NOTHING IMPORTS THIS FILE. Neither do styles/global.css or styles/width.css.
+   The .ff-MS, .fs-* and .fw-* utilities below have therefore never applied to
+   anything on the site (#6).
+
+   The Montserrat @import that used to sit here is why the brand face looked
+   like it was loaded when it was not. Montserrat is now self-hosted through
+   @fontsource/montserrat, imported in src/main.jsx.
+
+   Deleting this file, or importing it and auditing what the !important
+   utilities then start overriding, is its own ticket. */
 
 /* Font Family */
 .ff-MS {

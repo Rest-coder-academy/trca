@@ -112,7 +112,7 @@ import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDat
 </CardContent>
 <CardActions sx={{}} className='card-actions'>
   
-  <ButtonComponent size='large' variant={paid?'contained':'outlined'} label='Enroll Now'  borderRadius='0' sx={{}} onBtnClick={enroll}/>
+  <ButtonComponent size='large' variant={paid?'contained':'outlined'} label='Enroll Now' onBtnClick={enroll}/>
 </CardActions>
 </Card>
   );

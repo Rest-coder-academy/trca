@@ -49,10 +49,10 @@
 
 
 
-.banner-content-btns button:hover
-{
-  background-color: rgb(31, 31, 211)!important;
-}
+/* Hover, pressed and focus now come from ButtonComponent and design/tokens.css
+   (#7). The rule that used to live here forced rgb(31,31,211) with !important,
+   which is a blue that appears nowhere else in the palette and beat every state
+   the button declared. */
 
 
 /* .banner-content-btns button:active
@@ -94,11 +94,8 @@
             {
                 margin-top: 2rem;
             }
-            .banner .banner-content-btns button
-            {
-                border-radius: 30px!important
-
-            }
+            /* radius comes from --rca-radius-md; a 30px pill on mobile only
+               made the same button two different shapes. */
 
         }
 /* Extra Small Devices, Phones */ 

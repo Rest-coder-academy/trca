@@ -21,11 +21,12 @@ function App() {
   let closeModal=()=> {
     setIsOpen(false);
   }
-  const notify = (fullname) => toast(`Thanks ${fullname}.We will reach you soon`);
+  const notify = (message) => toast(message);
 
   const customStyles = {
     overlay:{
-      backgroundColor:"#06065abd"
+      backgroundColor:"rgba(15, 15, 25, 0.55)",
+      backdropFilter:"blur(3px)",
     },
     // content: {
     //   top: '55%',

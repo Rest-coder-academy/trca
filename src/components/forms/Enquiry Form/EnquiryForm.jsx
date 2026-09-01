@@ -1,5 +1,5 @@
-import { Box, Typography,Grid, Paper } from '@mui/material';
-import React, { useEffect, useState } from 'react'
+import { Box, CircularProgress } from '@mui/material';
+import React, { useState } from 'react'
 import InputBoxComponent from '../../atoms/InputBoxComponent/InputBoxComponent';
 import TextAreaComponent from '../../atoms/TextAreaComponent/TextAreaComponent';
 import DropdownComponent from '../../atoms/DropdownComponent/DropdownComponent';
@@ -10,14 +10,17 @@ import { useAuth } from '../../../App';
 import { regex } from '../../../regex/regex';
 import axios from 'axios';
 
-
+const WHATSAPP_FALLBACK_NUMBERS=["918073762257","919110424403"]
+const WHATSAPP_PREFILL=encodeURIComponent("Hi Rest Coder Academy, I'd like to enquire about a course.")
+const SUBMIT_TIMEOUT_MS=10000
 
 function EnquiryForm() {
 
   let [enquiryData,setenquiryData]=useState({fullname:"",mobile:"",email:"",experience:"",message:""})
   // const { register, handleSubmit, watch, formState: { errors } , control, reset} = useForm();
   let [enquiryErrors,setenquiryErrors]=useState({})
-  let [issubmit,setissubmit]=useState(false)
+  let [isSubmitting,setIsSubmitting]=useState(false)
+  let [submitFailed,setSubmitFailed]=useState(false)
 
   let {closeModal,notify}=useAuth()
 
@@ -38,38 +41,51 @@ let changeDropDown=(value)=>
     setenquiryData({...enquiryData,experience: value.label})
 }
     
-const handleSubmit = (e)=>
+const handleSubmit = async (e)=>
   {
     e.preventDefault();
-    
-    setenquiryErrors(
-    validateEnquiryForm(enquiryData))
-    setissubmit(true)
+
+    if(isSubmitting)
+    {
+      return
+    }
+
+    let errors=validateEnquiryForm(enquiryData)
+    setenquiryErrors(errors)
+
+    if(Object.keys(errors).length>0)
+    {
+      return
+    }
+
+    await sendEnquiry()
   };
 
   let sendEnquiry=async ()=>
   {
+    setSubmitFailed(false)
+    setIsSubmitting(true)
     try
     {
       // https://trcabe.onrender.com/enquiries/get/enquiries
-      let response=await axios.post('https://trcabe.onrender.com/enquiries/create/enquiry',enquiryData)
+      // axios only resolves for 2xx responses by default; anything else (and network
+      // errors/timeouts) rejects and is handled in the catch block below.
+      await axios.post('https://trcabe.onrender.com/enquiries/create/enquiry',enquiryData,{timeout:SUBMIT_TIMEOUT_MS})
       // await axios.post('http://localhost:4005/enquiries/create/enquiry',enquiryData)
+
+      notify(`Enquiry received. We'll call you on ${enquiryData.mobile} within one working day.`)
+      closeModal()
     }
     catch(err)
     {
       console.log(err)
+      setSubmitFailed(true)
+    }
+    finally
+    {
+      setIsSubmitting(false)
     }
   }
-
-useEffect(()=>
-{
-  if(Object.keys(enquiryErrors).length===0 && issubmit)
-    {
-      sendEnquiry();
-      notify(enquiryData.fullname);
-      closeModal()
-    }
-},[enquiryErrors])
 
 
   let validateEnquiryForm=({fullname,mobile,email,experience,message})=>
@@ -137,11 +153,11 @@ useEffect(()=>
        paddingY={1}
             onBtnClick={closeModal}
           >
-           X
+           ×
           </ButtonComponent>
       </Box>
 
-      <Box className="enquiry-fields" p={2}>
+      <Box className="enquiry-fields">
         <Box className="enquiry-field">
           <InputBoxComponent
             value={enquiryData.fullname}
@@ -196,6 +212,28 @@ useEffect(()=>
           
           />
         </Box>
+        {submitFailed && (
+          <Box className="enquiry-submit-error" role="alert">
+            <TypoGraphyComponent
+              component="p"
+              variant="body2"
+              text="We couldn't send that just now. Message us on WhatsApp and we'll pick it up straight away."
+            />
+            <div className="enquiry-whatsapp-links">
+              {WHATSAPP_FALLBACK_NUMBERS.map((num) => (
+                <a
+                  key={num}
+                  className="enquiry-whatsapp-fallback"
+                  href={`https://wa.me/${num}?text=${WHATSAPP_PREFILL}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  WhatsApp {num.replace(/^91/, "").replace(/(\d{5})(\d{5})/, "$1 $2")}
+                </a>
+              ))}
+            </div>
+          </Box>
+        )}
         <Box className="enquiry-field-button">
           <ButtonComponent
             variant="contained"
@@ -204,12 +242,15 @@ useEffect(()=>
             paddingX={1.5}
             paddingY={0.7}
             type="submit"
+            disabled={isSubmitting}
           >
-            Submit
+            {isSubmitting
+              ? <><CircularProgress size={16} color="inherit" className="enquiry-submit-spinner" /> Sending…</>
+              : "Submit"}
           </ButtonComponent>
         </Box>
       </Box>
-     
+
     </form>
   );
 }

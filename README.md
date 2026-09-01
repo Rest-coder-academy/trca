@@ -67,8 +67,7 @@ enquiry form  ->  POST /api/enquiry  ->  functions/api/enquiry.js  ->  D1 (enqui
     --command "SELECT * FROM enquiries ORDER BY created_at DESC;"
   ```
 
-(A friendly `/admin` lead-list page for the academy is a planned follow-up — see
-the issues.)
+- **Web:** `/admin` — a password-protected lead-list page (see below).
 
 ### Changing the database schema
 
@@ -77,6 +76,43 @@ Edit `schema.sql`, then apply it:
 ```bash
 npx wrangler d1 execute restcoder-enquiries --remote --file=schema.sql
 ```
+
+## Batch dates (admin-controlled)
+
+RCA updates upcoming batch dates themselves, with no code change or redeploy
+(see issue #15):
+
+```
+Batches section  ->  GET /api/batches   ->  functions/api/batches.js  ->  D1 (batches table)
+/admin/batches   ->  add / edit / hide  ->  functions/admin/batches.js -> D1 (batches table)
+```
+
+- Public read: `GET /api/batches` — returns active batch entries as JSON,
+  consumed by the "Upcoming Batches" section and each course card's "Next
+  batch" tag.
+- Admin screen: `/admin/batches` — same auth as `/admin` (see below); add,
+  edit, or hide a batch entry with plain HTML forms.
+- If the D1 table is empty or the request fails, the frontend falls back to
+  the static list in `src/components/organism/Batches/batches.js` so the
+  site never breaks — same graceful-degradation approach as the enquiry
+  form's WhatsApp fallback.
+- A batch whose date has passed is never shown as upcoming: the UI renders
+  "Batch closed" / "New dates coming soon" and switches the CTA to "Join the
+  Waitlist" (see issue #3).
+
+## Admin screens (`/admin`, `/admin/batches`)
+
+Both are password-protected with HTTP Basic Auth, gated by the `ADMIN_PASSWORD`
+Pages secret (`ADMIN_USER` optional, defaults to `admin`). Fails **closed** —
+if `ADMIN_PASSWORD` isn't set, nobody gets in.
+
+```bash
+# set once per environment, from the Cloudflare dashboard or:
+npx wrangler pages secret put ADMIN_PASSWORD
+```
+
+- `/admin` — enquiry leads (read-only).
+- `/admin/batches` — batch dates (add / edit / hide).
 
 ## History / context
 

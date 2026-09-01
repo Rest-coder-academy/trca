@@ -1,39 +1,12 @@
+import { requireAdminAuth } from "./_shared/auth.js";
+
 // GET /admin — password-protected lead list for the academy.
 // Reads enquiries from D1 (binding `DB`) and server-renders an HTML table.
-// Auth: HTTP Basic Auth against the `ADMIN_PASSWORD` Pages secret (user = ADMIN_USER
-// or "admin"). Fails CLOSED — if ADMIN_PASSWORD isn't set, nobody gets in.
 export async function onRequestGet(context) {
   const { request, env } = context;
 
-  const challenge = () =>
-    new Response("Authentication required.", {
-      status: 401,
-      headers: {
-        "WWW-Authenticate": 'Basic realm="Rest Coder Academy — Admin", charset="UTF-8"',
-        "content-type": "text/plain; charset=utf-8",
-      },
-    });
-
-  // Fail closed if no password is configured.
-  if (!env.ADMIN_PASSWORD) return challenge();
-
-  const header = request.headers.get("Authorization") || "";
-  if (!header.startsWith("Basic ")) return challenge();
-
-  let user = "", pass = "";
-  try {
-    const decoded = atob(header.slice(6));
-    const i = decoded.indexOf(":");
-    user = decoded.slice(0, i);
-    pass = decoded.slice(i + 1);
-  } catch {
-    return challenge();
-  }
-
-  const expectedUser = env.ADMIN_USER || "admin";
-  if (!safeEqual(user, expectedUser) || !safeEqual(pass, env.ADMIN_PASSWORD)) {
-    return challenge();
-  }
+  const auth = requireAdminAuth(request, env);
+  if (!auth.ok) return auth.response;
 
   if (!env.DB) {
     return html(page("Storage not configured.", 0, ""), 500);
@@ -84,6 +57,8 @@ function page(notice, count, body) {
   header { background:var(--navy); color:#fff; padding:1rem 1.25rem; display:flex; align-items:baseline; gap:.75rem; }
   header h1 { font-size:1.1rem; margin:0; }
   header .count { font-size:.85rem; opacity:.8; }
+  header nav { margin-left:auto; }
+  header nav a { color:#fff; opacity:.8; font-size:.85rem; text-decoration:underline; }
   .wrap { padding:1.25rem; overflow-x:auto; }
   table { border-collapse:collapse; width:100%; min-width:760px; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
   th,td { text-align:left; padding:.6rem .8rem; border-bottom:1px solid var(--line); vertical-align:top; font-size:.9rem; }
@@ -96,7 +71,7 @@ function page(notice, count, body) {
   .notice { padding:1rem 1.25rem; color:#b3261e; }
 </style></head>
 <body>
-  <header><h1>Enquiries</h1><span class="count">${count} total</span></header>
+  <header><h1>Enquiries</h1><span class="count">${count} total</span><nav><a href="/admin/batches">Batch dates →</a></nav></header>
   ${notice ? `<div class="notice">${esc(notice)}</div>` : ""}
   <div class="wrap">
     <table>
@@ -118,14 +93,4 @@ function esc(v) {
 
 function html(bodyStr, status) {
   return new Response(bodyStr, { status, headers: { "content-type": "text/html; charset=utf-8" } });
-}
-
-// Constant-time-ish string compare to avoid leaking the password via timing.
-function safeEqual(a, b) {
-  a = String(a);
-  b = String(b);
-  if (a.length !== b.length) return false;
-  let diff = 0;
-  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return diff === 0;
 }

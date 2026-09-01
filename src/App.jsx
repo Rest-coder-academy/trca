@@ -5,6 +5,7 @@ import Banner from './components/organism/Banner/Banner'
 import Home from "./components/Pages/Home";
 import Modal from 'react-modal';
 import EnquiryForm from './components/forms/Enquiry Form/EnquiryForm';
+import EnrollForm from './components/forms/EnrollForm/EnrollForm';
 import "./App.css"
 import FloatingIcons from './components/molecules/Floating Icons Components/FloatingIcons';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,7 +14,8 @@ import { ToastContainer, toast } from 'react-toastify';
 
 function App() {
   const [modalIsOpen, setIsOpen] = useState(false);
-  
+  const [enrollCourse, setEnrollCourse] = useState(null);
+
   let openModal=()=> {
     setIsOpen(true);
   }
@@ -21,11 +23,21 @@ function App() {
   let closeModal=()=> {
     setIsOpen(false);
   }
-  const notify = (fullname) => toast(`Thanks ${fullname}.We will reach you soon`);
+
+  // Enrolment modal — opened per course (paid → checkout, else → register).
+  let openEnroll=(course)=> {
+    setEnrollCourse(course);
+  }
+  let closeEnroll=()=> {
+    setEnrollCourse(null);
+  }
+
+  const notify = (message) => toast(message);
 
   const customStyles = {
     overlay:{
-      backgroundColor:"#06065abd"
+      backgroundColor:"rgba(15, 15, 25, 0.55)",
+      backdropFilter:"blur(3px)",
     },
     // content: {
     //   top: '55%',
@@ -40,7 +52,7 @@ function App() {
   
 
   return (
-    <AuthContext.Provider className="app" value={{ openModal, closeModal,notify }}>
+    <AuthContext.Provider className="app" value={{ openModal, closeModal, openEnroll, closeEnroll, notify }}>
       <Navbar />
       <ToastContainer className={"toast"} autoClose={2500}/>
       <Modal
@@ -48,9 +60,17 @@ function App() {
         onRequestClose={closeModal}
         className="modal-enquiry-form"
         style={customStyles}
-        
+
       >
         <EnquiryForm />
+      </Modal>
+      <Modal
+        isOpen={!!enrollCourse}
+        onRequestClose={closeEnroll}
+        className="modal-enquiry-form"
+        style={customStyles}
+      >
+        {enrollCourse && <EnrollForm course={enrollCourse} />}
       </Modal>
       <Home />
       <FloatingIcons/>

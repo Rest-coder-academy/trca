@@ -55,9 +55,21 @@
 .courses .course-header
 {
     background-image: linear-gradient(to right,#0f1a2b,#244668);
-    text-align: center; 
+    text-align: center;
     padding: 1rem 0;
     color: white;
+}
+.courses .next-batch-tag
+{
+    display: inline-block;
+    margin: 0 0 .5rem 0;
+    padding: .2rem .8rem;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .02em;
 }
 .courses .card-actions
 {
@@ -154,3 +166,27 @@
 
            
         }
+/* FDE / paid-course accents on the course card */
+.courses .course-badge {
+  display: inline-block;
+  background: #ff9800;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+.courses .course-price {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #03084c;
+}
+.courses .course-price .course-emi {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1b6b3a;
+}

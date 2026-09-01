@@ -1,0 +1,11 @@
+# Cloudflare Pages config for restcoder-academy.
+# The D1 binding below is what makes `env.DB` available inside the
+# Pages Functions in ./functions (e.g. the enquiry endpoint).
+name = "restcoder-academy"
+compatibility_date = "2024-09-23"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "restcoder-enquiries"
+database_id = "1c557470-b96a-4005-8dd8-6baa2ebb21e8"

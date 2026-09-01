@@ -9,19 +9,33 @@ import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyCompo
 import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { List, ListItem, ListItemText } from '@mui/material';
 import { useAuth } from '../../../App';
+import { useBatches } from '../Batches/useBatches';
+import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDateUtils';
 
 
- function CoursesCard({name,backend,audience,frontend,syllabus1,syllabus2}) {
-    let {openModal}=useAuth()
+ function CoursesCard({name,courseId,paid,price,badge,backend,audience,frontend,syllabus1,syllabus2}) {
+    let {openEnroll}=useAuth()
+    let batches=useBatches()
+    let nextBatch=getNextBatchForCourse(name,batches)
+    let enroll=()=>openEnroll({courseId,name,paid,price})
   return (
     <Card sx={{ }} className='card'>
         <Box className="course-header">
+            {badge && <Box component="span" className="course-badge">{badge}</Box>}
             <TypoGraphyComponent
             variant="h5"
-            sx={{mb:".6rem"}}
+            sx={{mb:".3rem"}}
             component="h5"
             text={name}
         />
+        <Box component="span" className="next-batch-tag">
+            {nextBatch ? `Next batch · ${formatBatchDateShort(nextBatch.date)}` : "New dates coming soon"}
+        </Box>
+        {paid && (
+          <Box component="span" className="course-price">
+            ₹{Number(price).toLocaleString("en-IN")} <span className="course-emi">· EMI available</span>
+          </Box>
+        )}
          <TypoGraphyComponent
             variant="text"
             sx={{}}
@@ -98,7 +112,7 @@ import { useAuth } from '../../../App';
 </CardContent>
 <CardActions sx={{}} className='card-actions'>
   
-  <ButtonComponent size='large' variant='outlined' label='Enquire Now'  borderRadius='0' sx={{}} onBtnClick={openModal}/>
+  <ButtonComponent size='large' variant={paid?'contained':'outlined'} label='Enroll Now'  borderRadius='0' sx={{}} onBtnClick={enroll}/>
 </CardActions>
 </Card>
   );

@@ -1,8 +1,87 @@
-# React + Vite
+# Rest Coder Academy — website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Marketing + enquiry site for Rest Coder Academy. React (Vite) frontend, hosted
+on Cloudflare with a small serverless backend for capturing leads.
 
-Currently, two official plugins are available:
+## Stack at a glance
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| Layer | What |
+|---|---|
+| Frontend | React + Vite (this repo) |
+| Hosting | **Cloudflare Pages** — project `restcoder-academy` |
+| Backend | **Cloudflare Pages Functions** (`functions/`) — edge serverless, nothing to sleep |
+| Database | **Cloudflare D1** — `restcoder-enquiries` (stores enquiry leads) |
+| Analytics | **Cloudflare Web Analytics** (automatic, no code) |
+
+Everything runs on **one Cloudflare account** (owned by the academy). Free tier
+throughout.
+
+## Domains
+
+- **Live:** https://restcoderacademy.in (and `www.`) — DNS managed on Cloudflare,
+  domain registered at **Hostinger**.
+- ⚠️ **`restcoderacademy.com` is EXPIRED / abandoned** (it lapsed at GoDaddy).
+  Do not rely on it or point anything at it.
+
+## Local development
+
+```bash
+npm install
+npm run dev      # local dev server
+npm run build    # production build -> dist/
+```
+
+## Deploying
+
+Deploys are currently **manual** (push-to-deploy is a TODO — connect the repo
+under Cloudflare Pages → Settings → Git to automate it):
+
+```bash
+# needs Cloudflare auth for the academy account (`wrangler login` once)
+npx wrangler pages deploy --branch main
+```
+
+`wrangler.toml` holds the Pages project name, the build output dir (`dist`), and
+the D1 binding — so `wrangler pages deploy` picks all of that up automatically.
+
+## Enquiry backend (leads)
+
+The enquiry form does **not** talk to any external server. It POSTs same-origin:
+
+```
+enquiry form  ->  POST /api/enquiry  ->  functions/api/enquiry.js  ->  D1 (enquiries table)
+```
+
+- Endpoint: `functions/api/enquiry.js` (validates + inserts into D1 via `env.DB`).
+- Database: D1 `restcoder-enquiries`, table `enquiries` — see `schema.sql`.
+- If the write ever fails, the form shows a **WhatsApp fallback** so a lead is
+  never lost. Fallback numbers: **80737 62257** and **91104 24403**.
+
+### Viewing the leads
+
+- **Dashboard:** Cloudflare → Storage & Databases → D1 → `restcoder-enquiries` →
+  Console → `SELECT * FROM enquiries ORDER BY created_at DESC;`
+- **CLI:**
+  ```bash
+  npx wrangler d1 execute restcoder-enquiries --remote \
+    --command "SELECT * FROM enquiries ORDER BY created_at DESC;"
+  ```
+
+(A friendly `/admin` lead-list page for the academy is a planned follow-up — see
+the issues.)
+
+### Changing the database schema
+
+Edit `schema.sql`, then apply it:
+
+```bash
+npx wrangler d1 execute restcoder-enquiries --remote --file=schema.sql
+```
+
+## History / context
+
+- The previous backend (`trcabe.onrender.com`) was a separate repo by the prior
+  developer, on a sleeping free tier with an undocumented database and no way to
+  view leads — so form submissions were silently dropped whenever it was asleep.
+  It was **replaced** by the D1 + Pages Function setup above (see issues #2, #17,
+  #19, #20). `trcabe.onrender.com` is no longer used.

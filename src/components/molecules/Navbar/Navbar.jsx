@@ -19,7 +19,8 @@ import logo from "../../../assets/new logo1.png";
 import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { useAuth } from '../../../App';
 import { Link, animateScroll as scroll } from 'react-scroll';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import { useIsHome } from '../../../hooks/useIsHome';
 const drawerWidth = 240;
 // const navItems = ['Home', 'Fish', 'Stones','Plants','Food','Lights','Air Pumps','Tanks & Bowls'];
 const navItems = ['Courses',  'Reviews','Clients','Placements','Batches'];
@@ -29,8 +30,7 @@ function Navbar(props) {
     let {openModal}=useAuth()
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const location = useLocation();
-  const isHome = location.pathname === '/';
+  const isHome = useIsHome();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -93,7 +93,7 @@ function Navbar(props) {
                 </ButtonComponent>
 
             ))}
-             <ButtonComponent variant='contained' bgColor='bg-btn-blue' borderRadius='0px' paddingX={1.5} paddingY={.7} onBtnClick={openModal}>
+             <ButtonComponent variant='contained' bgColor='bg-btn-blue' borderRadius='0px' paddingX={1.5} paddingY={.7} onBtnClick={()=>openModal()}>
                     Apply Now
                 </ButtonComponent>
           </Box>

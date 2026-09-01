@@ -2,17 +2,27 @@ import React from 'react'
 import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyComponent'
 import { Box,List,ListItem,ListItemText } from '@mui/material'
 import { Link, animateScroll as scroll } from 'react-scroll';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useIsHome } from '../../../hooks/useIsHome';
 
 
 function FooterLinks() {
   let links=['Placements', 'Reviews','Batches'];
-  const location = useLocation();
-  const isHome = location.pathname === '/';
+  const isHome = useIsHome();
+  const navigate = useNavigate();
 
+  // "About Us" lives in the homepage hero — scroll to it there, or navigate
+  // home first from anywhere else, same as the section links below.
   let scrollToTop=()=>
   {
-    scroll.scrollToTop()
+    if(isHome)
+    {
+      scroll.scrollToTop()
+    }
+    else
+    {
+      navigate('/')
+    }
   }
   return (
     <>

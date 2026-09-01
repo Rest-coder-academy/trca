@@ -43,3 +43,30 @@ test("navbar logo returns to the homepage from a course page", async ({ page }) 
   await page.locator('a[href="/"] img').click();
   await expect(page).toHaveURL(/\/$/);
 });
+
+// Regression guard: openModal's signature changed to accept an optional
+// prefill message. Any pre-existing CTA that still passes it unwrapped as an
+// onClick/onBtnClick handler gets called with the click SyntheticEvent as
+// that argument instead — corrupting the enquiry message with a stray event
+// object rather than leaving it blank.
+test("Apply Now in the navbar opens the enquiry form with an empty message", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /apply now/i }).click();
+  await expect(page.locator('textarea[name="message"]')).toHaveValue("");
+});
+
+test("Register Now in the hero opens the enquiry form with an empty message", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /register now/i }).click();
+  await expect(page.locator('textarea[name="message"]')).toHaveValue("");
+});
+
+test("Enquire Now on a batch card pre-fills that batch's course name", async ({ page }) => {
+  await page.goto("/");
+  await page
+    .locator(".batches")
+    .getByRole("button", { name: /enquire now|join the waitlist/i })
+    .first()
+    .click();
+  await expect(page.locator('textarea[name="message"]')).toHaveValue(/I'm interested in the .+ course\./);
+});

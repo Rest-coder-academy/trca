@@ -60,7 +60,7 @@ import { useAuth } from '../../../App';
           label={upcoming ? "Enquire Now" : "Join the Waitlist"}
           borderRadius="0"
           sx={{}}
-          onBtnClick={openModal}
+          onBtnClick={()=>openModal(`I'm interested in the ${name} course.`)}
         />
       </CardActions>
     </Card>

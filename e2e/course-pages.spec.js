@@ -70,3 +70,20 @@ test("Enquire Now on a batch card pre-fills that batch's course name", async ({ 
     .click();
   await expect(page.locator('textarea[name="message"]')).toHaveValue(/I'm interested in the .+ course\./);
 });
+
+// Regression guard: React Router doesn't reset scroll position on navigation
+// by default, so clicking a course card while scrolled down the homepage
+// landed on the new page at that same pixel offset instead of the top.
+test("clicking a course card scrolls the new page to the top", async ({ page }) => {
+  await page.goto("/");
+  await page.mouse.wheel(0, 2000);
+  await page.locator(".courses").getByRole("heading", { name: "Java Full Stack" }).click();
+  await expect(page).toHaveURL(/\/courses\/java-full-stack$/);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(50);
+});
+
+test("clicking the syllabus preview on a card (not just the title) also navigates through", async ({ page }) => {
+  await page.goto("/");
+  await page.locator(".courses").getByText("Core Java").click();
+  await expect(page).toHaveURL(/\/courses\/java-full-stack$/);
+});

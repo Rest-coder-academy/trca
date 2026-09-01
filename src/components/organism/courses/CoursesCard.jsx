@@ -38,9 +38,8 @@ import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDat
             text={audience}
         />
         </Box>
-        </RouterLink>
     <CardContent className='card-content'>
-    
+
           <List className='links' sx={{listStyleType:"disc"}}>
           <TypoGraphyComponent
             variant="h6"
@@ -106,10 +105,11 @@ import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDat
     species, ranging across all continents except Antarctica
   </Typography> */}
 </CardContent>
+        </RouterLink>
 <CardActions sx={{}} className='card-actions'>
 
-  <ButtonComponent size='large' variant='outlined' label='Enquire Now'  borderRadius='0' sx={{}} onBtnClick={()=>openModal(`I'm interested in the ${name} course.`)}/>
-  <ButtonComponent size='large' variant='text' label='View Syllabus' borderRadius='0' sx={{}} component={RouterLink} to={`/courses/${slug}`}/>
+  <ButtonComponent size='small' variant='outlined' label='Enquire Now'  borderRadius='0' sx={{}} onBtnClick={()=>openModal(`I'm interested in the ${name} course.`)}/>
+  <ButtonComponent size='small' variant='outlined' label='View Syllabus' borderRadius='0' sx={{}} component={RouterLink} to={`/courses/${slug}`}/>
 </CardActions>
 </Card>
   );

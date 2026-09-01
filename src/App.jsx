@@ -5,6 +5,7 @@ import Footer from "./components/organism/Footer/FooterComponent"
 import Banner from './components/organism/Banner/Banner'
 import Home from "./components/Pages/Home";
 import CoursePage from "./components/Pages/CoursePage";
+import ScrollToTop from "./components/ScrollToTop";
 import Modal from 'react-modal';
 import EnquiryForm from './components/forms/Enquiry Form/EnquiryForm';
 import "./App.css"
@@ -46,6 +47,7 @@ function App() {
 
   return (
     <AuthContext.Provider className="app" value={{ openModal, closeModal,notify,enquiryPrefill }}>
+      <ScrollToTop />
       <Navbar />
       <ToastContainer className={"toast"} autoClose={2500}/>
       <Modal

@@ -82,23 +82,30 @@
     border-top: .5px solid rgba(211, 211, 211, 0.582);
     display: flex;
     justify-content: center;
+    gap: .6rem;
     padding-bottom: .8rem;
     padding-top: .8rem;
-    
+
 }
 
-.courses .card-actions button
+.courses .card-actions button,
+.courses .card-actions a
 {
     color: black!important;
-    padding: .5rem 3rem;
+    border-color: black!important;
+    padding: .4rem 1.2rem;
     border-radius: 3px;
-    font-size: 1.2rem;
+    font-size: .9rem;
+    text-decoration: none;
+    display: inline-block;
 }
 
-.courses .card-actions button:hover
+.courses .card-actions button:hover,
+.courses .card-actions a:hover
 {
     background-color: #1976d2!important;
     color: white!important;
+    border-color: #1976d2!important;
 }
 
 /* ? media quries */

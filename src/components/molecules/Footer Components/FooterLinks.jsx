@@ -1,9 +1,10 @@
 import React from 'react'
 import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyComponent'
 import { Box,List,ListItem,ListItemText } from '@mui/material'
-import { Link, animateScroll as scroll } from 'react-scroll';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { animateScroll as scroll } from 'react-scroll';
+import { useNavigate } from 'react-router-dom';
 import { useIsHome } from '../../../hooks/useIsHome';
+import SectionLink from '../../SectionLink';
 
 
 function FooterLinks() {
@@ -37,14 +38,9 @@ function FooterLinks() {
               {links.map((link,id)=>
               {
                return <ListItem  key={id}>
-                  {isHome
-                    ? <Link to={link} smooth={true} offset={-62}>
-                        <ListItemText primary={link} />
-                      </Link>
-                    : <RouterLink to={`/#${link}`}>
-                        <ListItemText primary={link} />
-                      </RouterLink>
-                  }
+                  <SectionLink to={link}>
+                    <ListItemText primary={link} />
+                  </SectionLink>
               </ListItem>
 
               })}

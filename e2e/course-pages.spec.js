@@ -23,6 +23,16 @@ test("an unknown course slug redirects home instead of 404ing blank", async ({ p
   await expect(page).toHaveURL(/\/$/);
 });
 
+// Regression guard: before routing, every path unconditionally rendered
+// Home. Adding <Routes> without a catch-all meant any path outside "/" and
+// "/courses/:slug" (a typo, a stale bookmark, anything else Cloudflare
+// Pages' SPA fallback serves index.html for) rendered a blank content area.
+test("an unrelated unknown path redirects home instead of rendering blank", async ({ page }) => {
+  await page.goto("/about");
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator(".courses")).toBeVisible();
+});
+
 test("back button returns from a course page to the homepage", async ({ page }) => {
   await page.goto("/");
   await page.locator(".courses").getByRole("heading", { name: "Python Full Stack" }).click();

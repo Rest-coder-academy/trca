@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from "./components/molecules/Navbar/Navbar"
 import Footer from "./components/organism/Footer/FooterComponent"
 import Banner from './components/organism/Banner/Banner'
@@ -62,6 +62,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/courses/:slug" element={<CoursePage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <FloatingIcons/>
       <Footer />

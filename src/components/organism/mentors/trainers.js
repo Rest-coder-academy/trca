@@ -1,27 +1,9 @@
-// Fallback trainer data — rendered when /api/trainers is empty or unreachable, so
-// the "Our Trainers" section always shows the real trainer. Trainers are managed
-// live at /admin/trainers (D1); this bundled copy is the safety net.
+// No trainers are bundled into the site. The "Our Trainers" section is driven
+// entirely by /admin/trainers (D1), so what the academy enters in the portal is
+// exactly what shows — and if nothing has been entered (or the API is briefly
+// unreachable), the section simply doesn't render. This keeps the site and the
+// admin portal always in sync and honours "if it isn't entered, we don't show it".
 //
-// Field names match the /api/trainers response exactly (snake_case) so a card
-// renders identically whether it comes from D1 or from here.
-//
-// Only verifiable facts are seeded below. Experience / expertise / bio are left
-// blank on purpose — fill them in from the admin portal so the credibility shown
-// is real, never invented.
-export const trainers = [
-  {
-    id: "uday",
-    name: "Uday Pawar S",
-    title: "Full-Stack Trainer",
-    photo_url: "/trainers/uday.png",
-    experience: "",
-    expertise: "",
-    bio: "",
-    linkedin_url: "https://www.linkedin.com/in/uday-pawar-s-835920164",
-    github_url: "",
-    instagram_url: "https://www.instagram.com/_udaypawar_",
-    facebook_url: "https://www.facebook.com/share/1B6z1EPq7d/",
-    website_url: "",
-    certificate_url: "/trainers/uday-certificate.pdf",
-  },
-];
+// Photos and certificates the academy references (e.g. /trainers/uday.png,
+// /trainers/uday-certificate.pdf) are served from public/trainers/.
+export const trainers = [];

@@ -154,7 +154,7 @@ const handleSubmit = async (e)=>
        paddingY={1}
             onBtnClick={closeModal}
           >
-           X
+           ×
           </ButtonComponent>
       </Box>
 

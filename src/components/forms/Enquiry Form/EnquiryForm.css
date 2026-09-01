@@ -1,58 +1,76 @@
 .enquiry-form
 {
-    border: 1px solid rgba(6, 6, 90, 0.507);
-    border-radius: .3rem;
-    /* height: 100%; */
     width: 100%;
-     padding: .5rem;
-
 }
+
 .enquiry-form .form-heading
 {
-    /* border: 1px solid black; */
-    /* padding: .5rem; */
-    /* box-shadow: 1px 0px 10px 1px lightgray; */
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    
+    padding: 1rem 1.25rem;
+    background: rgb(3, 8, 76);
 }
 .enquiry-form .form-heading h6
 {
-    text-align: center;
-    color: #06065abd;
+    text-align: left;
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: .02em;
 }
 .enquiry-form .form-heading button
 {
-    background-color: transparent!important;
-    color: #06065abd!important;
+    background-color: rgba(255, 255, 255, 0.12)!important;
+    color: #ffffff!important;
     padding: 0!important;
     min-width: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: background-color .15s ease;
+}
+.enquiry-form .form-heading button:hover
+{
+    background-color: rgba(255, 255, 255, 0.24)!important;
+}
 
+.enquiry-form .enquiry-fields
+{
+    padding: 1.25rem!important;
 }
 
 .enquiry-form .enquiry-field,.enquiry-form .enquiry-field-button
 {
-    /* border: 2px solid pink; */
-    margin-top: .6rem;
-    /* width: 100%!important; */
+    margin-top: 1rem;
+}
+.enquiry-form .enquiry-field:first-child
+{
+    margin-top: 0;
 }
 .enquiry-form .enquiry-field-button
 {
     text-align: center;
-    /* border: 1px solid red; */
+    margin-top: 1.4rem;
 }
 .enquiry-form .enquiry-field-button button
 {
-    border-radius: .3rem;
-    padding: .5rem 1rem;
+    border-radius: .5rem;
+    padding: .65rem 1rem;
     font-size: 1rem;
-
+    font-weight: 600;
+    letter-spacing: .02em;
+    box-shadow: 0 4px 14px rgba(3, 8, 76, 0.25);
+    transition: transform .1s ease, box-shadow .15s ease;
 }
-
-.enquiry-form .enquiry-field-button button:active
+.enquiry-form .enquiry-field-button button:hover:not(:disabled)
 {
-    background-color: rgb(46, 46, 143);
-
+    box-shadow: 0 6px 18px rgba(3, 8, 76, 0.32);
+}
+.enquiry-form .enquiry-field-button button:active:not(:disabled)
+{
+    transform: translateY(1px);
 }
 .enquiry-form .enquiry-field textarea
 {
@@ -61,24 +79,37 @@
 
 .enquiry-form .enquiry-submit-error
 {
-    margin-top: .6rem;
-    padding: .6rem;
-    border: 1px solid #c0392b;
-    border-radius: .3rem;
+    margin-top: 1rem;
+    padding: .75rem .9rem;
+    border: 1px solid #f1b5ac;
+    border-radius: .5rem;
     background-color: #fdecea;
     text-align: center;
+    animation: enquiry-error-in .2s ease-out;
 }
 .enquiry-form .enquiry-submit-error p
 {
-    color: #c0392b;
-    margin: 0 0 .4rem 0;
+    color: #b3261e;
+    margin: 0 0 .5rem 0;
+    line-height: 1.4;
 }
 .enquiry-form .enquiry-whatsapp-fallback
 {
-    display: inline-block;
-    color: #128c7e;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .4rem .9rem;
+    border-radius: 999px;
+    background-color: #128c7e;
+    color: #ffffff;
     font-weight: 600;
-    text-decoration: underline;
+    font-size: .85rem;
+    text-decoration: none;
+    transition: background-color .15s ease;
+}
+.enquiry-form .enquiry-whatsapp-fallback:hover
+{
+    background-color: #0e6f64;
 }
 .enquiry-form .enquiry-submit-spinner
 {
@@ -86,36 +117,36 @@
     vertical-align: middle;
 }
 
+@keyframes enquiry-error-in
+{
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* ? media quries */
-        /* Custom, iPhone Retina */ 
+        /* Custom, iPhone Retina */
         @media (min-width:320px) and  (max-width:479.98px) {
-            
-            .enquiry-form .enquiry-field textarea
-            {
-                background-color: white!important;
-                color: black!important;
-            }
 
         }
-/* Extra Small Devices, Phones */ 
+/* Extra Small Devices, Phones */
         @media (min-width: 480px) and (max-width: 575.98px) {
 
         }
 /* Small Devices, Tablets */
         @media (min-width: 576px) and (max-width:767.98px) {
 
-            
+
         }
 /* Medium Devices, Desktops */
-        
+
         @media (min-width: 768px) and (max-width:991.98px ) {
 
-           
+
         }
 
         /* Large Devices, Wide Screens */
 
         @media (min-width: 992px) and (max-width:1200px ) {
 
-           
+
         }

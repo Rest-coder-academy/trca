@@ -18,6 +18,14 @@ export default function InputBoxComponent({
       {...params}
       sx={{
         width: "100%",
+        "& .MuiInputBase-input": {
+          backgroundColor: "#ffffff",
+          color: "#000000",
+        },
+        "& .MuiInputBase-input:-webkit-autofill": {
+          WebkitBoxShadow: "0 0 0 1000px #ffffff inset",
+          WebkitTextFillColor: "#000000",
+        },
       }}
       name={name}
       size="small"

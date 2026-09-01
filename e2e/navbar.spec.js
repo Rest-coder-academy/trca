@@ -30,3 +30,21 @@ test("the hamburger actually opens the drawer at 375px", async ({ page }) => {
   // Scoped to the drawer panel — "Rest Coder Academy" also appears in the footer.
   await expect(page.locator(".MuiDrawer-paper").getByText("Rest Coder Academy")).toBeVisible();
 });
+
+test("the hamburger icon has contrast against the navbar background at 375px", async ({ page }) => {
+  // Regression guard: the icon was briefly hardcoded to white while the navbar
+  // background (Navbar.css `nav { background-color: white !important; }`) is
+  // also white, making a technically-"visible" but unreadable white-on-white icon.
+  await page.setViewportSize({ width: 375, height: 800 });
+  await page.goto("/");
+
+  const iconColor = await page
+    .getByLabel("open drawer")
+    .locator("svg")
+    .evaluate((el) => getComputedStyle(el).color);
+  const navBackground = await page
+    .locator(".MuiAppBar-root")
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+
+  expect(iconColor).not.toBe(navBackground);
+});

@@ -67,7 +67,7 @@ function Navbar(props) {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { xs: 'block', md: 'none' } }}
           >
-            <MenuIcon sx={{ color: '#fff' }} />
+            <MenuIcon sx={{ color: '#000' }} />
           </IconButton>
 
 

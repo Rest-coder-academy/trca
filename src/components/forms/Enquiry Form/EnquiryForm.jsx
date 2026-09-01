@@ -1,5 +1,5 @@
-import { Box, Typography,Grid, Paper } from '@mui/material';
-import React, { useEffect, useState } from 'react'
+import { Box, Typography,Grid, Paper, CircularProgress } from '@mui/material';
+import React, { useState } from 'react'
 import InputBoxComponent from '../../atoms/InputBoxComponent/InputBoxComponent';
 import TextAreaComponent from '../../atoms/TextAreaComponent/TextAreaComponent';
 import DropdownComponent from '../../atoms/DropdownComponent/DropdownComponent';
@@ -17,9 +17,13 @@ function EnquiryForm() {
   let [enquiryData,setenquiryData]=useState({fullname:"",mobile:"",email:"",experience:"",message:""})
   // const { register, handleSubmit, watch, formState: { errors } , control, reset} = useForm();
   let [enquiryErrors,setenquiryErrors]=useState({})
-  let [issubmit,setissubmit]=useState(false)
+  let [isSubmitting,setIsSubmitting]=useState(false)
+  let [submitFailed,setSubmitFailed]=useState(false)
 
   let {closeModal,notify}=useAuth()
+
+  const WHATSAPP_FALLBACK_URL="https://wa.me/918073762257"
+  const SUBMIT_TIMEOUT_MS=10000
 
     let  options =[
         { label: "Working professional - Technical roles", id: 1 },
@@ -38,38 +42,51 @@ let changeDropDown=(value)=>
     setenquiryData({...enquiryData,experience: value.label})
 }
     
-const handleSubmit = (e)=>
+const handleSubmit = async (e)=>
   {
     e.preventDefault();
-    
-    setenquiryErrors(
-    validateEnquiryForm(enquiryData))
-    setissubmit(true)
+
+    let errors=validateEnquiryForm(enquiryData)
+    setenquiryErrors(errors)
+
+    if(Object.keys(errors).length>0)
+    {
+      return
+    }
+
+    await sendEnquiry()
   };
 
   let sendEnquiry=async ()=>
   {
+    setSubmitFailed(false)
+    setIsSubmitting(true)
     try
     {
       // https://trcabe.onrender.com/enquiries/get/enquiries
-      let response=await axios.post('https://trcabe.onrender.com/enquiries/create/enquiry',enquiryData)
+      let response=await axios.post('https://trcabe.onrender.com/enquiries/create/enquiry',enquiryData,{timeout:SUBMIT_TIMEOUT_MS})
       // await axios.post('http://localhost:4005/enquiries/create/enquiry',enquiryData)
+
+      if(response.status>=200 && response.status<300)
+      {
+        notify(`Enquiry received. We'll call you on ${enquiryData.mobile} within one working day.`)
+        closeModal()
+      }
+      else
+      {
+        setSubmitFailed(true)
+      }
     }
     catch(err)
     {
       console.log(err)
+      setSubmitFailed(true)
+    }
+    finally
+    {
+      setIsSubmitting(false)
     }
   }
-
-useEffect(()=>
-{
-  if(Object.keys(enquiryErrors).length===0 && issubmit)
-    {
-      sendEnquiry();
-      notify(enquiryData.fullname);
-      closeModal()
-    }
-},[enquiryErrors])
 
 
   let validateEnquiryForm=({fullname,mobile,email,experience,message})=>
@@ -196,6 +213,23 @@ useEffect(()=>
           
           />
         </Box>
+        {submitFailed && (
+          <Box className="enquiry-submit-error" role="alert">
+            <TypoGraphyComponent
+              component="p"
+              variant="body2"
+              text="We couldn't send that just now. Message us on WhatsApp and we'll pick it up straight away."
+            />
+            <a
+              className="enquiry-whatsapp-fallback"
+              href={WHATSAPP_FALLBACK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Message us on WhatsApp
+            </a>
+          </Box>
+        )}
         <Box className="enquiry-field-button">
           <ButtonComponent
             variant="contained"
@@ -204,12 +238,15 @@ useEffect(()=>
             paddingX={1.5}
             paddingY={0.7}
             type="submit"
+            disabled={isSubmitting}
           >
-            Submit
+            {isSubmitting
+              ? <><CircularProgress size={16} color="inherit" className="enquiry-submit-spinner" /> Sending…</>
+              : "Submit"}
           </ButtonComponent>
         </Box>
       </Box>
-     
+
     </form>
   );
 }

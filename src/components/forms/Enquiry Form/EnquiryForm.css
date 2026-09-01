@@ -59,6 +59,33 @@
     width: 100%!important;
 }
 
+.enquiry-form .enquiry-submit-error
+{
+    margin-top: .6rem;
+    padding: .6rem;
+    border: 1px solid #c0392b;
+    border-radius: .3rem;
+    background-color: #fdecea;
+    text-align: center;
+}
+.enquiry-form .enquiry-submit-error p
+{
+    color: #c0392b;
+    margin: 0 0 .4rem 0;
+}
+.enquiry-form .enquiry-whatsapp-fallback
+{
+    display: inline-block;
+    color: #128c7e;
+    font-weight: 600;
+    text-decoration: underline;
+}
+.enquiry-form .enquiry-submit-spinner
+{
+    margin-right: .4rem;
+    vertical-align: middle;
+}
+
 /* ? media quries */
         /* Custom, iPhone Retina */ 
         @media (min-width:320px) and  (max-width:479.98px) {

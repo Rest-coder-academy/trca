@@ -73,3 +73,28 @@ a
     padding-inline: var(--rca-gutter-mobile);
   }
 }
+
+/* Carousel dots were 20 x 20. slick draws the dot with a ::before glyph inside
+   the button, so the button can be padded out to a real target without the dot
+   itself changing size. */
+/* slick-theme.min.css is a <link> in index.html and this file is injected
+   before it, so matching its specificity loses on order. One extra class
+   wins outright and does not need !important. */
+.slick-slider ul.slick-dots li
+{
+    width: var(--rca-control-h-mobile);
+    height: var(--rca-control-h-mobile);
+}
+
+.slick-slider ul.slick-dots li button
+{
+    width: 100%;
+    height: 100%;
+}
+
+.slick-slider ul.slick-dots li button:before
+{
+    width: 100%;
+    height: 100%;
+    line-height: var(--rca-control-h-mobile);
+}

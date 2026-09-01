@@ -24,7 +24,10 @@
 
 .footer .grid-content-box p
 {
-    line-height: 24px;
+    /* MUI's body2 is 14px. The address, phone number and email are the whole
+       point of a footer — they are body copy, not fine print (#11). */
+    font-size: var(--rca-fs-body);
+    line-height: var(--rca-lh-body);
 }
 
 .footer .grid-content-box ul
@@ -35,7 +38,6 @@
 {
     padding-left: 0px;
      padding-top: 0px;
-    margin-bottom: -10px;
     cursor: pointer;
 }
 
@@ -46,6 +48,12 @@
 .footer .links li a
 {
     color: white;
+    /* The link was the tap target and it was 19-32px tall. Padding it to the
+       minimum costs nothing here — the list already had negative margin
+       pulling the rows together (#11). */
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--rca-control-h-mobile);
 }
 hr
 {
@@ -187,3 +195,14 @@ hr
 
            
         }
+
+/* The Google Maps link was an 80 x 19 anchor wrapped around an icon — the icon
+   was the only thing giving it height. Same treatment as the nav links (#11). */
+.footer .grid-content-box > a
+{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--rca-control-h-mobile);
+    min-height: var(--rca-control-h-mobile);
+}

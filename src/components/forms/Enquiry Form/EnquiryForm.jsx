@@ -1,4 +1,4 @@
-import { Box, Typography,Grid, Paper, CircularProgress } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import React, { useState } from 'react'
 import InputBoxComponent from '../../atoms/InputBoxComponent/InputBoxComponent';
 import TextAreaComponent from '../../atoms/TextAreaComponent/TextAreaComponent';
@@ -10,7 +10,8 @@ import { useAuth } from '../../../App';
 import { regex } from '../../../regex/regex';
 import axios from 'axios';
 
-
+const WHATSAPP_FALLBACK_URL="https://wa.me/918073762257"
+const SUBMIT_TIMEOUT_MS=10000
 
 function EnquiryForm() {
 
@@ -21,9 +22,6 @@ function EnquiryForm() {
   let [submitFailed,setSubmitFailed]=useState(false)
 
   let {closeModal,notify}=useAuth()
-
-  const WHATSAPP_FALLBACK_URL="https://wa.me/918073762257"
-  const SUBMIT_TIMEOUT_MS=10000
 
     let  options =[
         { label: "Working professional - Technical roles", id: 1 },
@@ -45,6 +43,11 @@ let changeDropDown=(value)=>
 const handleSubmit = async (e)=>
   {
     e.preventDefault();
+
+    if(isSubmitting)
+    {
+      return
+    }
 
     let errors=validateEnquiryForm(enquiryData)
     setenquiryErrors(errors)

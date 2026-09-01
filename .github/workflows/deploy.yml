@@ -1,0 +1,33 @@
+name: Deploy to Cloudflare Pages
+
+# Auto-deploys the site to restcoderacademy.in on every merge to main.
+# Runs the same `wrangler pages deploy` we'd run by hand. The D1 binding and
+# ADMIN_PASSWORD secret are project-level in Cloudflare, so they persist across
+# these deploys. Requires the CLOUDFLARE_API_TOKEN repo secret (Cloudflare Pages:Edit).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 3cb72abff110a3a65b4985178f7ef0eb
+          command: pages deploy --branch main

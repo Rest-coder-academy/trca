@@ -1,0 +1,183 @@
+/* Premium course card — the flagship look applied to every course, with
+   Abhigna's Book-your-seat flow. FDE adds .course-card--flagship extras. */
+.course-card {
+  width: 100%;
+  max-width: 384px;
+  display: flex;
+  flex-direction: column;
+  background: var(--rca-surface, #fff);
+  border: 1px solid #e6e9f2;
+  border-radius: var(--rca-radius-lg, 12px);
+  overflow: hidden;
+  box-shadow: var(--rca-shadow-card, 0 1px 3px rgba(3, 8, 76, 0.08));
+  font-family: var(--rca-font, "Montserrat", "Segoe UI", system-ui, sans-serif);
+  text-align: left;
+}
+.course-card--flagship {
+  box-shadow: 0 14px 36px rgba(3, 8, 76, 0.16);
+}
+.course-card * { box-sizing: border-box; }
+
+/* --- Navy header --- */
+.cc-head {
+  background: var(--rca-navy, #03084c);
+  color: #fff;
+  padding: 20px 24px 18px;
+}
+.cc-flagship {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 152, 0, 0.16);
+  color: #ffb74d;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: var(--rca-radius-pill, 999px);
+  margin-bottom: 12px;
+}
+.cc-title {
+  margin: 0;
+  font-size: var(--rca-fs-h5, 20px);
+  font-weight: var(--rca-fw-bold, 700);
+  line-height: 1.22;
+}
+.cc-sub {
+  margin: 7px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #aeb6e0;
+}
+.cc-trainer {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 15px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+}
+.cc-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--rca-blue, #146389);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.cc-trainer-text { display: flex; flex-direction: column; line-height: 1.35; }
+.cc-trainer-text b { font-size: 13px; font-weight: 600; }
+.cc-trainer-text span { font-size: 11.5px; color: #8e96c8; }
+
+/* --- Body --- */
+.cc-body {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 24px 22px;
+}
+.cc-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.cc-price {
+  font-size: 27px;
+  font-weight: 800;
+  color: var(--rca-navy, #03084c);
+  letter-spacing: -0.5px;
+}
+.cc-price small { font-size: 12px; font-weight: 400; color: #45545d; }
+.cc-price--request {
+  font-size: var(--rca-fs-lead, 18px);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: #45545d;
+}
+.cc-tag {
+  flex-shrink: 0;
+  background: rgba(255, 152, 0, 0.14);
+  color: #8a5200;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--rca-radius-pill, 999px);
+  white-space: nowrap;
+}
+.cc-tag--muted {
+  background: var(--rca-disabled-bg, #e4e7ea);
+  color: var(--rca-disabled-ink, #9aa3aa);
+}
+
+.cc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+.cc-chips span {
+  background: #f0f3f8;
+  color: #33415c;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: var(--rca-radius-pill, 999px);
+}
+
+.cc-syllabus { margin-top: 18px; }
+.cc-syllabus-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--rca-blue, #146389);
+  margin-bottom: 11px;
+}
+.cc-syllabus ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cc-syllabus li { display: flex; align-items: flex-start; gap: 10px; }
+.cc-syllabus li span { font-size: 13px; color: #333; line-height: 1.4; }
+.cc-syllabus li.cc-capstone span { color: var(--rca-navy, #03084c); font-weight: 600; }
+.cc-check { flex-shrink: 0; margin-top: 1px; }
+
+.cc-foot { margin-top: 20px; }
+.cc-book {
+  width: 100%;
+  font-family: inherit;
+  font-size: var(--rca-fs-body, 16px);
+  font-weight: 600;
+  height: var(--rca-control-h, 46px);
+  border: 1px solid transparent;
+  border-radius: var(--rca-radius-md, 8px);
+  background: var(--rca-navy, #03084c);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.cc-book:hover { background: var(--rca-navy-hover, #0a1270); }
+.cc-book:active { background: var(--rca-navy-pressed, #01062f); }
+.cc-counsellor {
+  display: block;
+  width: 100%;
+  margin-top: 9px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--rca-blue, #146389);
+}
+.cc-counsellor:hover { text-decoration: underline; }

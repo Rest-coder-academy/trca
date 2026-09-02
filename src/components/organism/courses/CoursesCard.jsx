@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../../App";
 import { useFounder, hasFounder } from "../../Pages/useFounder";
 import { useTrainers } from "../mentors/useTrainers";
-import { scroller } from "react-scroll";
 import { useBatches } from "../Batches/useBatches";
 import { getNextBatchForCourse, formatBatchDateShort } from "../Batches/batchDateUtils";
 import "./CourseCard.css";
@@ -45,7 +44,13 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
   // Clicking a trainer with a profile jumps to the "Our Trainers" section
   // (their full card — photo, bio, expertise, socials). The card only ever
   // renders on the homepage, so a direct scroll is enough.
-  const goToTrainers = () => scroller.scrollTo("Trainers", { smooth: true, offset: -62, duration: 400 });
+  const goToTrainers = () => {
+    const el = document.getElementById("Trainers");
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 62; // clear the fixed navbar
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
   const trainerLinkProps = trainerProfile
     ? {
         role: "link",

@@ -19,6 +19,7 @@ const HOST = "127.0.0.1";
 const routes = [
   { path: "/", out: "index.html", waitFor: "#Courses" },
   { path: "/for-parents", out: "for-parents.html", waitFor: "main.fp" },
+  { path: "/contact", out: "contact.html", waitFor: "main.ct" },
   // /about is intentionally NOT prerendered: it's admin-managed (/api/founder)
   // and hides itself until content exists, so there's nothing static to snapshot.
   // It renders client-side (Googlebot executes JS) once a founder is set.

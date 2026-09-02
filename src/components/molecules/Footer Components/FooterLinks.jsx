@@ -2,6 +2,7 @@ import React from 'react'
 import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyComponent'
 import { Box,List,ListItem,ListItemText } from '@mui/material'
 import { Link, animateScroll as scroll } from 'react-scroll';
+import { Link as RouterLink } from 'react-router-dom';
 
 
 function FooterLinks() {
@@ -32,7 +33,11 @@ function FooterLinks() {
               </ListItem>
           
               })}
-               
+              <ListItem>
+                <RouterLink to="/contact">
+                  <ListItemText primary="Contact" />
+                </RouterLink>
+              </ListItem>
           </List>
     </>
   )

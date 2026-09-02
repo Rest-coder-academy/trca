@@ -1,0 +1,80 @@
+/* Contact / location page. Shared design tokens; below the fixed navbar. */
+.ct {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 92px 20px 72px;
+  font-family: var(--rca-font, "Montserrat", "Segoe UI", system-ui, sans-serif);
+  color: #1b2230;
+}
+.ct h2 { font-size: clamp(21px, 3vw, 26px); font-weight: 800; letter-spacing: -0.01em; color: var(--rca-navy, #03084c); margin: 0 0 12px; }
+.ct p { font-size: 15.5px; line-height: 1.65; color: #37424f; }
+
+/* Hero */
+.ct-hero {
+  background: linear-gradient(155deg, var(--rca-navy, #03084c) 0%, #070d3a 100%);
+  color: #fff;
+  border-radius: var(--rca-radius-lg, 12px);
+  padding: 40px 34px 34px;
+  box-shadow: 0 14px 36px rgba(3, 8, 76, 0.14);
+}
+.ct-eyebrow {
+  display: inline-block;
+  background: rgba(255, 152, 0, 0.16);
+  color: #ffb74d;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 999px; margin-bottom: 16px;
+}
+.ct-hero h1 {
+  margin: 0 0 14px;
+  font-size: clamp(27px, 4.6vw, 40px);
+  font-weight: 800; line-height: 1.12; letter-spacing: -0.02em; text-wrap: balance;
+}
+.ct-hero p { color: #c3caf0; font-size: 16px; margin: 0; max-width: 60ch; }
+.ct-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.ct-btn {
+  font-family: inherit; font-size: 15.5px; font-weight: 600;
+  height: 48px; padding: 0 26px; border: none; border-radius: var(--rca-radius-md, 8px);
+  background: #fff; color: var(--rca-navy, #03084c); cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.ct-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
+.ct-btn--ghost { background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); }
+.ct-btn--ghost:hover { background: rgba(255, 255, 255, 0.08); box-shadow: none; transform: none; }
+
+/* Address + phone/email cards */
+.ct-details { margin-top: 40px; display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 620px) { .ct-details { grid-template-columns: 1fr 1fr; } }
+.ct-card {
+  background: #f5f7fb; border: 1px solid #e6e9f2; border-left: 4px solid var(--rca-blue, #146389);
+  border-radius: var(--rca-radius-md, 8px); padding: 20px 22px;
+}
+.ct-card h2 { font-size: 16px; margin: 0 0 6px; }
+.ct-card h2 + h2 { margin-top: 18px; }
+.ct-card p { margin: 0 0 4px; font-size: 14.5px; color: #45545d; }
+.ct-link { color: var(--rca-navy, #03084c); font-weight: 700; text-decoration: none; }
+.ct-link:hover { text-decoration: underline; }
+.ct-map-link { display: inline-block; margin-top: 10px; font-size: 14px; font-weight: 700; color: var(--rca-blue, #146389); text-decoration: none; }
+.ct-map-link:hover { text-decoration: underline; }
+
+/* Map CTA strip */
+.ct-map { margin-top: 24px; text-align: center; }
+.ct-map-cta {
+  display: inline-block; font-size: 14.5px; font-weight: 700;
+  color: var(--rca-navy, #03084c); text-decoration: none;
+  border: 1px solid #d0d7e6; border-radius: var(--rca-radius-md, 8px);
+  padding: 12px 22px;
+}
+.ct-map-cta:hover { background: #f5f7fb; }
+
+/* Closing */
+.ct-foot {
+  margin-top: 44px; text-align: center;
+  background: #f5f7fb; border: 1px solid #e6e9f2; border-radius: var(--rca-radius-lg, 12px);
+  padding: 34px 24px;
+}
+.ct-foot h2 { margin-bottom: 8px; }
+.ct-foot p { margin: 0 auto 22px; max-width: 52ch; }
+.ct-foot .ct-cta { justify-content: center; }
+.ct-foot .ct-btn { background: var(--rca-navy, #03084c); color: #fff; }
+.ct-foot .ct-btn--ghost { background: transparent; color: var(--rca-navy, #03084c); border: 1px solid var(--line-2, #d0d7e6); }

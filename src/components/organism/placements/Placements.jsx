@@ -9,7 +9,7 @@ import PlacementCard from './PlacementCard'
 function Placement() {
     return (
         <Box className='placements rca-section' id="Placements">
-        <TypoGraphyComponent variant='h3' text='Placements' component='h3' sx={{textAlign:"center",fontWeight:"bold"}} />
+        <TypoGraphyComponent variant='h3' text='Placements' component='h2' sx={{textAlign:"center",fontWeight:"bold"}} />
         {/* <TypoGraphyComponent variant='h4' text='Our Trusted Placement' component='h4' sx={{textAlign:"center",fontWeight:"bold"}} /> */}
 
         <hr />

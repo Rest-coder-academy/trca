@@ -16,30 +16,39 @@ import skad from "../../../assets/clients/skad.jpg"
 export let clients=[
     {
         image:hcl,
+        name:"HCL Technologies",
     },
     {
         image:skad,
+        name:"SKAD",
     },
     {
         image:infosys,
+        name:"Infosys",
     },
     {
         image:integra,
+        name:"Integra",
     },
     {
         image:accenture,
+        name:"Accenture",
     },
     {
         image:capgemini,
+        name:"Capgemini",
     },
     {
         image:mindtree,
+        name:"Mindtree",
     },
     {
         image:wipro,
+        name:"Wipro",
     },
     {
         image:techmahindra,
+        name:"Tech Mahindra",
     },
-    
+
 ]

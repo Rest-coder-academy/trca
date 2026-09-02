@@ -8,6 +8,8 @@ import CourseDetail from "./components/Pages/CourseDetail";
 import ForParents from "./components/Pages/ForParents";
 import About from "./components/Pages/About";
 import PlacementsPage from "./components/Pages/PlacementsPage";
+import Contact from "./components/Pages/Contact";
+import FAQ from "./components/Pages/FAQ";
 import ScrollToTop from "./components/ScrollToTop";
 import Modal from 'react-modal';
 import EnquiryForm from './components/forms/Enquiry Form/EnquiryForm';
@@ -85,6 +87,8 @@ function App() {
         <Route path="/for-parents" element={<ForParents />} />
         <Route path="/about" element={<About />} />
         <Route path="/placements" element={<PlacementsPage />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <FloatingIcons/>

@@ -147,6 +147,14 @@
     width: 100%;
 
 } */
+.placements .card-content .company .company-name
+{
+    /* Text fallback when a placement has no bundled logo. Sized to sit on the
+       same line the logo would have occupied, so the card height is unchanged. */
+    display: inline-block;
+    font-weight: 600;
+    line-height: 50px;
+}
 .placements .card-content .company  img
 {
     /* border: 2px solid rgb(255, 30, 0)!important; */

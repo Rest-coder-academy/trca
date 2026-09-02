@@ -34,7 +34,7 @@
 
 .trainer-photo {
   width: 100%;
-  height: 240px;
+  aspect-ratio: 1 / 1;   /* square so headshots aren't cropped top/bottom */
   background: var(--rca-surface-subtle);
   display: flex;
   align-items: center;
@@ -44,6 +44,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top; /* favour the head if a photo isn't square */
 }
 .trainer-initials {
   font-size: 3.2rem;

@@ -1,0 +1,163 @@
+/* Course detail page. Uses the shared design tokens; sits below the fixed navbar. */
+.cd {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 92px 20px 64px;
+  font-family: var(--rca-font, "Montserrat", "Segoe UI", system-ui, sans-serif);
+  color: #1b2230;
+}
+
+.cd-crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+.cd-crumb a { color: var(--rca-blue, #146389); text-decoration: none; }
+.cd-crumb a:hover { text-decoration: underline; }
+.cd-crumb [aria-current] { color: #1b2230; font-weight: 600; }
+
+/* Hero */
+.cd-hero {
+  background: linear-gradient(155deg, var(--rca-navy, #03084c) 0%, #070d3a 100%);
+  color: #fff;
+  border-radius: var(--rca-radius-lg, 12px);
+  padding: 30px 30px 26px;
+  box-shadow: 0 14px 36px rgba(3, 8, 76, 0.14);
+}
+.cd-flag {
+  display: inline-block;
+  background: rgba(255, 152, 0, 0.16);
+  color: #ffb74d;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+.cd-hero h1 {
+  margin: 0 0 8px;
+  font-size: clamp(26px, 4.5vw, 38px);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+.cd-aud { margin: 0 0 20px; color: #aeb6e0; font-size: 15px; }
+.cd-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 26px;
+  align-items: baseline;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+}
+.cd-price { font-size: 30px; font-weight: 800; letter-spacing: -0.5px; }
+.cd-price small { font-size: 13px; font-weight: 400; color: #aeb6e0; }
+.cd-batch, .cd-trainer { font-size: 14px; color: #dfe3f7; }
+.cd-batch b, .cd-trainer b {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #8e96c8;
+  margin-bottom: 2px;
+}
+.cd-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.cd-book {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  height: 48px;
+  padding: 0 28px;
+  border: none;
+  border-radius: var(--rca-radius-md, 8px);
+  background: #fff;
+  color: var(--rca-navy, #03084c);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.cd-book:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); }
+.cd-talk {
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  height: 48px;
+  padding: 0 22px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--rca-radius-md, 8px);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+.cd-talk:hover { background: rgba(255, 255, 255, 0.08); }
+
+/* Accountability USP */
+.cd-accountability {
+  margin-top: 30px;
+  background: rgba(20, 99, 137, 0.07);
+  border: 1px solid rgba(20, 99, 137, 0.18);
+  border-left: 4px solid var(--rca-blue, #146389);
+  border-radius: var(--rca-radius-md, 8px);
+  padding: 22px 24px;
+}
+.cd-accountability h2 { margin: 0 0 8px; font-size: 19px; color: var(--rca-navy, #03084c); }
+.cd-accountability p { margin: 0; font-size: 15px; line-height: 1.6; color: #37424f; }
+
+/* Syllabus */
+.cd-syllabus { margin-top: 34px; }
+.cd-syllabus h2 { font-size: 13px; letter-spacing: 0.11em; text-transform: uppercase; color: var(--rca-blue, #146389); margin: 0 0 16px; }
+.cd-syllabus ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+@media (min-width: 620px) { .cd-syllabus ul { grid-template-columns: 1fr 1fr; } }
+.cd-syllabus li {
+  position: relative;
+  padding: 12px 14px 12px 40px;
+  background: #f5f7fb;
+  border: 1px solid #e6e9f2;
+  border-radius: var(--rca-radius-md, 8px);
+  font-size: 14.5px;
+  color: #333;
+}
+.cd-syllabus li::before {
+  content: "✓";
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  color: var(--rca-navy, #03084c);
+  font-weight: 800;
+}
+
+/* Closing CTA */
+.cd-foot {
+  margin-top: 40px;
+  text-align: center;
+  padding: 30px 24px;
+  background: #f5f7fb;
+  border: 1px solid #e6e9f2;
+  border-radius: var(--rca-radius-lg, 12px);
+}
+.cd-foot h2 { margin: 0 0 8px; font-size: 22px; color: var(--rca-navy, #03084c); }
+.cd-foot p { margin: 0 0 20px; color: #45545d; font-size: 14.5px; }
+.cd-foot .cd-cta { justify-content: center; }
+.cd-foot .cd-book { background: var(--rca-navy, #03084c); color: #fff; }
+.cd-back {
+  align-self: center;
+  color: var(--rca-blue, #146389);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0 8px;
+  line-height: 48px;
+}
+.cd-back:hover { text-decoration: underline; }

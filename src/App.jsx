@@ -1,8 +1,10 @@
 import { createContext, useContext, useState } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from "./components/molecules/Navbar/Navbar"
 import Footer from "./components/organism/Footer/FooterComponent"
 import Banner from './components/organism/Banner/Banner'
 import Home from "./components/Pages/Home";
+import CourseDetail from "./components/Pages/CourseDetail";
 import Modal from 'react-modal';
 import EnquiryForm from './components/forms/Enquiry Form/EnquiryForm';
 import EnrollForm from './components/forms/EnrollForm/EnrollForm';
@@ -72,7 +74,11 @@ function App() {
       >
         {enrollCourse && <EnrollForm course={enrollCourse} />}
       </Modal>
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/courses/:slug" element={<CourseDetail />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
       <FloatingIcons/>
       <Footer />
     </AuthContext.Provider>

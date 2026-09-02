@@ -7,6 +7,7 @@ export let courses = [
   {
     id: "0",
     courseId: "fde",
+    slug: "forward-deployed-engineering",
     name: "Forward Deployed Engineering",
     badge: "FDE · New",
     audience:
@@ -31,6 +32,7 @@ export let courses = [
   {
     id: "1",
     courseId: "java-fs",
+    slug: "java-full-stack",
     name: "Java Full Stack",
     audience: "For Freshers & Working Professionals",
     paid: true,
@@ -41,6 +43,7 @@ export let courses = [
   {
     id: "2",
     courseId: "python-fs",
+    slug: "python-full-stack",
     name: "Python Full Stack",
     audience: "For Freshers & Working Professionals",
     paid: true,
@@ -51,6 +54,7 @@ export let courses = [
   {
     id: "3",
     courseId: "mern",
+    slug: "mern-stack",
     name: "MERN Stack",
     audience: "For Freshers & Working Professionals",
     paid: true,

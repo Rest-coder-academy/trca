@@ -1,0 +1,123 @@
+/* ==========================================================================
+   Rest Coder Academy — UI tokens
+   Import once in src/main.jsx, ABOVE every other stylesheet:
+       import "../design/tokens.css"
+   Every colour, size and radius in the app should come from this file.
+   Nothing here is invented: the palette is the one already in
+   src/styles/colors.css, written as variables so it can be used consistently.
+   ========================================================================== */
+
+:root {
+  /* --- Brand ------------------------------------------------------------ */
+  --rca-navy:          #03084C;  /* was rgb(3, 8, 76) — primary buttons, headings */
+  --rca-navy-hover:    #0A1270;
+  --rca-navy-pressed:  #01062F;
+  --rca-blue:          #146389;  /* secondary surfaces, links */
+  --rca-blue-hover:    #10506F;
+  --rca-orange:        #FF9800;  /* accent only — never a full button fill */
+
+  /* --- Text ------------------------------------------------------------- */
+  --rca-ink:           #333333;  /* body copy */
+  --rca-ink-muted:     #4A4A4A;  /* secondary copy */
+  --rca-ink-soft:      #45545D;  /* long-form paragraphs */
+  --rca-ink-invert:    #FFFFFF;
+
+  /* --- Surface & line --------------------------------------------------- */
+  --rca-surface:       #FFFFFF;
+  --rca-surface-subtle:#F8FAFB;  /* alternating section backgrounds */
+  --rca-border:        #DDE3E7;
+  --rca-border-strong: #AEBAC0;
+
+  /* --- Feedback --------------------------------------------------------- */
+  --rca-danger:        #D32F2F;
+  --rca-danger-bg:     #FDECEA;
+  --rca-success:       #2E7D32;
+  --rca-success-bg:    #EDF7ED;
+
+  /* --- Disabled --------------------------------------------------------- */
+  --rca-disabled-bg:   #E4E7EA;
+  --rca-disabled-ink:  #9AA3AA;
+
+  /* --- Type ------------------------------------------------------------- */
+  --rca-font:          "Montserrat", "Segoe UI", system-ui, sans-serif;
+
+  --rca-fs-caption:    12px;   /* helper text, labels */
+  --rca-fs-small:      14px;
+  --rca-fs-body:       16px;   /* default body — never go below this for copy */
+  --rca-fs-lead:       18px;
+  --rca-fs-h5:         20px;
+  --rca-fs-h4:         24px;
+  --rca-fs-h3:         30px;
+  --rca-fs-h2:         38px;
+  --rca-fs-h1:         48px;   /* hero, desktop only; 32px on mobile */
+
+  --rca-lh-tight:      1.2;    /* headings */
+  --rca-lh-body:       1.6;    /* paragraphs */
+
+  --rca-fw-regular:    400;
+  --rca-fw-medium:     500;
+  --rca-fw-semibold:   600;
+  --rca-fw-bold:       700;
+
+  /* --- Spacing (4px base) ----------------------------------------------- */
+  --rca-space-1:  4px;
+  --rca-space-2:  8px;
+  --rca-space-3:  12px;
+  --rca-space-4:  16px;
+  --rca-space-5:  24px;
+  --rca-space-6:  32px;
+  --rca-space-7:  48px;
+  --rca-space-8:  64px;   /* vertical gap between page sections (desktop) */
+
+  /* --- Radius ------------------------------------------------------------
+     Four values, no more. The app currently uses ten.                      */
+  --rca-radius-sm:   4px;   /* chips, badges */
+  --rca-radius-md:   8px;   /* buttons, inputs */
+  --rca-radius-lg:   12px;  /* cards, modals */
+  --rca-radius-pill: 999px; /* pills */
+
+  /* --- Elevation -------------------------------------------------------- */
+  --rca-shadow-card:  0 1px 3px rgba(3, 8, 76, 0.08);
+  --rca-shadow-hover: 0 6px 18px rgba(3, 8, 76, 0.10);
+  --rca-shadow-modal: 0 20px 60px rgba(3, 8, 76, 0.25);
+
+  /* --- Translucency ------------------------------------------------------
+     The only places a colour legitimately needs alpha: tints over the navy
+     cards, and the dialog scrim. Everything else is a solid token.          */
+  --rca-tint-on-dark:        rgba(255, 255, 255, 0.15);
+  --rca-tint-on-dark-strong: rgba(255, 255, 255, 0.24);
+  --rca-scrim:               rgba(3, 8, 76, 0.55);
+
+  /* --- Third-party brand -------------------------------------------------
+     WhatsApp's own green. Not ours to restyle, and not part of the palette —
+     named so it is obvious why it sits outside the scale.                   */
+  --rca-whatsapp: #128C7E;
+
+  /* --- Controls ---------------------------------------------------------- */
+  --rca-control-h:        48px;  /* button / input height, desktop */
+  --rca-control-h-mobile: 44px;  /* never smaller — minimum touch target */
+  --rca-focus-ring:       0 0 0 3px rgba(20, 99, 137, 0.40);
+
+  --rca-transition: 180ms cubic-bezier(0.2, 0, 0, 1);
+
+  /* --- Layout ------------------------------------------------------------ */
+  --rca-container:      1200px;
+  --rca-gutter:         24px;
+  --rca-gutter-mobile:  16px;
+}
+
+/* Breakpoints (for reference — CSS custom properties can't be used in @media)
+   mobile   375px
+   tablet   768px
+   laptop   1024px
+   desktop  1440px                                                          */
+
+@media (max-width: 767px) {
+  :root {
+    --rca-fs-h1:     32px;
+    --rca-fs-h2:     26px;
+    --rca-fs-h3:     22px;
+    --rca-space-8:   40px;
+    --rca-control-h: var(--rca-control-h-mobile);
+  }
+}

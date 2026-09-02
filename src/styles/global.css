@@ -20,19 +20,19 @@ body,
 
 /* Track  */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
+  background: var(--rca-surface-subtle);
+  border-radius: var(--rca-radius-lg);
 }
 
 /* Handle  */
 ::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
+  background: var(--rca-ink-muted);
+  border-radius: var(--rca-radius-lg);
 }
 
 /* Handle on hover  */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--rca-ink);
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -84,23 +84,23 @@ fieldset > legend {
 
 /* Toast */
 .Toastify__toast--info {
-  background: #3498db !important;
-  color: #ffffff !important;
+  background: var(--rca-blue) !important;
+  color: var(--rca-surface) !important;
 }
 
 .Toastify__toast--success {
-  background: #07bc0c !important;
-  color: #ffffff !important;
+  background: var(--rca-success) !important;
+  color: var(--rca-surface) !important;
 }
 
 .Toastify__toast--warning {
-  background: #f1c40f !important;
-  color: #ffffff !important;
+  background: var(--rca-orange) !important;
+  color: var(--rca-surface) !important;
 }
 
 .Toastify__toast--error {
-  background: #e74c3c !important;
-  color: #ffffff !important;
+  background: var(--rca-danger) !important;
+  color: var(--rca-surface) !important;
 }
 
 /* z-index */

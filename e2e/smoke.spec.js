@@ -17,8 +17,23 @@ test("/admin is password-protected (401)", async ({ request }) => {
   expect((await request.get("/admin/batches")).status()).toBe(401);
 });
 
-test("enquiry CTA opens the form", async ({ page }) => {
+test("book-a-seat CTA launches checkout directly (no form)", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: /enquire/i }).first().click();
+  await page.getByRole("button", { name: /book your seat/i }).first().click();
+  // No form on our side — it opens Razorpay directly. Without keys the order is
+  // 503, so the launcher shows the opening/opening-soon state (never a form).
+  await expect(
+    page.getByText(/opening secure checkout|enrolment is opening soon/i)
+  ).toBeVisible();
+});
+
+test("apply CTA opens the enquiry form", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /apply now|register now/i }).first().click();
   await expect(page.getByRole("button", { name: /submit|sending/i })).toBeVisible();
+});
+
+test("/api/enroll/order is inert until Razorpay keys are set (503)", async ({ request }) => {
+  const res = await request.post("/api/enroll/order", { data: { course: "fde" } });
+  expect(res.status()).toBe(503);
 });

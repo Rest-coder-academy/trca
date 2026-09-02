@@ -18,24 +18,37 @@ import "../Navbar/Navbar.css"
 import logo from "../../../assets/new logo1.png";
 import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { useAuth } from '../../../App';
-import { Link, animateScroll as scroll } from 'react-scroll';
+import { scroller } from 'react-scroll';
+import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 const drawerWidth = 240;
 // const navItems = ['Home', 'Fish', 'Stones','Plants','Food','Lights','Air Pumps','Tanks & Bowls'];
-const navItems = ['Courses',  'Reviews','Clients','Placements','Batches'];
+const navItems = ['Courses',  'Reviews','Clients','Placements'];
 
 
 function Navbar(props) {
     let {openModal}=useAuth()
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  // On the homepage, scroll to the section; from any other route, go home and
+  // let Home scroll to it (via location state).
+  const goToSection = (id) => {
+    if (location.pathname === '/') {
+      scroller.scrollTo(id, { smooth: true, offset: -62, duration: 400 });
+    } else {
+      navigate('/', { state: { scrollTo: id } });
+    }
+  };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2,fontFamily:"tilt neon" }}>
+      <Typography variant="h6" component="div" sx={{ my: 2,fontFamily:"tilt neon" }}>
         Rest Coder Academy
       </Typography>
       <Divider />
@@ -43,7 +56,7 @@ function Navbar(props) {
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
             <ListItemButton sx={{ textAlign: 'center', minHeight: 44 }}>
-              <ListItemText primary={<Link to={item} smooth={true} offset={-62}  onClick={handleDrawerToggle} activeClass='active' spy={true}>{item}</Link>} />
+              <ListItemText primary={<span style={{ cursor: 'pointer' }} onClick={() => { handleDrawerToggle(); goToSection(item); }}>{item}</span>} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -59,7 +72,7 @@ function Navbar(props) {
       <AppBar component="nav">
         <Toolbar>
 
-        <img src={logo} alt=""  />
+        <RouterLink to="/"><img src={logo} alt="Rest Coder Academy" /></RouterLink>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -74,9 +87,8 @@ function Navbar(props) {
           {/* </Typography> */}
           <Box sx={{ display: { xs: 'none', md: 'block' }, marginLeft: "auto" }}>
             {navItems.map((item) => (
-              <ButtonComponent key={item} sx={{ color: '#fff', }} variant='text'>
-                  <Link to={item} smooth={true} offset={-62} activeClass='active' spy={true}>{item}</Link>
-                  
+              <ButtonComponent key={item} textColor="color-dark-black" variant='text' onBtnClick={() => goToSection(item)}>
+                  {item}
                 </ButtonComponent>
                 
             ))}

@@ -18,11 +18,19 @@ import PersonIcon from '@mui/icons-material/Person';
 import CallIcon from '@mui/icons-material/Call';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import { useAuth } from '../../../App';
+import { courses } from '../courses/courses';
 
 
  function BatchesCard({name,date,day,time,trainer,duration,mode,contact}) {
-    let {openModal}=useAuth()
+    let {openModal,openEnroll}=useAuth()
     let upcoming=isBatchUpcoming(date)
+    // Funnel an upcoming batch straight into its course's enrolment flow.
+    let course=courses.find((c)=>c.name===name)
+    let canEnroll=upcoming && !!course
+    let onCta=canEnroll
+      ? ()=>openEnroll({courseId:course.courseId,name:course.name,paid:course.paid,price:course.price})
+      : openModal
+    let ctaLabel=canEnroll ? "Book your seat" : (upcoming ? "Enquire Now" : "Join the Waitlist")
   return (
     <Card sx={{}} className="card">
       <Box className="course-header">
@@ -56,11 +64,11 @@ import { useAuth } from '../../../App';
       <CardActions sx={{}} className="card-actions">
         <ButtonComponent
           size="large"
-          variant="outlined"
-          label={upcoming ? "Enquire Now" : "Join the Waitlist"}
+          variant={canEnroll && course.paid ? "contained" : "outlined"}
+          label={ctaLabel}
           borderRadius="0"
           sx={{}}
-          onBtnClick={openModal}
+          onBtnClick={onCta}
         />
       </CardActions>
     </Card>

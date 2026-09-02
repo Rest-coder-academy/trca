@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const useStyles = makeStyles({
   root: {
     " &:disabled": {
-      backgroundColor: "#706c61",
+      backgroundColor: "var(--rca-disabled-ink)",
       color: "white",
     },
 

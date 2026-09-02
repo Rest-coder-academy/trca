@@ -1,10 +1,21 @@
 import { createContext, useContext, useState } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from "./components/molecules/Navbar/Navbar"
 import Footer from "./components/organism/Footer/FooterComponent"
 import Banner from './components/organism/Banner/Banner'
 import Home from "./components/Pages/Home";
+import CourseDetail from "./components/Pages/CourseDetail";
+import ForParents from "./components/Pages/ForParents";
+import About from "./components/Pages/About";
+import PlacementsPage from "./components/Pages/PlacementsPage";
+import Contact from "./components/Pages/Contact";
+import FAQ from "./components/Pages/FAQ";
+import Blog from "./components/Pages/Blog";
+import BlogPost from "./components/Pages/BlogPost";
+import ScrollToTop from "./components/ScrollToTop";
 import Modal from 'react-modal';
 import EnquiryForm from './components/forms/Enquiry Form/EnquiryForm';
+import EnrollForm from './components/forms/EnrollForm/EnrollForm';
 import "./App.css"
 import FloatingIcons from './components/molecules/Floating Icons Components/FloatingIcons';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,7 +24,8 @@ import { ToastContainer, toast } from 'react-toastify';
 
 function App() {
   const [modalIsOpen, setIsOpen] = useState(false);
-  
+  const [enrollCourse, setEnrollCourse] = useState(null);
+
   let openModal=()=> {
     setIsOpen(true);
   }
@@ -21,11 +33,20 @@ function App() {
   let closeModal=()=> {
     setIsOpen(false);
   }
+
+  // Enrolment modal — opened per course (paid → checkout, else → register).
+  let openEnroll=(course)=> {
+    setEnrollCourse(course);
+  }
+  let closeEnroll=()=> {
+    setEnrollCourse(null);
+  }
+
   const notify = (message) => toast(message);
 
   const customStyles = {
     overlay:{
-      backgroundColor:"rgba(15, 15, 25, 0.55)",
+      backgroundColor:"var(--rca-scrim)",
       backdropFilter:"blur(3px)",
     },
     // content: {
@@ -41,7 +62,7 @@ function App() {
   
 
   return (
-    <AuthContext.Provider className="app" value={{ openModal, closeModal,notify }}>
+    <AuthContext.Provider className="app" value={{ openModal, closeModal, openEnroll, closeEnroll, notify }}>
       <Navbar />
       <ToastContainer className={"toast"} autoClose={2500}/>
       <Modal
@@ -49,11 +70,31 @@ function App() {
         onRequestClose={closeModal}
         className="modal-enquiry-form"
         style={customStyles}
-        
+
       >
         <EnquiryForm />
       </Modal>
-      <Home />
+      <Modal
+        isOpen={!!enrollCourse}
+        onRequestClose={closeEnroll}
+        className="modal-enquiry-form"
+        style={customStyles}
+      >
+        {enrollCourse && <EnrollForm course={enrollCourse} />}
+      </Modal>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/courses/:slug" element={<CourseDetail />} />
+        <Route path="/for-parents" element={<ForParents />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/placements" element={<PlacementsPage />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
       <FloatingIcons/>
       <Footer />
     </AuthContext.Provider>

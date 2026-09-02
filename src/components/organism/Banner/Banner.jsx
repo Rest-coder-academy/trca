@@ -10,7 +10,7 @@ import "./Banner.css"
 function Banner() {
     let mapdataContent=[<BannerContent/>,<BannerImage/>]
   return (
-    <Box className="banner" bgcolor="#ffffff"  py={5} mx={12} id="banner">
+    <Box className="banner rca-section" bgcolor="var(--rca-surface)" id="banner">
 
     <GenericGridComponents xs={12} sm={12} lg={6} spacing={2}
     mapdata={mapdataContent}  />

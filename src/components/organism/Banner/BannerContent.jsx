@@ -12,7 +12,7 @@ function BannerContent() {
       <TypoGraphyComponent
         variant="h2"
         sx={{mb:".6rem"}}
-        component="h2"
+        component="h1"
         text={`Code Your Dreams Into Reality`}
       />
       {/* <TypoGraphyComponent
@@ -24,7 +24,7 @@ function BannerContent() {
       /> */}
       <TypoGraphyComponent
         variant="body"
-        sx={{my:"1rem",color:"#45545d",fontSize:"1.1rem"}}
+        sx={{my:"1rem",color:"var(--rca-ink-soft)",fontSize:"1.1rem"}}
         component="p"
       >
         At <span className="color-dark-blue">REST CODER ACADEMY</span>{quote}

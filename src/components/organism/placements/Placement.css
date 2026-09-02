@@ -5,11 +5,20 @@
 
 }
 
+.placements-more-link {
+    color: var(--rca-blue, #146389);
+    font-weight: 600;
+    display: inline-block;
+}
+.placements-more-link:hover {
+    color: var(--rca-navy, #03084c);
+}
+
 .placements hr {
     width: 5%;
     margin: 1.5rem auto ;
     height: .18rem;
-    background-color: #1976d2;
+    background-color: var(--rca-blue);
 }
 
 .placements .MuiGrid-container {
@@ -63,17 +72,17 @@
 } */
 .placements .MuiGrid-container .card {
     width: 94% !important;
-    /* background-image: linear-gradient(#0054b4,#40e0d0); */
-    /* background-image: linear-gradient(#a7a6ba,#909eae); */
-    background-image: linear-gradient(#1ca9c9,#0047ab);
-    /* background-image: linear-gradient(#4b0082,#0892d0,#4b0082); */
-    /* background-image: linear-gradient(#000080,#00bfff,#000080); */
+    /* background-image: linear-gradient(var(--rca-navy),var(--rca-blue)); */
+    /* background-image: linear-gradient(var(--rca-border-strong),var(--rca-border-strong)); */
+    background-image: linear-gradient(var(--rca-blue),var(--rca-navy));
+    /* background-image: linear-gradient(var(--rca-navy),var(--rca-blue),var(--rca-navy)); */
+    /* background-image: linear-gradient(var(--rca-navy),var(--rca-blue),var(--rca-navy)); */
 
 
 
     box-shadow: none;
     /* color: white; */
-    border-radius: .3rem;
+    border-radius: var(--rca-radius-sm);
     /* margin: 1rem; */
     margin-left: 8px;
     display: flex !important;
@@ -95,8 +104,8 @@
     justify-content: space-between;
     align-items: center;
     color: white;
-    /* background-color:#06065a; */
-    border-radius: .3rem;
+    /* background-color:var(--rca-navy); */
+    border-radius: var(--rca-radius-sm);
     height: 82%;
     text-align: center;
     /* position: relative; */
@@ -108,7 +117,7 @@
 }
 .placements .name-desig
 {
-    /* border: 2px solid rgb(240, 240, 237)!important; */
+    /* border: 2px solid var(--rca-surface)!important; */
     margin-top: 1rem;
 }
 /* .placements .card-text
@@ -129,11 +138,11 @@
     height: 5.5rem;
 
     /* height: 100%!important; */
-    /* border: .1rem solid rgba(110, 110, 112, 0.61); */
+    /* border: .1rem solid var(--rca-border-strong); */
     border-radius: 50%;
     /* position: absolute;
     top: -40px; */
-    /* box-shadow: 1px 1px 10px 1px #03235342; */
+    /* box-shadow: 1px 1px 10px 1px var(--rca-navy); */
     margin-top: 1rem!important;
 
 }
@@ -147,9 +156,17 @@
     width: 100%;
 
 } */
+.placements .card-content .company .company-name
+{
+    /* Text fallback when a placement has no bundled logo. Sized to sit on the
+       same line the logo would have occupied, so the card height is unchanged. */
+    display: inline-block;
+    font-weight: 600;
+    line-height: 50px;
+}
 .placements .card-content .company  img
 {
-    /* border: 2px solid rgb(255, 30, 0)!important; */
+    /* border: 2px solid var(--rca-danger)!important; */
     width: 7rem;
     /* margin-top: 1rem; */
     /* display: flex !important;
@@ -171,7 +188,7 @@
 } */
 .placements .card svg {
     /* font-size: 1.2rem; */
-    /* background-color: #1976d2; */
+    /* background-color: var(--rca-blue); */
     /* color: white; */
     /* border-radius: 100%; */
     /* padding: 9px; */
@@ -195,7 +212,7 @@
 {
     font-size: 2rem;
     opacity: 1!important;
-    color: #06065abd;
+    color: var(--rca-navy);
 }
 
 /* ? media quries */
@@ -219,7 +236,7 @@
         /* border: none; */
         /* width: 364px!important; */
         margin-left: 8px;
-        box-shadow: 0px 2px 15px rgba(156, 156, 156, 0.137) !important;
+        box-shadow: var(--rca-shadow-card) !important;
 
     }
 

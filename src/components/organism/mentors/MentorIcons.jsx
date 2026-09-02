@@ -1,24 +1,30 @@
 import React from 'react'
-import WhatsAppIcon from '@mui/icons-material/WhatsApp'
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
+import { Box } from '@mui/material'
+import FacebookIcon from '@mui/icons-material/Facebook'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import { GitHub, Language, LinkedIn } from '@mui/icons-material'
 
-import {Box} from '@mui/material'
-import { LinkedIn, YouTube } from '@mui/icons-material';
+// Per-trainer social links. Each trainer carries their own URLs (from D1 /
+// the fallback), and only the links that are present render — so no card ever
+// shows another trainer's profile.
+function MentorIcons({ trainer = {} }) {
+  const links = [
+    { url: trainer.linkedin_url, Icon: LinkedIn, cls: 'linkedin-icon', label: 'LinkedIn' },
+    { url: trainer.github_url, Icon: GitHub, cls: 'github-icon', label: 'GitHub' },
+    { url: trainer.instagram_url, Icon: InstagramIcon, cls: 'instagram-icon', label: 'Instagram' },
+    { url: trainer.facebook_url, Icon: FacebookIcon, cls: 'facebook-icon', label: 'Facebook' },
+    { url: trainer.website_url, Icon: Language, cls: 'website-icon', label: 'Website' },
+  ].filter((l) => l.url)
 
-function MentorIcons() {
+  if (!links.length) return null
+
   return (
     <Box className="icons">
-        <a href="https://www.facebook.com/share/1B6z1EPq7d/?mibextid=wwXIfr" target="_blank">
-        <FacebookIcon className='facebook-icon'  />
+      {links.map(({ url, Icon, cls, label }, i) => (
+        <a key={i} href={url} target="_blank" rel="noreferrer" aria-label={label}>
+          <Icon className={cls} />
         </a>
-        <a href="https://www.instagram.com/_udaypawar_?igsh=cmhwaDF4MmNlaGwy" target='_blank'>
-        <InstagramIcon className='instagram-icon'/>
-        </a>
-        <a href="https://www.linkedin.com/in/uday-pawar-s-835920164?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target='_blank'>
-        <LinkedIn className='linkedin-icon'/>
-        </a>
-       
+      ))}
     </Box>
   )
 }

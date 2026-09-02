@@ -1,0 +1,68 @@
+{
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "Flow"
+    },
+    {
+      "id": "page-2",
+      "name": "Decisions"
+    },
+    {
+      "id": "page-3",
+      "name": "Build notes"
+    }
+  ],
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "page": "page-1",
+      "x": 0,
+      "y": 0,
+      "w": 2140,
+      "h": 1180,
+      "title": "The enrol flow"
+    },
+    {
+      "file": "Coupon.dc.html",
+      "page": "page-2",
+      "x": 0,
+      "y": 0,
+      "w": 1900,
+      "h": 1320,
+      "title": "The referral field \u2014 attribution"
+    },
+    {
+      "file": "Variants.dc.html",
+      "page": "page-2",
+      "x": 2020,
+      "y": 0,
+      "w": 1900,
+      "h": 1870,
+      "title": "The two open questions"
+    },
+    {
+      "file": "Spec.dc.html",
+      "page": "page-3",
+      "x": 0,
+      "y": 0,
+      "w": 1500,
+      "h": 840,
+      "title": "Build notes"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "rca-open",
+      "page": "page-2",
+      "x": 3980,
+      "y": 0,
+      "w": 300,
+      "text": "Waiting on Nik\n\n1. Full \u20b935,000 online, or a deposit?\n2. Do prices go public on the site?\n\nBoth already asked. Neither blocks the design \u2014 the layout takes either answer as a config change.\n\nThe fee itself (\u20b935,000) came from the SOW line in kulli-and-co/docs/OPERATIONS.md, so that one did not need asking."
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "page-1"
+  }
+}

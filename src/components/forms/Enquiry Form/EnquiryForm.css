@@ -9,19 +9,19 @@
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1.25rem;
-    background: rgb(3, 8, 76);
+    background: var(--rca-navy);
 }
 .enquiry-form .form-heading h6
 {
     text-align: left;
-    color: #ffffff;
+    color: var(--rca-surface);
     font-weight: 600;
     letter-spacing: .02em;
 }
 .enquiry-form .form-heading button
 {
-    background-color: rgba(255, 255, 255, 0.12)!important;
-    color: #ffffff!important;
+    background-color: var(--rca-tint-on-dark)!important;
+    color: var(--rca-surface)!important;
     padding: 0!important;
     min-width: 0;
     width: 1.75rem;
@@ -33,7 +33,7 @@
 }
 .enquiry-form .form-heading button:hover
 {
-    background-color: rgba(255, 255, 255, 0.24)!important;
+    background-color: var(--rca-tint-on-dark-strong)!important;
 }
 
 .enquiry-form .enquiry-fields
@@ -56,17 +56,17 @@
 }
 .enquiry-form .enquiry-field-button button
 {
-    border-radius: .5rem;
+    border-radius: var(--rca-radius-md);
     padding: .65rem 1rem;
     font-size: 1rem;
     font-weight: 600;
     letter-spacing: .02em;
-    box-shadow: 0 4px 14px rgba(3, 8, 76, 0.25);
+    box-shadow: var(--rca-shadow-card);
     transition: transform .1s ease, box-shadow .15s ease;
 }
 .enquiry-form .enquiry-field-button button:hover:not(:disabled)
 {
-    box-shadow: 0 6px 18px rgba(3, 8, 76, 0.32);
+    box-shadow: var(--rca-shadow-hover);
 }
 .enquiry-form .enquiry-field-button button:active:not(:disabled)
 {
@@ -81,15 +81,15 @@
 {
     margin-top: 1rem;
     padding: .75rem .9rem;
-    border: 1px solid #f1b5ac;
-    border-radius: .5rem;
-    background-color: #fdecea;
+    border: 1px solid var(--rca-danger-bg);
+    border-radius: var(--rca-radius-md);
+    background-color: var(--rca-danger-bg);
     text-align: center;
     animation: enquiry-error-in .2s ease-out;
 }
 .enquiry-form .enquiry-submit-error p
 {
-    color: #b3261e;
+    color: var(--rca-danger);
     margin: 0 0 .5rem 0;
     line-height: 1.4;
 }
@@ -106,9 +106,9 @@
     align-items: center;
     gap: .35rem;
     padding: .4rem .9rem;
-    border-radius: 999px;
-    background-color: #128c7e;
-    color: #ffffff;
+    border-radius: var(--rca-radius-pill);
+    background-color: var(--rca-whatsapp);
+    color: var(--rca-surface);
     font-weight: 600;
     font-size: .85rem;
     text-decoration: none;
@@ -116,7 +116,7 @@
 }
 .enquiry-form .enquiry-whatsapp-fallback:hover
 {
-    background-color: #0e6f64;
+    background-color: var(--rca-success);
 }
 .enquiry-form .enquiry-submit-spinner
 {

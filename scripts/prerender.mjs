@@ -1,0 +1,125 @@
+// Post-build prerender. The app is a client-rendered React SPA, so crawlers get
+// an empty <div id="root"> on first load. This snapshots each route to static
+// HTML — using a real headless browser (Playwright), so no SSR-safety refactor
+// is needed for the app's window/localStorage/Razorpay/modal code. The page's
+// own JS still boots on load, so users get the normal live SPA; crawlers get the
+// pre-rendered content + the per-route <title>/<meta>/JSON-LD React 19 injects.
+//
+// Runs in the deploy job only (needs chromium): `npm run build && npm run prerender`.
+import { chromium } from "@playwright/test";
+import { createServer } from "node:http";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { extname, join, dirname, resolve } from "node:path";
+import { courses } from "../src/components/organism/courses/courses.js";
+
+const DIST = resolve(process.cwd(), "dist");
+const HOST = "127.0.0.1";
+
+const routes = [
+  { path: "/", out: "index.html", waitFor: "#Courses" },
+  { path: "/for-parents", out: "for-parents.html", waitFor: "main.fp" },
+  // /about is intentionally NOT prerendered: it's admin-managed (/api/founder)
+  // and hides itself until content exists, so there's nothing static to snapshot.
+  // It renders client-side (Googlebot executes JS) once a founder is set.
+  ...courses.map((c) => {
+    const slug = c.slug || c.courseId;
+    // Flat `.html` (not `<slug>/index.html`) so Cloudflare Pages serves the
+    // clean, no-trailing-slash URL directly (200) — matching the canonical +
+    // sitemap and avoiding a 308 redirect hop.
+    return { path: `/courses/${slug}`, out: `courses/${slug}.html`, waitFor: "main.cd" };
+  }),
+];
+
+const TYPES = {
+  ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8",
+  ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png",
+  ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp",
+  ".ico": "image/x-icon", ".woff": "font/woff", ".woff2": "font/woff2",
+  ".ttf": "font/ttf", ".txt": "text/plain; charset=utf-8", ".xml": "application/xml",
+  ".map": "application/json",
+};
+
+async function main() {
+  if (!existsSync(join(DIST, "index.html"))) {
+    console.error("prerender: dist/index.html not found — run `npm run build` first.");
+    process.exit(1);
+  }
+  // Serve the ORIGINAL shell for every SPA route, from memory, so writing
+  // prerendered files mid-run never changes what the server hands back.
+  const shell = await readFile(join(DIST, "index.html"));
+
+  const server = createServer(async (req, res) => {
+    try {
+      const url = new URL(req.url, `http://${HOST}`);
+      const rel = decodeURIComponent(url.pathname).replace(/^\/+/, "");
+      const filePath = join(DIST, rel);
+      // A real static asset (js/css/img/robots…) → serve it. Otherwise SPA shell.
+      if (rel && extname(rel) && existsSync(filePath) && resolve(filePath).startsWith(DIST)) {
+        const body = await readFile(filePath);
+        res.writeHead(200, { "content-type": TYPES[extname(filePath)] || "application/octet-stream" });
+        res.end(body);
+        return;
+      }
+      res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+      res.end(shell);
+    } catch (e) {
+      res.writeHead(500);
+      res.end(String(e));
+    }
+  });
+
+  await new Promise((r) => server.listen(0, HOST, r));
+  const port = server.address().port;
+  const base = `http://${HOST}:${port}`;
+
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  let ok = 0;
+
+  for (const route of routes) {
+    const target = base + route.path;
+    await page.goto(target, { waitUntil: "networkidle", timeout: 30000 });
+    await page.waitForSelector(route.waitFor, { timeout: 20000 });
+
+    // React 19 hoists per-route <title>/<meta> into a <head> that already holds
+    // the static ones from index.html — collapse each to a single element so the
+    // page ends with exactly one canonical title/description.
+    await page.evaluate(() => {
+      // `document.title` is the effective title React 19 maintains (course title
+      // on a course page, homepage title on home) — rebuild a single canonical
+      // <title> from it, regardless of how many/where the elements ended up.
+      const effectiveTitle = document.title;
+      document.querySelectorAll("head > title").forEach((t) => t.remove());
+      const t = document.createElement("title");
+      t.textContent = effectiveTitle;
+      document.head.appendChild(t);
+      // For meta description + canonical, the per-route element React injects is
+      // last, so keep the last of each.
+      const keepLast = (sel) => {
+        const els = [...document.querySelectorAll(sel)];
+        els.slice(0, -1).forEach((e) => e.remove());
+      };
+      keepLast('head > meta[name="description"]');
+      keepLast('head > link[rel="canonical"]');
+    });
+
+    const html = "<!doctype html>\n" + (await page.evaluate(() => document.documentElement.outerHTML));
+    const outPath = join(DIST, route.out);
+    await mkdir(dirname(outPath), { recursive: true });
+    await writeFile(outPath, html);
+    const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || "(no title)";
+    console.log(`prerendered ${route.path.padEnd(38)} → ${route.out}   [${title}]`);
+    ok++;
+  }
+
+  await browser.close();
+  await new Promise((r) => server.close(r));
+  console.log(`prerender: ${ok}/${routes.length} routes written.`);
+}
+
+main().catch((e) => {
+  console.error("prerender failed:", e);
+  process.exit(1);
+});

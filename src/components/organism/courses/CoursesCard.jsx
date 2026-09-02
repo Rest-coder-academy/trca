@@ -1,12 +1,17 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../../App";
+import { useFounder, hasFounder } from "../../Pages/useFounder";
+import { useTrainers } from "../mentors/useTrainers";
 import { useBatches } from "../Batches/useBatches";
 import { getNextBatchForCourse, formatBatchDateShort } from "../Batches/batchDateUtils";
 import "./CourseCard.css";
 
-// FDE-only credibility line under the trainer name.
+// Credibility line under the flagship trainer's name (Nikshep). Other courses
+// use the trainer's own profile title.
 const FDE_TRAINER_TITLE = "ex-Head of Engineering, Organic Mandya";
 
+const norm = (s) => String(s || "").trim().toLowerCase();
 function initials(name = "") {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 }
@@ -24,10 +29,17 @@ function Check({ filled }) {
 // pill, the trainer credibility line and highlight chips; every card shares the
 // navy header, check-icon syllabus, price slot ("Fee on request" until priced),
 // equal heights, and "Book your seat" + a counsellor secondary (Abhigna's flow).
-function CoursesCard({ name, courseId, paid, flagship, price, trainer, audience, backend, frontend, syllabus1, syllabus2 }) {
+function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, audience, backend, frontend, syllabus1, syllabus2 }) {
   const { openEnroll, openModal } = useAuth();
+  const { founder } = useFounder();
+  const trainers = useTrainers();
   const batches = useBatches();
   const nextBatch = getNextBatchForCourse(name, batches);
+
+  // Match the course's trainer to a full profile (photo + title) so every card
+  // shows a "Taught by …" credibility block, not just the flagship.
+  const trainerProfile = trainer ? (trainers || []).find((t) => norm(t.name) === norm(trainer)) : null;
+  const trainerTitle = flagship ? FDE_TRAINER_TITLE : (trainerProfile && trainerProfile.title) || "";
   const modules = (
     flagship ? [...(syllabus1 || []), ...(syllabus2 || [])] : [...(backend || []), ...(frontend || [])]
   ).filter(Boolean);
@@ -48,14 +60,23 @@ function CoursesCard({ name, courseId, paid, flagship, price, trainer, audience,
         )}
         <h3 className="cc-title">{name}</h3>
         <p className="cc-sub">{audience || "For Freshers & Working Professionals"}</p>
-        {flagship && trainer && (
+        {trainer && (
           <div className="cc-trainer">
-            <span className="cc-avatar">{initials(trainer)}</span>
+            <span className="cc-avatar">
+              {trainerProfile && trainerProfile.photo_url ? (
+                <img src={trainerProfile.photo_url} alt={trainer} />
+              ) : (
+                initials(trainer)
+              )}
+            </span>
             <span className="cc-trainer-text">
               <b>Taught by {trainer}</b>
-              <span>{FDE_TRAINER_TITLE}</span>
+              {trainerTitle && <span>{trainerTitle}</span>}
             </span>
           </div>
+        )}
+        {flagship && hasFounder(founder) && (
+          <Link className="cc-founder-link" to="/about">Meet the founder →</Link>
         )}
       </div>
 
@@ -78,7 +99,7 @@ function CoursesCard({ name, courseId, paid, flagship, price, trainer, audience,
                 {[nextBatch.day, formatBatchDateShort(nextBatch.date), nextBatch.time].filter(Boolean).join(" · ")}
               </span>
               <span className="cc-sched-meta">
-                {[nextBatch.mode, nextBatch.duration, nextBatch.trainer && `Trainer: ${nextBatch.trainer}`].filter(Boolean).join(" · ")}
+                {[nextBatch.mode, nextBatch.duration].filter(Boolean).join(" · ")}
               </span>
             </>
           ) : (
@@ -113,6 +134,9 @@ function CoursesCard({ name, courseId, paid, flagship, price, trainer, audience,
           <button className="cc-counsellor" type="button" onClick={openModal}>
             Or talk to a counsellor first
           </button>
+          <Link className="cc-details" to={`/courses/${slug || courseId}`}>
+            Full syllabus &amp; details →
+          </Link>
         </div>
       </div>
     </div>

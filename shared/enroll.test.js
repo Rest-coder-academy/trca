@@ -11,11 +11,14 @@ async function sign(orderId, paymentId, secret) {
 }
 
 describe("priceForCourse (server-side source of truth)", () => {
-  it("returns the FDE price in paise", () => {
+  it("returns the course price in paise", () => {
     expect(priceForCourse("fde")).toBe(5000000);
+    expect(priceForCourse("java-fs")).toBe(3500000);
+    expect(priceForCourse("python-fs")).toBe(3500000);
+    expect(priceForCourse("mern")).toBe(3500000);
   });
   it("returns null for a course with no online price", () => {
-    expect(priceForCourse("java-fs")).toBeNull();
+    expect(priceForCourse("unknown-course")).toBeNull();
     expect(priceForCourse("")).toBeNull();
     expect(priceForCourse(undefined)).toBeNull();
   });

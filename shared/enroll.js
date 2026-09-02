@@ -7,6 +7,9 @@
 // price here to make it payable.
 export const COURSE_PRICES = {
   fde: 5000000, // FDE — Forward Deployed Engineering — ₹50,000
+  "java-fs": 3500000, // Java Full Stack — ₹35,000
+  "python-fs": 3500000, // Python Full Stack — ₹35,000
+  mern: 3500000, // MERN Stack — ₹35,000
 };
 
 export function priceForCourse(courseId) {

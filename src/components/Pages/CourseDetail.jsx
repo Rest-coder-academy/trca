@@ -4,14 +4,22 @@ import { useAuth } from "../../App";
 import { courses } from "../organism/courses/courses";
 import { useBatches } from "../organism/Batches/useBatches";
 import { getNextBatchForCourse, formatBatchDateShort } from "../organism/Batches/batchDateUtils";
+import { useTrainers } from "../organism/mentors/useTrainers";
+import MentorIcons from "../organism/mentors/MentorIcons";
 import "./CourseDetail.css";
 
 const ORIGIN = "https://restcoderacademy.in";
+
+const norm = (s) => String(s || "").trim().toLowerCase();
+function initials(name = "") {
+  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+}
 
 function CourseDetail() {
   const { slug } = useParams();
   const { openEnroll, openModal } = useAuth();
   const batches = useBatches();
+  const trainers = useTrainers();
 
   const course = courses.find((c) => c.slug === slug || c.courseId === slug);
   // Unknown course → home (router already redirects unknown paths, this guards
@@ -19,6 +27,13 @@ function CourseDetail() {
   if (!course) return <Navigate to="/" replace />;
 
   const next = getNextBatchForCourse(course.name, batches);
+  // The course's trainer (course.trainer, else the next batch's) matched to a
+  // full profile from /admin/trainers, so students can verify credibility.
+  const trainerName = course.trainer || next?.trainer || "";
+  const trainer = trainerName
+    ? (trainers || []).find((t) => norm(t.name) === norm(trainerName))
+    : null;
+  const trainerSkills = ((trainer && trainer.expertise) || "").split(",").map((s) => s.trim()).filter(Boolean);
   const modules = (
     course.flagship
       ? [...(course.syllabus1 || []), ...(course.syllabus2 || [])]
@@ -108,6 +123,43 @@ function CourseDetail() {
             ))}
           </ul>
         </section>
+
+        {trainer && (
+          <section className="cd-trainer">
+            <h2>Your trainer</h2>
+            <div className="cd-tr">
+              <div className="cd-tr-photo">
+                {trainer.photo_url ? (
+                  <img src={trainer.photo_url} alt={trainer.name} />
+                ) : (
+                  <span className="cd-tr-initials">{initials(trainer.name)}</span>
+                )}
+              </div>
+              <div className="cd-tr-body">
+                <h3>{trainer.name}</h3>
+                {trainer.title && <p className="cd-tr-title">{trainer.title}</p>}
+                {trainer.experience && <p className="cd-tr-exp">{trainer.experience} experience</p>}
+                {trainerSkills.length > 0 && (
+                  <div className="cd-tr-skills">
+                    {trainerSkills.map((s, i) => (
+                      <span key={i}>{s}</span>
+                    ))}
+                  </div>
+                )}
+                {trainer.bio && <p className="cd-tr-bio">{trainer.bio}</p>}
+                <div className="cd-tr-links">
+                  <MentorIcons trainer={trainer} />
+                  {trainer.certificate_url && (
+                    <a className="cd-tr-cert" href={trainer.certificate_url} target="_blank" rel="noreferrer">
+                      View certificate
+                    </a>
+                  )}
+                </div>
+                <p className="cd-tr-verify">See their profiles and verify for yourself — you should know exactly who's teaching you.</p>
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="cd-foot">
           <h2>Ready to join {course.name}?</h2>

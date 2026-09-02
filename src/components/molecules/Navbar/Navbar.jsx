@@ -56,7 +56,7 @@ function Navbar(props) {
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
             <ListItemButton sx={{ textAlign: 'center', minHeight: 44 }}>
-              <ListItemText primary={<span style={{ cursor: 'pointer' }} onClick={() => { handleDrawerToggle(); goToSection(item); }}>{item}</span>} />
+              <ListItemText primary={<span style={{ cursor: 'pointer' }} onClick={() => goToSection(item)}>{item}</span>} />
             </ListItemButton>
           </ListItem>
         ))}

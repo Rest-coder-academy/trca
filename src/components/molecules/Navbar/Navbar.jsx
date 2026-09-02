@@ -35,7 +35,7 @@ function Navbar(props) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2,fontFamily:"tilt neon" }}>
+      <Typography variant="h6" component="div" sx={{ my: 2,fontFamily:"tilt neon" }}>
         Rest Coder Academy
       </Typography>
       <Divider />
@@ -59,7 +59,7 @@ function Navbar(props) {
       <AppBar component="nav">
         <Toolbar>
 
-        <img src={logo} alt=""  />
+        <img src={logo} alt="Rest Coder Academy"  />
           <IconButton
             color="inherit"
             aria-label="open drawer"

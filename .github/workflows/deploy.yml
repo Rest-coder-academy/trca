@@ -49,7 +49,11 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npx playwright install --with-deps chromium
       - run: npm run build
+      # Snapshot each route to static HTML so crawlers see real content, not an
+      # empty SPA shell. Needs chromium (installed above); deploy-only.
+      - run: npm run prerender
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:

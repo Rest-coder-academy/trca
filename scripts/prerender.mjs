@@ -19,6 +19,7 @@ const HOST = "127.0.0.1";
 const routes = [
   { path: "/", out: "index.html", waitFor: "#Courses" },
   { path: "/for-parents", out: "for-parents.html", waitFor: "main.fp" },
+  { path: "/placements", out: "placements.html", waitFor: "main.pl" },
   { path: "/contact", out: "contact.html", waitFor: "main.ct" },
   { path: "/faq", out: "faq.html", waitFor: "main.faq" },
   // /about is intentionally NOT prerendered: it's admin-managed (/api/founder)

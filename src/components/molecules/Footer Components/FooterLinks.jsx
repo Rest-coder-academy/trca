@@ -34,6 +34,11 @@ function FooterLinks() {
           
               })}
               <ListItem>
+                <RouterLink to="/placements">
+                  <ListItemText primary="Success Stories" />
+                </RouterLink>
+              </ListItem>
+              <ListItem>
                 <RouterLink to="/contact">
                   <ListItemText primary="Contact" />
                 </RouterLink>

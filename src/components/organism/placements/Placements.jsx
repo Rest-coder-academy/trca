@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import CardGrid from '../../molecules/Grid/CardGrid'
 import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyComponent'
 import { Box } from '@mui/material'
@@ -15,6 +16,9 @@ function Placement() {
             <CardGrid>
                 <PlacementCard/>
             </CardGrid>
+            <Box sx={{ textAlign: "center", mt: 2 }}>
+                <Link className="placements-more-link" to="/placements">See full success stories →</Link>
+            </Box>
     </Box>
     )
 }

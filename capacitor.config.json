@@ -1,0 +1,11 @@
+{
+  "appId": "in.restcoderacademy.app",
+  "appName": "Rest Coder Academy",
+  "webDir": "dist",
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

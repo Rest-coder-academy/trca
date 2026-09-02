@@ -6,6 +6,7 @@ import Banner from './components/organism/Banner/Banner'
 import Home from "./components/Pages/Home";
 import CourseDetail from "./components/Pages/CourseDetail";
 import ForParents from "./components/Pages/ForParents";
+import About from "./components/Pages/About";
 import ScrollToTop from "./components/ScrollToTop";
 import Modal from 'react-modal';
 import EnquiryForm from './components/forms/Enquiry Form/EnquiryForm';
@@ -81,6 +82,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/courses/:slug" element={<CourseDetail />} />
         <Route path="/for-parents" element={<ForParents />} />
+        <Route path="/about" element={<About />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <FloatingIcons/>

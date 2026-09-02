@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../App";
+import { useFounder, hasFounder } from "../../Pages/useFounder";
 import { useBatches } from "../Batches/useBatches";
 import { getNextBatchForCourse, formatBatchDateShort } from "../Batches/batchDateUtils";
 import "./CourseCard.css";
@@ -27,6 +28,7 @@ function Check({ filled }) {
 // equal heights, and "Book your seat" + a counsellor secondary (Abhigna's flow).
 function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, audience, backend, frontend, syllabus1, syllabus2 }) {
   const { openEnroll, openModal } = useAuth();
+  const { founder } = useFounder();
   const batches = useBatches();
   const nextBatch = getNextBatchForCourse(name, batches);
   const modules = (
@@ -57,6 +59,9 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
               <span>{FDE_TRAINER_TITLE}</span>
             </span>
           </div>
+        )}
+        {flagship && hasFounder(founder) && (
+          <Link className="cc-founder-link" to="/about">Meet the founder →</Link>
         )}
       </div>
 

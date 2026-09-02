@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../../App";
 import { useBatches } from "../Batches/useBatches";
 import { getNextBatchForCourse, formatBatchDateShort } from "../Batches/batchDateUtils";
@@ -24,7 +25,7 @@ function Check({ filled }) {
 // pill, the trainer credibility line and highlight chips; every card shares the
 // navy header, check-icon syllabus, price slot ("Fee on request" until priced),
 // equal heights, and "Book your seat" + a counsellor secondary (Abhigna's flow).
-function CoursesCard({ name, courseId, paid, flagship, price, trainer, audience, backend, frontend, syllabus1, syllabus2 }) {
+function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, audience, backend, frontend, syllabus1, syllabus2 }) {
   const { openEnroll, openModal } = useAuth();
   const batches = useBatches();
   const nextBatch = getNextBatchForCourse(name, batches);
@@ -113,6 +114,9 @@ function CoursesCard({ name, courseId, paid, flagship, price, trainer, audience,
           <button className="cc-counsellor" type="button" onClick={openModal}>
             Or talk to a counsellor first
           </button>
+          <Link className="cc-details" to={`/courses/${slug || courseId}`}>
+            Full syllabus &amp; details →
+          </Link>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../../App";
 import { useFounder, hasFounder } from "../../Pages/useFounder";
 import { useTrainers } from "../mentors/useTrainers";
+import { scroller } from "react-scroll";
 import { useBatches } from "../Batches/useBatches";
 import { getNextBatchForCourse, formatBatchDateShort } from "../Batches/batchDateUtils";
 import "./CourseCard.css";
@@ -40,6 +41,25 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
   // shows a "Taught by …" credibility block, not just the flagship.
   const trainerProfile = trainer ? (trainers || []).find((t) => norm(t.name) === norm(trainer)) : null;
   const trainerTitle = flagship ? FDE_TRAINER_TITLE : (trainerProfile && trainerProfile.title) || "";
+
+  // Clicking a trainer with a profile jumps to the "Our Trainers" section
+  // (their full card — photo, bio, expertise, socials). The card only ever
+  // renders on the homepage, so a direct scroll is enough.
+  const goToTrainers = () => scroller.scrollTo("Trainers", { smooth: true, offset: -62, duration: 400 });
+  const trainerLinkProps = trainerProfile
+    ? {
+        role: "link",
+        tabIndex: 0,
+        title: `See ${trainer}'s profile`,
+        onClick: goToTrainers,
+        onKeyDown: (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            goToTrainers();
+          }
+        },
+      }
+    : {};
   const modules = (
     flagship ? [...(syllabus1 || []), ...(syllabus2 || [])] : [...(backend || []), ...(frontend || [])]
   ).filter(Boolean);
@@ -61,7 +81,7 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
         <h3 className="cc-title">{name}</h3>
         <p className="cc-sub">{audience || "For Freshers & Working Professionals"}</p>
         {trainer && (
-          <div className="cc-trainer">
+          <div className={"cc-trainer" + (trainerProfile ? " cc-trainer--link" : "")} {...trainerLinkProps}>
             <span className="cc-avatar">
               {trainerProfile && trainerProfile.photo_url ? (
                 <img src={trainerProfile.photo_url} alt={trainer} />

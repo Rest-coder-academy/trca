@@ -36,7 +36,7 @@ function App() {
 
   const customStyles = {
     overlay:{
-      backgroundColor:"rgba(15, 15, 25, 0.55)",
+      backgroundColor:"var(--rca-scrim)",
       backdropFilter:"blur(3px)",
     },
     // content: {

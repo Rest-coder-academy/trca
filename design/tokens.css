@@ -79,6 +79,19 @@
   /* --- Elevation -------------------------------------------------------- */
   --rca-shadow-card:  0 1px 3px rgba(3, 8, 76, 0.08);
   --rca-shadow-hover: 0 6px 18px rgba(3, 8, 76, 0.10);
+  --rca-shadow-modal: 0 20px 60px rgba(3, 8, 76, 0.25);
+
+  /* --- Translucency ------------------------------------------------------
+     The only places a colour legitimately needs alpha: tints over the navy
+     cards, and the dialog scrim. Everything else is a solid token.          */
+  --rca-tint-on-dark:        rgba(255, 255, 255, 0.15);
+  --rca-tint-on-dark-strong: rgba(255, 255, 255, 0.24);
+  --rca-scrim:               rgba(3, 8, 76, 0.55);
+
+  /* --- Third-party brand -------------------------------------------------
+     WhatsApp's own green. Not ours to restyle, and not part of the palette —
+     named so it is obvious why it sits outside the scale.                   */
+  --rca-whatsapp: #128C7E;
 
   /* --- Controls ---------------------------------------------------------- */
   --rca-control-h:        48px;  /* button / input height, desktop */

@@ -2,7 +2,7 @@ nav
 {
     background-color: white!important;
     max-width: 100vw;
-    box-shadow: 1px 0px 30px #042c686c!important;
+    box-shadow: 1px 0px 30px var(--rca-navy)!important;
     position: fixed;
     top: 0;
     padding: .3rem 3rem;
@@ -15,14 +15,14 @@ nav img
 nav a
 {
     text-decoration: none!important;
-    color: #45545d!important;
+    color: var(--rca-ink-soft)!important;
     text-transform: capitalize;
-    font-family: "Tilt Neon", sans-serif!important;
+    font-family: var(--rca-font);
     font-size: 1rem!important;
 }
 nav button:last-child a
 {
-    color: #ffffff!important;
+    color: var(--rca-surface)!important;
 }
 nav button:hover
 {
@@ -31,21 +31,21 @@ nav button:hover
 
 nav button:last-child:hover
 {
-  background-color: rgb(31, 31, 211)!important;
+  background-color: var(--rca-blue)!important;
 }
 
 nav h6
 {
-    font-family: "Tilt Neon", sans-serif!important;
+    font-family: var(--rca-font);
 }
 
 .active
 {
-    color: rgb(3, 8, 76)!important;
+    color: var(--rca-navy)!important;
 }
 /* .css-13pctpc-MuiSvgIcon-root
 {
-    color: rgb(73, 7, 62)!important;
+    color: var(--rca-navy)!important;
 } */
 
 .css-1coayy3-MuiButtonBase-root-MuiIconButton-root
@@ -73,7 +73,7 @@ nav h6
             }
             /* .css-13pctpc-MuiSvgIcon-root,.css-q7mezt
             {
-                color: rgb(46, 7, 82)!important;
+                color: var(--rca-navy)!important;
             } */
 
         }
@@ -94,7 +94,7 @@ nav h6
             }
             /* .css-13pctpc-MuiSvgIcon-root,.css-q7mezt
             {
-                color: rgb(46, 7, 82)!important;
+                color: var(--rca-navy)!important;
             } */
         }
 /* Small Devices, Tablets */

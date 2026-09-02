@@ -1,47 +1,5 @@
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
- */
+/* Vite's starter-template CSS lived here, commented out — the .logo
+   drop-shadows were the last two hardcoded colours in src/ (#6). */
 
 /* Modal class */
 
@@ -66,16 +24,16 @@
     position: absolute;
     inset: 50% auto auto 50%;
     border: none;
-    background: rgb(255, 255, 255);
+    background: var(--rca-surface);
     overflow: auto;
-    border-radius: 12px;
+    border-radius: var(--rca-radius-lg);
     outline: none;
     padding: 0;
     margin-right: -50%;
     transform: translate(-50%, -50%);
     max-height: 90vh;
     width: min(92vw, 400px);
-    box-shadow: 0 20px 60px rgba(6, 6, 90, 0.25);
+    box-shadow: var(--rca-shadow-modal);
     z-index: 1301;
 }
 
@@ -84,7 +42,7 @@
 
 .toast .Toastify__toast
 {
-  background-color: #003366;
+  background-color: var(--rca-navy);
   color: white;
 }
 
@@ -92,7 +50,7 @@
 {
   color: white;
   opacity: 1;
-  border-radius: 10px;
+  border-radius: var(--rca-radius-lg);
 }
 
 /* ? media quries */

@@ -284,7 +284,7 @@ describe("POST /api/enroll/order", () => {
   });
   it("400 for a course that has no online price, even with keys", async () => {
     const env = { DB: makeDB(), RAZORPAY_KEY_ID: "k", RAZORPAY_KEY_SECRET: "s" };
-    const res = await enrollOrder(ctx(jsonReqTo("https://x/api/enroll/order", { course: "java-fs" }), env));
+    const res = await enrollOrder(ctx(jsonReqTo("https://x/api/enroll/order", { course: "unknown-course" }), env));
     expect(res.status).toBe(400);
   });
 });
@@ -293,14 +293,14 @@ describe("POST /api/enroll/register (free interest)", () => {
   it("records a registration (201)", async () => {
     const db = makeDB();
     const res = await enrollRegister(
-      ctx(jsonReqTo("https://x/api/enroll/register", { fullname: "Asha", mobile: "9000000000", course: "java-fs", course_name: "Java Full Stack" }), { DB: db })
+      ctx(jsonReqTo("https://x/api/enroll/register", { mobile: "9000000000", email: "asha@example.com", course: "java-fs", course_name: "Java Full Stack" }), { DB: db })
     );
     expect(res.status).toBe(201);
     expect(db.tables.enrollments).toHaveLength(1);
     expect(db.tables.enrollments[0].status).toBe("registered");
   });
-  it("400 without name/mobile", async () => {
-    const res = await enrollRegister(ctx(jsonReqTo("https://x/api/enroll/register", { fullname: "" }), { DB: makeDB() }));
+  it("400 without phone/email", async () => {
+    const res = await enrollRegister(ctx(jsonReqTo("https://x/api/enroll/register", { mobile: "" }), { DB: makeDB() }));
     expect(res.status).toBe(400);
   });
 });

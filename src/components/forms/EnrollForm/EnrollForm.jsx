@@ -1,7 +1,6 @@
 import { Box, CircularProgress } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import InputBoxComponent from "../../atoms/InputBoxComponent/InputBoxComponent";
-import DropdownComponent from "../../atoms/DropdownComponent/DropdownComponent";
 import TypoGraphyComponent from "../../atoms/TypoGraphyComponent/TypoGraphyComponent";
 import ButtonComponent from "../../atoms/ButtonComponent/ButtonComponent";
 import { useAuth } from "../../../App";
@@ -11,48 +10,37 @@ import { isBatchUpcoming, formatBatchDateShort } from "../../organism/Batches/ba
 import { getReferral, loadRazorpay, createOrder, verifyPayment, registerInterest } from "./enrollApi";
 import "./EnrollForm.css";
 
-const EXPERIENCE_OPTIONS = [
-  { label: "Working professional - Technical roles", id: 1 },
-  { label: "Working professional - Non technical", id: 2 },
-  { label: "College student - Final year", id: 3 },
-  { label: "College student - 1st to pre-final year", id: 4 },
-  { label: "Others", id: 5 },
-];
-
+// Deliberately low-friction: a buyer who clicked "Book your seat" wants to pay,
+// not fill a form (the "talk to a counsellor" path is where we gather details).
+// So we ask only email + phone; the referral rides in silently from the URL and
+// the batch is auto-set to the soonest upcoming one. Razorpay collects the name
+// at payment.
 function EnrollForm({ course }) {
   const { closeEnroll, notify } = useAuth();
   const batches = useBatches();
   const paid = !!(course && course.paid);
 
   const [data, setData] = useState({
-    fullname: "", mobile: "", email: "", experience: "", batch: "", referral: getReferral(),
+    mobile: "", email: "", referral: getReferral(),
   });
   const [errors, setErrors] = useState({});
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState("");
   const [done, setDone] = useState(""); // "" | "paid" | "registered"
 
-  // Upcoming batches for this course, for the (optional) batch selector.
-  const batchOptions = useMemo(
-    () =>
-      (batches || [])
-        .filter((b) => b.name === course.name && isBatchUpcoming(b.date))
-        .map((b, i) => ({
-          id: i + 1,
-          label: `${b.day ? b.day + " · " : ""}${formatBatchDateShort(b.date)}${b.time ? " · " + b.time : ""}`,
-        })),
-    [batches, course]
-  );
+  // Soonest upcoming batch for this course — auto-recorded, no picker shown.
+  const nextBatchLabel = useMemo(() => {
+    const b = (batches || [])
+      .filter((x) => x.name === course.name && isBatchUpcoming(x.date))
+      .sort((x, y) => new Date(x.date) - new Date(y.date))[0];
+    if (!b) return "";
+    return `${b.day ? b.day + " · " : ""}${formatBatchDateShort(b.date)}${b.time ? " · " + b.time : ""}`;
+  }, [batches, course]);
 
   const change = ({ target: { name, value } }) => setData((d) => ({ ...d, [name]: value }));
-  const changeExp = (v) => setData((d) => ({ ...d, experience: v.label }));
-  const changeBatch = (v) => setData((d) => ({ ...d, batch: v.label }));
 
   function validate() {
     const e = {};
-    if (!data.fullname) e.fullname = "Full Name is Required";
-    else if (data.fullname.length < 3) e.fullname = "Full Name should be more than 3 characters";
-    else if (!regex.nameRegex.test(data.fullname)) e.fullname = "Full Name Should Contain Only Alphabets";
     if (!data.mobile) e.mobile = "Mobile is Required";
     else if (!regex.mobileRegex.test(data.mobile)) e.mobile = "Invalid Mobile Number";
     if (!data.email) e.email = "Email is Required";
@@ -63,11 +51,11 @@ function EnrollForm({ course }) {
   const payload = () => ({
     course: course.courseId,
     course_name: course.name,
-    fullname: data.fullname,
+    fullname: "",
     mobile: data.mobile,
     email: data.email,
-    experience: data.experience,
-    batch: data.batch,
+    experience: "",
+    batch: nextBatchLabel,
     referral: data.referral,
   });
 
@@ -128,7 +116,7 @@ function EnrollForm({ course }) {
       name: "Rest Coder Academy",
       description: course.name,
       image: "/favicon.png",
-      prefill: { name: data.fullname, email: data.email, contact: data.mobile },
+      prefill: { email: data.email, contact: data.mobile },
       notes: { course: course.courseId, referral: data.referral },
       theme: { color: "var(--rca-navy)" },
       handler: async (resp) => {
@@ -191,23 +179,11 @@ function EnrollForm({ course }) {
       )}
 
       <Box className="enroll-fields">
-        <InputBoxComponent value={data.fullname} label="Full Name" variant="outlined" onChange={change} name="fullname" error={!!errors.fullname} helperText={errors.fullname} />
-        <InputBoxComponent value={data.mobile} label="Mobile" variant="outlined" onChange={change} name="mobile" error={!!errors.mobile} helperText={errors.mobile} />
         <InputBoxComponent value={data.email} label="Email" variant="outlined" onChange={change} name="email" error={!!errors.email} helperText={errors.email} />
-        <DropdownComponent label="Experience" options={EXPERIENCE_OPTIONS} name="experience" onChange={changeExp} value={EXPERIENCE_OPTIONS} />
-        {batchOptions.length > 0 && (
-          <DropdownComponent label="Preferred batch" options={batchOptions} name="batch" onChange={changeBatch} value={batchOptions} />
+        <InputBoxComponent value={data.mobile} label="Phone" variant="outlined" onChange={change} name="mobile" error={!!errors.mobile} helperText={errors.mobile} />
+        {nextBatchLabel && (
+          <TypoGraphyComponent component="p" variant="caption" text={`Next batch: ${nextBatchLabel}`} />
         )}
-
-        <Box className="enroll-referral">
-          <InputBoxComponent
-            value={data.referral}
-            label="Referral code (optional)"
-            variant="outlined"
-            onChange={change}
-            name="referral"
-          />
-        </Box>
 
         {failed && (
           <Box className="enroll-error" role="alert">

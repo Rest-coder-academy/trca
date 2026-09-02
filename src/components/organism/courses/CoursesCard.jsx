@@ -24,21 +24,21 @@ function Check({ filled }) {
 // pill, the trainer credibility line and highlight chips; every card shares the
 // navy header, check-icon syllabus, price slot ("Fee on request" until priced),
 // equal heights, and "Book your seat" + a counsellor secondary (Abhigna's flow).
-function CoursesCard({ name, courseId, paid, price, trainer, audience, backend, frontend, syllabus1, syllabus2 }) {
+function CoursesCard({ name, courseId, paid, flagship, price, trainer, audience, backend, frontend, syllabus1, syllabus2 }) {
   const { openEnroll, openModal } = useAuth();
   const batches = useBatches();
   const nextBatch = getNextBatchForCourse(name, batches);
   const modules = (
-    paid ? [...(syllabus1 || []), ...(syllabus2 || [])] : [...(backend || []), ...(frontend || [])]
+    flagship ? [...(syllabus1 || []), ...(syllabus2 || [])] : [...(backend || []), ...(frontend || [])]
   ).filter(Boolean);
-  const chips = paid ? ["Project-based", "Live cohort", "Ship to production"] : [];
+  const chips = flagship ? ["Project-based", "Live cohort", "Ship to production"] : [];
 
   const book = () => openEnroll({ courseId, name, paid, price });
 
   return (
-    <div className={"course-card" + (paid ? " course-card--flagship" : "")}>
+    <div className={"course-card" + (flagship ? " course-card--flagship" : "")}>
       <div className="cc-head">
-        {paid && (
+        {flagship && (
           <span className="cc-flagship">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 2.5l2.85 6.05 6.65.7-4.95 4.5 1.35 6.55L12 17.6 6.1 20.8l1.35-6.55L2.5 9.25l6.65-.7L12 2.5z" fill="#FFB74D" />
@@ -48,7 +48,7 @@ function CoursesCard({ name, courseId, paid, price, trainer, audience, backend, 
         )}
         <h3 className="cc-title">{name}</h3>
         <p className="cc-sub">{audience || "For Freshers & Working Professionals"}</p>
-        {paid && trainer && (
+        {flagship && trainer && (
           <div className="cc-trainer">
             <span className="cc-avatar">{initials(trainer)}</span>
             <span className="cc-trainer-text">
@@ -95,11 +95,11 @@ function CoursesCard({ name, courseId, paid, price, trainer, audience, backend, 
         )}
 
         <div className="cc-syllabus">
-          <div className="cc-syllabus-label">What you'll {paid ? "master" : "learn"}</div>
+          <div className="cc-syllabus-label">What you'll {flagship ? "master" : "learn"}</div>
           <ul>
             {modules.map((m, i) => (
-              <li key={i} className={paid && i === modules.length - 1 ? "cc-capstone" : ""}>
-                <Check filled={paid && i === modules.length - 1} />
+              <li key={i} className={flagship && i === modules.length - 1 ? "cc-capstone" : ""}>
+                <Check filled={flagship && i === modules.length - 1} />
                 <span>{m}</span>
               </li>
             ))}

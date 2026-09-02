@@ -30,6 +30,10 @@ function Contact() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    // Same @id as the EducationalOrganization node in index.html, so this is
+    // read as the same entity (with address/contact detail) rather than a
+    // second, competing business on the same domain.
+    "@id": `${ORIGIN}/#org`,
     name: "Rest Coder Academy",
     image: `${ORIGIN}/favicon.png`,
     url: ORIGIN,
@@ -71,11 +75,9 @@ function Contact() {
           <div className="ct-card">
             <h2>Address</h2>
             <p>
-              #364, 3rd Floor, 16th Main
+              {ADDRESS.street}
               <br />
-              4th T Block East, Pattabhirama Nagar
-              <br />
-              Jayanagar, Bengaluru, Karnataka 560041
+              {ADDRESS.locality}, {ADDRESS.region} {ADDRESS.postalCode}
             </p>
             <a className="ct-map-link" href={MAP_URL} target="_blank" rel="noreferrer">
               Get directions →

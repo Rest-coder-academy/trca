@@ -76,6 +76,9 @@
 .cc-trainer-text { display: flex; flex-direction: column; line-height: 1.35; }
 .cc-trainer-text b { font-size: 13px; font-weight: 600; }
 .cc-trainer-text span { font-size: 11.5px; color: #8e96c8; }
+.cc-trainer--link { cursor: pointer; }
+.cc-trainer--link:hover .cc-trainer-text b { text-decoration: underline; }
+.cc-trainer--link:focus-visible { outline: 2px solid #ffb74d; outline-offset: 3px; border-radius: 6px; }
 .cc-founder-link {
   display: inline-block;
   margin-top: 12px;

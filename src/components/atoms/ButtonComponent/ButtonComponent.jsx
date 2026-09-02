@@ -14,8 +14,8 @@ import { Button, Box } from "@mui/material";
  * only: no lift, no scale.
  */
 
-/** Colour, hover and pressed per variant. `text` is deliberately left alone —
- *  the navbar links use it on a navy bar, and a fill there would be wrong. */
+/** Colour, hover and pressed per variant. `text` never gets a background
+ *  fill — only a text color and a subtle hover tint. */
 const VARIANT_SX = {
   contained: {
     backgroundColor: "var(--rca-navy)",
@@ -31,7 +31,13 @@ const VARIANT_SX = {
     "&:hover": { backgroundColor: "rgba(3, 8, 76, 0.06)" },
     "&:active": { backgroundColor: "rgba(3, 8, 76, 0.12)" },
   },
-  text: {},
+  // The navbar's only text-variant use (the nav links) sits on a white bar,
+  // not navy — no fill, but it still needs a real text color, or it falls
+  // through to MUI's default primary blue.
+  text: {
+    color: "var(--rca-ink)",
+    "&:hover": { backgroundColor: "rgba(3, 8, 76, 0.04)" },
+  },
 };
 
 const SPINNER_SX = {

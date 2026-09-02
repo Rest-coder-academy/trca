@@ -87,7 +87,7 @@ function Navbar(props) {
           {/* </Typography> */}
           <Box sx={{ display: { xs: 'none', sm: 'block',marginLeft:"auto" } }}>
             {navItems.map((item) => (
-              <ButtonComponent key={item} textColor="color-dark-black" variant='text' onBtnClick={() => goToSection(item)}>
+              <ButtonComponent key={item} variant='text' onBtnClick={() => goToSection(item)}>
                   {item}
                 </ButtonComponent>
                 

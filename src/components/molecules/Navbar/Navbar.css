@@ -24,16 +24,6 @@ nav button:last-child a
 {
     color: var(--rca-surface)!important;
 }
-nav button:hover
-{
-  background-color: transparent!important;
-}
-
-nav button:last-child:hover
-{
-  background-color: var(--rca-blue)!important;
-}
-
 nav h6
 {
     font-family: var(--rca-font);

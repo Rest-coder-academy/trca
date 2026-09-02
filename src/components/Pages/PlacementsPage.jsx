@@ -20,6 +20,10 @@ function PlacementsPage() {
   // nothing here is invented. No parent quotes: the repo has none on record,
   // and a plausible-looking guess is exactly the kind of claim a visitor
   // holds you to (same principle #9's hero copy followed for placedCount).
+  // No reviewRating either, for the same reason: the placements data has no
+  // rating field, so a numeric star score would be a fabricated one — and
+  // an identical 5/5 on every review reads as exactly that to both readers
+  // and Google's structured-data spam checks.
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": placements.map((p) => ({
@@ -27,7 +31,6 @@ function PlacementsPage() {
       itemReviewed: { "@id": ORG_ID },
       author: { "@type": "Person", name: p.name },
       reviewBody: p.description,
-      reviewRating: { "@type": "Rating", ratingValue: 5, bestRating: 5 },
     })),
   };
 

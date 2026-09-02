@@ -17,7 +17,7 @@ function Placement() {
                 <PlacementCard/>
             </CardGrid>
             <Box sx={{ textAlign: "center", mt: 2 }}>
-                <Link to="/placements">See full success stories →</Link>
+                <Link className="placements-more-link" to="/placements">See full success stories →</Link>
             </Box>
     </Box>
     )

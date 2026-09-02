@@ -156,13 +156,13 @@ function EnrollForm({ course }) {
     const isPaid = done === "paid";
     return (
       <Box className="enroll-form enroll-done">
-        <TypoGraphyComponent component="h6" variant="h6" text={isPaid ? "You're enrolled 🎉" : "Seat registered ✅"} />
+        <TypoGraphyComponent component="h6" variant="h6" text={isPaid ? "Your seat is booked 🎉" : "You're registered ✅"} />
         <TypoGraphyComponent
           component="p"
           variant="body2"
           text={
             isPaid
-              ? `Welcome to ${course.name}. A confirmation is on its way to ${data.email}.`
+              ? `₹${Number(course.price).toLocaleString("en-IN")} received. A receipt is on its way to your email and WhatsApp — we'll call you within a day to confirm your batch.`
               : "Thanks! We've saved your details and the team will reach out with the next steps and dates."
           }
         />
@@ -175,7 +175,7 @@ function EnrollForm({ course }) {
     <form className="enroll-form" onSubmit={handleSubmit}>
       <Box className="form-heading">
         <Box>
-          <TypoGraphyComponent component="h6" variant="h6" text={paid ? "Enroll Now" : "Register Interest"} />
+          <TypoGraphyComponent component="h6" variant="h6" text={paid ? "Book your seat" : "Register your seat"} />
           <TypoGraphyComponent component="p" variant="body2" text={course.name} />
         </Box>
         <ButtonComponent paddingX={1} paddingY={1} onBtnClick={closeEnroll}>
@@ -219,7 +219,7 @@ function EnrollForm({ course }) {
           type="submit"
           fullWidth
           disabled={busy}
-          label={busy ? "" : paid ? `Pay ₹${Number(course.price).toLocaleString("en-IN")}` : "Register my seat"}
+          label={busy ? "" : paid ? `Pay ₹${Number(course.price).toLocaleString("en-IN")} securely` : "Register my seat"}
         >
           {busy && <CircularProgress size={20} sx={{ color: "var(--rca-surface)" }} />}
         </ButtonComponent>
@@ -227,7 +227,7 @@ function EnrollForm({ course }) {
           <TypoGraphyComponent
             component="p"
             variant="caption"
-            text="Secure payment via Razorpay. Pay in full or choose EMI on the next screen."
+            text="Secured by Razorpay · UPI, cards, net banking · EMI"
           />
         )}
       </Box>

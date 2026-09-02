@@ -1,125 +1,59 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyComponent';
-import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
-import { List, ListItem, ListItemText } from '@mui/material';
-import { useAuth } from '../../../App';
-import { useBatches } from '../Batches/useBatches';
-import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDateUtils';
-import FdeCard from './FdeCard';
+import React from "react";
+import { useAuth } from "../../../App";
+import { useBatches } from "../Batches/useBatches";
+import { getNextBatchForCourse, formatBatchDateShort } from "../Batches/batchDateUtils";
+import "./CourseCard.css";
 
+// Course card — Abhigna's uniform design (design/ui-template.html §5 + the
+// payment-gateway flow): fixed skeleton so every card in a row is the same
+// height, a reserved price slot ("Fee on request" until priced), a condensed
+// syllabus, and "Book your seat" with a counsellor secondary. One style for
+// every course — the paid course (FDE) differs only by showing its fee.
+function CoursesCard({ name, courseId, paid, price, audience, backend, syllabus1, syllabus2 }) {
+  const { openEnroll, openModal } = useAuth();
+  const batches = useBatches();
+  const nextBatch = getNextBatchForCourse(name, batches);
 
- function CoursesCard({name,courseId,paid,price,badge,trainer,backend,audience,frontend,syllabus1,syllabus2}) {
-    // The paid/flagship course (FDE) gets its own premium card.
-    if (paid) return <FdeCard courseId={courseId} name={name} price={price} trainer={trainer} syllabus1={syllabus1} syllabus2={syllabus2} />;
-    let {openEnroll}=useAuth()
-    let batches=useBatches()
-    let nextBatch=getNextBatchForCourse(name,batches)
-    let enroll=()=>openEnroll({courseId,name,paid,price})
+  // A few bullets, not the old two-column tech grid.
+  const bullets = (paid ? [...(syllabus1 || []), ...(syllabus2 || [])] : backend || []).filter(Boolean);
+
+  const book = () => openEnroll({ courseId, name, paid, price });
+
   return (
-    <Card sx={{ }} className='card'>
-        <Box className="course-header">
-            {badge && <Box component="span" className="course-badge">{badge}</Box>}
-            <TypoGraphyComponent
-            variant="h5"
-            sx={{mb:".3rem"}}
-            component="h5"
-            text={name}
-        />
-        <Box component="span" className="next-batch-tag">
-            {nextBatch ? `Next batch · ${formatBatchDateShort(nextBatch.date)}` : "New dates coming soon"}
-        </Box>
-        {paid && (
-          <Box component="span" className="course-price">
-            ₹{Number(price).toLocaleString("en-IN")} <span className="course-emi">· EMI available</span>
-          </Box>
-        )}
-         <TypoGraphyComponent
-            variant="text"
-            sx={{}}
-            component="p"
-            text={audience}
-        />
-        </Box>
-    <CardContent className='card-content'>
-    
-          <List className='links' sx={{listStyleType:"disc"}}>
-          <TypoGraphyComponent
-            variant="h6"
-            sx={{}}
-            component="h6"
-            text={frontend?"Front End":"Syllabus"}
-        />
-              {frontend && frontend.map((link,id)=>
-              {
-               return <ListItem  key={id} sx={{ display: 'list-item',visibility:link?"visible":"hidden"}}>
-                    <ListItemText
-                      primary={link}
-                    />
-              </ListItem>
-          
-          
-              })}
-{/* Syllabus  */}
-        {syllabus1 && syllabus1.map((link,id)=>
-              {
-               return <ListItem  key={id} sx={{ display: 'list-item',visibility:link?"visible":"hidden"}}>
-                    <ListItemText
-                      primary={link}
-                    />
-              </ListItem>
-          
-          
-              })}
-               
-               
-          </List>
-          <List className='links' sx={{listStyleType:"disc"}}>
-    <TypoGraphyComponent
-            variant="h6"
-            sx={{}}
-            component="h6"
-            text={backend?"Backend":"syllabus"}
-        />
-              {backend && backend.map((link,id)=>
-              {
-               return <ListItem  key={id} sx={{ display: link?'list-item':"none" }}>
-                    <ListItemText
-                      primary={link}
-                    />
-              </ListItem>
-          
-              })}
-              {/* Syllabus  */}
-        {syllabus2 && syllabus2.map((link,id)=>
-              {
-               return <ListItem  key={id} sx={{ display: 'list-item',visibility:link?"visible":"hidden"}}>
-                    <ListItemText
-                      primary={link}
-                    />
-              </ListItem>
-          
-          
-              })}
-               
-          </List>
-  {/* <Typography variant="body2" color="text.secondary">
-    Lizards are a widespread group of squamate reptiles, with over 6,000
-    species, ranging across all continents except Antarctica
-  </Typography> */}
-</CardContent>
-<CardActions sx={{}} className='card-actions'>
-  
-  <ButtonComponent size='large' variant={paid?'contained':'outlined'} label='Enroll Now'  borderRadius='0' sx={{}} onBtnClick={enroll}/>
-</CardActions>
-</Card>
+    <div className="course-card">
+      <div className="hd">
+        <h3>{name}</h3>
+        <p>{audience || "For Freshers & Working Professionals"}</p>
+      </div>
+
+      <span className={"tag" + (nextBatch ? "" : " tag--muted")}>
+        {nextBatch ? `Next batch · ${formatBatchDateShort(nextBatch.date)}` : "New dates coming soon"}
+      </span>
+
+      {paid ? (
+        <p className="price">
+          ₹{Number(price).toLocaleString("en-IN")} <small>· EMI available</small>
+        </p>
+      ) : (
+        <p className="price price--request">Fee on request</p>
+      )}
+
+      <ul>
+        {bullets.map((b, i) => (
+          <li key={i}>{b}</li>
+        ))}
+      </ul>
+
+      <div className="foot">
+        <button className="book-btn" type="button" onClick={book}>
+          Book your seat
+        </button>
+        <button className="counsellor" type="button" onClick={openModal}>
+          Or talk to a counsellor first
+        </button>
+      </div>
+    </div>
   );
 }
 
-
-export default CoursesCard
+export default CoursesCard;

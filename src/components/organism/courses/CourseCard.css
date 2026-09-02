@@ -1,0 +1,125 @@
+/* Course card — Abhigna's design (design/ui-template.html §5, design/payment-gateway).
+   Uniform skeleton, reserved price slot, equal heights, "Book your seat" +
+   counsellor secondary. One style for every course. */
+.course-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--rca-surface, #fff);
+  border: 1px solid var(--rca-border, #dde3e7);
+  border-radius: var(--rca-radius-lg, 12px);
+  box-shadow: var(--rca-shadow-card, 0 1px 3px rgba(3, 8, 76, 0.08));
+  padding: var(--rca-space-5, 24px);
+  font-family: var(--rca-font, "Montserrat", "Segoe UI", system-ui, sans-serif);
+  text-align: left;
+}
+
+/* Navy header, bled to the card edges */
+.course-card .hd {
+  background: var(--rca-navy, #03084c);
+  color: #fff;
+  margin: calc(var(--rca-space-5, 24px) * -1) calc(var(--rca-space-5, 24px) * -1) var(--rca-space-4, 16px);
+  padding: var(--rca-space-4, 16px) var(--rca-space-5, 24px);
+  border-radius: var(--rca-radius-lg, 12px) var(--rca-radius-lg, 12px) 0 0;
+}
+.course-card .hd h3 {
+  margin: 0 0 4px;
+  font-size: var(--rca-fs-h5, 20px);
+  font-weight: var(--rca-fw-bold, 700);
+  line-height: var(--rca-lh-tight, 1.2);
+}
+.course-card .hd p {
+  margin: 0;
+  font-size: var(--rca-fs-caption, 12px);
+  opacity: 0.85;
+}
+
+.course-card .tag {
+  display: inline-block;
+  background: rgba(255, 152, 0, 0.14);
+  color: #8a5200;
+  font-size: var(--rca-fs-caption, 12px);
+  font-weight: var(--rca-fw-semibold, 600);
+  padding: 3px 10px;
+  border-radius: var(--rca-radius-pill, 999px);
+  margin-bottom: var(--rca-space-3, 12px);
+}
+.course-card .tag--muted {
+  background: var(--rca-disabled-bg, #e4e7ea);
+  color: var(--rca-disabled-ink, #9aa3aa);
+}
+
+.course-card .price {
+  font-size: var(--rca-fs-h4, 24px);
+  font-weight: var(--rca-fw-bold, 700);
+  color: var(--rca-navy, #03084c);
+  margin: 0 0 var(--rca-space-1, 4px);
+}
+.course-card .price small {
+  font-size: var(--rca-fs-caption, 12px);
+  font-weight: var(--rca-fw-regular, 400);
+  color: var(--rca-ink-muted, #4a4a4a);
+}
+.course-card .price--request {
+  font-size: var(--rca-fs-lead, 18px);
+  font-weight: var(--rca-fw-medium, 500);
+  color: var(--rca-ink-muted, #4a4a4a);
+}
+
+.course-card ul {
+  margin: 0 0 var(--rca-space-4, 16px);
+  padding-left: 1.1em;
+  font-size: var(--rca-fs-small, 14px);
+  color: var(--rca-ink-muted, #4a4a4a);
+}
+.course-card ul li {
+  margin-bottom: 2px;
+}
+
+.course-card .foot {
+  margin-top: auto;
+}
+.course-card .book-btn {
+  width: 100%;
+  font-family: inherit;
+  font-size: var(--rca-fs-body, 16px);
+  font-weight: var(--rca-fw-semibold, 600);
+  height: var(--rca-control-h, 44px);
+  padding: 0 var(--rca-space-5, 24px);
+  border: 1px solid transparent;
+  border-radius: var(--rca-radius-md, 8px);
+  background: var(--rca-navy, #03084c);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.course-card .book-btn:hover {
+  background: var(--rca-navy-hover, #0a1270);
+}
+.course-card .book-btn:active {
+  background: var(--rca-navy-pressed, #01062f);
+}
+.course-card .book-btn--outline {
+  background: transparent;
+  color: var(--rca-navy, #03084c);
+  border-color: var(--rca-navy, #03084c);
+}
+.course-card .book-btn--outline:hover {
+  background: rgba(3, 8, 76, 0.06);
+}
+
+.course-card .counsellor {
+  display: block;
+  width: 100%;
+  margin-top: var(--rca-space-2, 8px);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  font-size: var(--rca-fs-small, 14px);
+  color: var(--rca-blue, #146389);
+}
+.course-card .counsellor:hover {
+  text-decoration: underline;
+}

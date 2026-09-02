@@ -147,6 +147,45 @@
   font-weight: 800;
 }
 
+/* Your trainer — credibility card pulled from /admin/trainers */
+.cd-trainer { margin-top: 40px; }
+.cd-trainer h2 { font-size: 13px; letter-spacing: 0.11em; text-transform: uppercase; color: var(--rca-blue, #146389); margin: 0 0 16px; }
+.cd-tr {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: #f5f7fb;
+  border: 1px solid #e6e9f2;
+  border-radius: var(--rca-radius-lg, 12px);
+  padding: 22px 24px;
+}
+@media (min-width: 560px) { .cd-tr { flex-direction: row; align-items: flex-start; } }
+.cd-tr-photo { flex-shrink: 0; }
+.cd-tr-photo img,
+.cd-tr-initials {
+  width: 96px; height: 96px; border-radius: 16px; object-fit: cover;
+}
+.cd-tr-initials {
+  display: flex; align-items: center; justify-content: center;
+  background: var(--rca-blue, #146389); color: #fff; font-size: 30px; font-weight: 800;
+}
+.cd-tr-body { flex: 1; }
+.cd-tr-body h3 { margin: 0 0 3px; font-size: 19px; color: var(--rca-navy, #03084c); }
+.cd-tr-title { margin: 0 0 8px; font-size: 14px; font-weight: 600; color: var(--rca-blue, #146389); }
+.cd-tr-exp { margin: 0 0 10px; font-size: 13.5px; color: #45545d; }
+.cd-tr-skills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+.cd-tr-skills span {
+  background: #eaf0f6; color: #33415c; font-size: 12px; font-weight: 600;
+  padding: 4px 11px; border-radius: var(--rca-radius-pill, 999px);
+}
+.cd-tr-bio { margin: 0 0 12px; font-size: 14px; line-height: 1.55; color: #37424f; }
+.cd-tr-links { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.cd-tr-links .icons { display: flex; gap: 12px; }
+.cd-tr-links .icons a { color: var(--rca-navy, #03084c); display: inline-flex; }
+.cd-tr-cert { font-size: 13px; font-weight: 600; color: var(--rca-blue, #146389); text-decoration: none; }
+.cd-tr-cert:hover { text-decoration: underline; }
+.cd-tr-verify { margin: 12px 0 0; font-size: 12.5px; color: #6b7280; font-style: italic; }
+
 /* Closing CTA */
 .cd-foot {
   margin-top: 40px;

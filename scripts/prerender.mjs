@@ -12,6 +12,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { extname, join, dirname, resolve } from "node:path";
 import { courses } from "../src/components/organism/courses/courses.js";
+import { posts } from "../src/components/Pages/blog/posts.js";
 
 const DIST = resolve(process.cwd(), "dist");
 const HOST = "127.0.0.1";
@@ -22,6 +23,8 @@ const routes = [
   { path: "/placements", out: "placements.html", waitFor: "main.pl" },
   { path: "/contact", out: "contact.html", waitFor: "main.ct" },
   { path: "/faq", out: "faq.html", waitFor: "main.faq" },
+  { path: "/blog", out: "blog.html", waitFor: "main.bl" },
+  ...posts.map((p) => ({ path: `/blog/${p.slug}`, out: `blog/${p.slug}.html`, waitFor: "article.bl-post" })),
   // /about is intentionally NOT prerendered: it's admin-managed (/api/founder)
   // and hides itself until content exists, so there's nothing static to snapshot.
   // It renders client-side (Googlebot executes JS) once a founder is set.

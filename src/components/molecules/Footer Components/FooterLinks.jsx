@@ -48,6 +48,11 @@ function FooterLinks() {
                   <ListItemText primary="FAQs" />
                 </RouterLink>
               </ListItem>
+              <ListItem>
+                <RouterLink to="/blog">
+                  <ListItemText primary="Blog" />
+                </RouterLink>
+              </ListItem>
           </List>
     </>
   )

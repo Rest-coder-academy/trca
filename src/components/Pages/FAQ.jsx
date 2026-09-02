@@ -4,6 +4,8 @@ import { useAuth } from "../../App";
 import "./FAQ.css";
 
 const ORIGIN = "https://restcoderacademy.in";
+const MAP_URL = "https://maps.app.goo.gl/XdZWt3oDzGUCL5KWA?g_st=iw";
+const PHONE_TEL = "+918073762257";
 
 // Every answer here is a fact already published elsewhere in the app (course
 // prices, batch duration/mode, the enquiry form's experience-level options,
@@ -27,7 +29,7 @@ const FAQS = [
   },
   {
     q: "Do you help with placements?",
-    a: "Yes, placement support is part of every course. Our placements carousel names real students and the companies they joined, including Wipro, Infosys and Accenture.",
+    a: "Yes, placement support is part of every course. Our placements carousel names real students and the companies they joined, including SAP Hybris, HCL Technologies and SKAD IT Solutions.",
     linkTo: "/",
     linkState: { scrollTo: "Placements" },
     linkLabel: "See placements",
@@ -40,8 +42,8 @@ const FAQS = [
   },
   {
     q: "Where are you located, and can I visit?",
-    a: "We're in Jayanagar, Bengaluru — the full address, map and contact details are on our Contact page.",
-    linkTo: "/contact",
+    a: "We're in Jayanagar, Bengaluru — #364, 3rd Floor, 16th Main, 4th T Block East, Pattabhirama Nagar.",
+    href: MAP_URL,
     linkLabel: "Get directions",
   },
 ];
@@ -95,6 +97,11 @@ function FAQ() {
                     {item.linkLabel} →
                   </Link>
                 )}
+                {item.href && (
+                  <a className="faq-a-link" href={item.href} target="_blank" rel="noreferrer">
+                    {item.linkLabel} →
+                  </a>
+                )}
               </div>
             </details>
           ))}
@@ -105,7 +112,7 @@ function FAQ() {
           <p>A counsellor can walk you through the course, the fees and EMI, and what happens after you enrol.</p>
           <div className="faq-cta">
             <button className="faq-btn" type="button" onClick={openModal}>Talk to a counsellor</button>
-            <Link className="faq-btn faq-btn--ghost" to="/contact">Contact us</Link>
+            <a className="faq-btn faq-btn--ghost" href={`tel:${PHONE_TEL}`}>Call us</a>
           </div>
         </section>
       </main>

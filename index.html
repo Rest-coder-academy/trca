@@ -2,41 +2,109 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="HandheldFriendly" content="true">
-<meta charset="utf-8"> -->
-    <title>Rest Coder Academy</title>
+
+    <!-- Primary SEO -->
+    <title>Full Stack Coding Classes in Bengaluru — Java, Python & MERN | Rest Coder Academy</title>
+    <meta name="description" content="Live, project-based Java, Python & MERN full-stack courses in Jayanagar, Bengaluru — with placement support and EMI. Plus weekly progress reports parents can actually see." />
+    <meta name="keywords" content="full stack course Bengaluru, java full stack course, python full stack course, MERN stack course, coding classes Jayanagar, coding bootcamp with placement, Rest Coder Academy" />
+    <link rel="canonical" href="https://restcoderacademy.in/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#03084C" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Rest Coder Academy" />
+    <meta property="og:title" content="Full Stack Coding Classes in Bengaluru — Java, Python & MERN | Rest Coder Academy" />
+    <meta property="og:description" content="Live, project-based full-stack courses with placement support and EMI — and progress reports parents can actually see." />
+    <meta property="og:url" content="https://restcoderacademy.in/" />
+    <meta property="og:image" content="https://restcoderacademy.in/favicon.png" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Full Stack Coding Classes in Bengaluru — Java, Python & MERN | Rest Coder Academy" />
+    <meta name="twitter:description" content="Live, project-based full-stack courses with placement support and EMI — and progress reports parents can actually see." />
+    <meta name="twitter:image" content="https://restcoderacademy.in/favicon.png" />
+
+    <!-- Structured data (JSON-LD): organisation + courses. Ratings are NOT
+         included until we have real, countable review data (tracked in #74). -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "EducationalOrganization",
+          "@id": "https://restcoderacademy.in/#org",
+          "name": "Rest Coder Academy",
+          "url": "https://restcoderacademy.in/",
+          "logo": "https://restcoderacademy.in/favicon.png",
+          "image": "https://restcoderacademy.in/favicon.png",
+          "description": "Live, project-based full-stack coding courses (Java, Python, MERN) and a Forward Deployed Engineering program in Bengaluru, with placement support, EMI, and weekly progress reports visible to guardians.",
+          "email": "enquiry@restcoderacademy.com",
+          "telephone": "+91-80737-62257",
+          "hasMap": "https://maps.app.goo.gl/XdZWt3oDzGUCL5KWA",
+          "areaServed": "Bengaluru",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "#364, 3rd Floor, 16th Main, 4th T Block East, Pattabhirama Nagar, Jayanagar",
+            "addressLocality": "Bengaluru",
+            "addressRegion": "Karnataka",
+            "postalCode": "560041",
+            "addressCountry": "IN"
+          }
+        },
+        {
+          "@type": "Course",
+          "name": "Forward Deployed Engineering (FDE)",
+          "description": "The program a former Head of Engineering used to train his own team — ship production software: full-stack build, CI/CD, cloud, real integrations and a capstone.",
+          "provider": { "@id": "https://restcoderacademy.in/#org" },
+          "offers": { "@type": "Offer", "category": "Paid", "price": "50000", "priceCurrency": "INR" }
+        },
+        {
+          "@type": "Course",
+          "name": "Java Full Stack",
+          "description": "Live, project-based Java full-stack course — Core & Advanced Java, Spring, Hibernate, microservices, REST APIs and a modern front end.",
+          "provider": { "@id": "https://restcoderacademy.in/#org" },
+          "offers": { "@type": "Offer", "category": "Paid", "price": "35000", "priceCurrency": "INR" }
+        },
+        {
+          "@type": "Course",
+          "name": "Python Full Stack",
+          "description": "Live, project-based Python full-stack course — Python, Django, microservices, REST APIs and a modern front end.",
+          "provider": { "@id": "https://restcoderacademy.in/#org" },
+          "offers": { "@type": "Offer", "category": "Paid", "price": "35000", "priceCurrency": "INR" }
+        },
+        {
+          "@type": "Course",
+          "name": "MERN Stack",
+          "description": "Live, project-based MERN full-stack course — MongoDB, Express, React, Node, TypeScript and Next.js.",
+          "provider": { "@id": "https://restcoderacademy.in/#org" },
+          "offers": { "@type": "Offer", "category": "Paid", "price": "35000", "priceCurrency": "INR" }
+        }
+      ]
+    }
+    </script>
+
     <link
-  rel="stylesheet"
-  type="text/css"
-  charset="UTF-8"
-  href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
-/>
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-/>
-    <!-- One typeface (#6). Dancing Script was loaded here and used nowhere,
-         Tilt Neon was the navbar and footer face; both are gone. Montserrat is
-         self-hosted via @fontsource/montserrat, imported in src/main.jsx — no
-         font request leaves the site. -->
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
-<!-- <script type="module" src="http://localhost:5173/@vite/client"></script> -->
-    <!-- <script type="module">
-        import RefreshRuntime from 'http://localhost:5173/@react-refresh'
-        RefreshRuntime.injectIntoGlobalHook(window)
-        window.$RefreshReg$ = () => {}
-        window.$RefreshSig$ = () => (type) => type
-        window.__vite_plugin_react_preamble_installed__ = true
-      </script> -->
+      rel="stylesheet"
+      type="text/css"
+      charset="UTF-8"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
+    />
+    <!-- One typeface (#6). Montserrat is self-hosted via @fontsource/montserrat,
+         imported in src/main.jsx — no font request leaves the site. -->
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <!-- <script type="module" src="http://localhost:5173/main.jsx"></script> -->
   </body>
 </html>

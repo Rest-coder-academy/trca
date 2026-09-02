@@ -68,9 +68,22 @@ function CoursesCard({ name, courseId, paid, price, trainer, audience, backend, 
           ) : (
             <span className="cc-price cc-price--request">Fee on request</span>
           )}
-          <span className={"cc-tag" + (nextBatch ? "" : " cc-tag--muted")}>
-            {nextBatch ? `Next batch · ${formatBatchDateShort(nextBatch.date)}` : "New dates coming soon"}
-          </span>
+        </div>
+
+        <div className={"cc-schedule" + (nextBatch ? "" : " cc-schedule--soon")}>
+          {nextBatch ? (
+            <>
+              <span className="cc-sched-label">Next batch</span>
+              <span className="cc-sched-main">
+                {[nextBatch.day, formatBatchDateShort(nextBatch.date), nextBatch.time].filter(Boolean).join(" · ")}
+              </span>
+              <span className="cc-sched-meta">
+                {[nextBatch.mode, nextBatch.duration, nextBatch.trainer && `Trainer: ${nextBatch.trainer}`].filter(Boolean).join(" · ")}
+              </span>
+            </>
+          ) : (
+            "New dates coming soon"
+          )}
         </div>
 
         {chips.length > 0 && (

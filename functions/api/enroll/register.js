@@ -15,7 +15,10 @@ export async function onRequestPost(context) {
 
   const fullname = str(b.fullname);
   const mobile = str(b.mobile);
-  if (!fullname || !mobile) return json({ error: "Name and mobile are required." }, 400);
+  const email = str(b.email);
+  // Low-friction enrolment: phone + email is all we require (name is optional —
+  // collected at payment). We need at least one way to reach them.
+  if (!mobile || !email) return json({ error: "Phone and email are required." }, 400);
 
   try {
     await env.DB.prepare(
@@ -23,7 +26,7 @@ export async function onRequestPost(context) {
         "VALUES (?1,?2,?3,?4,?5,?6,?7,?8,'registered')"
     )
       .bind(
-        fullname, mobile, str(b.email), str(b.experience),
+        fullname, mobile, email, str(b.experience),
         str(b.course), str(b.course_name), str(b.batch), str(b.referral)
       )
       .run();

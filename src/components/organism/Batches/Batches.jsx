@@ -11,7 +11,7 @@ function Batches() {
     let batches=useBatches()
     let mapdataContent=["","",""]
     return (
-        <Box className='batches' my={5} mx={12} id="Batches">
+        <Box className='batches rca-section' id="Batches">
         <TypoGraphyComponent variant='h3' text='Upcoming Batches' component='h3' sx={{textAlign:"center",fontWeight:"bold"}} />
         <hr />
            

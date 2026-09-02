@@ -1,8 +1,18 @@
 import { createContext, useContext, useState } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from "./components/molecules/Navbar/Navbar"
 import Footer from "./components/organism/Footer/FooterComponent"
 import Banner from './components/organism/Banner/Banner'
 import Home from "./components/Pages/Home";
+import CourseDetail from "./components/Pages/CourseDetail";
+import ForParents from "./components/Pages/ForParents";
+import About from "./components/Pages/About";
+import PlacementsPage from "./components/Pages/PlacementsPage";
+import Contact from "./components/Pages/Contact";
+import FAQ from "./components/Pages/FAQ";
+import Blog from "./components/Pages/Blog";
+import BlogPost from "./components/Pages/BlogPost";
+import ScrollToTop from "./components/ScrollToTop";
 import Modal from 'react-modal';
 import EnquiryForm from './components/forms/Enquiry Form/EnquiryForm';
 import EnrollForm from './components/forms/EnrollForm/EnrollForm';
@@ -36,7 +46,7 @@ function App() {
 
   const customStyles = {
     overlay:{
-      backgroundColor:"rgba(15, 15, 25, 0.55)",
+      backgroundColor:"var(--rca-scrim)",
       backdropFilter:"blur(3px)",
     },
     // content: {
@@ -72,7 +82,19 @@ function App() {
       >
         {enrollCourse && <EnrollForm course={enrollCourse} />}
       </Modal>
-      <Home />
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/courses/:slug" element={<CourseDetail />} />
+        <Route path="/for-parents" element={<ForParents />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/placements" element={<PlacementsPage />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
       <FloatingIcons/>
       <Footer />
     </AuthContext.Provider>

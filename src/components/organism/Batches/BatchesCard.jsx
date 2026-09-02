@@ -30,7 +30,7 @@ import { courses } from '../courses/courses';
     let onCta=canEnroll
       ? ()=>openEnroll({courseId:course.courseId,name:course.name,paid:course.paid,price:course.price})
       : openModal
-    let ctaLabel=canEnroll ? "Enroll Now" : (upcoming ? "Enquire Now" : "Join the Waitlist")
+    let ctaLabel=canEnroll ? "Book your seat" : (upcoming ? "Enquire Now" : "Join the Waitlist")
   return (
     <Card sx={{}} className="card">
       <Box className="course-header">

@@ -50,14 +50,14 @@
 
 
 /* Hover, pressed and focus now come from ButtonComponent and design/tokens.css
-   (#7). The rule that used to live here forced rgb(31,31,211) with !important,
-   which is a blue that appears nowhere else in the palette and beat every state
-   the button declared. */
+   (#7). The rule that used to live here forced a hover color with !important,
+   which beat every state the button declared regardless of which color it
+   named. */
 
 
 /* .banner-content-btns button:active
 {
-    background: #3a66c4!important;
+    background: var(--rca-blue)!important;
 } */
 
 
@@ -69,7 +69,7 @@
                 margin: 2rem!important;
                 margin-top: 4rem!important;
             }
-            .banner .MuiGrid-item .grid-content-box h2
+            .banner .MuiGrid-item .grid-content-box h1
             {
                 font-size: 2.3rem!important;
                 text-align: center;
@@ -118,7 +118,7 @@
             }
             .footer .grid-item:not(:last-child)
             {
-                border-bottom: 1px solid #bcb4b4;
+                border-bottom: 1px solid var(--rca-border);
                 padding-bottom: 10px;
                 justify-content: space-around;
             }

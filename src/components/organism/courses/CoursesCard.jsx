@@ -1,122 +1,171 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyComponent';
-import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
-import { List, ListItem, ListItemText } from '@mui/material';
-import { useAuth } from '../../../App';
-import { useBatches } from '../Batches/useBatches';
-import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDateUtils';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../../App";
+import { useFounder, hasFounder } from "../../Pages/useFounder";
+import { useTrainers } from "../mentors/useTrainers";
+import { useBatches } from "../Batches/useBatches";
+import { getNextBatchForCourse, formatBatchDateShort } from "../Batches/batchDateUtils";
+import "./CourseCard.css";
 
+// Credibility line under the flagship trainer's name (Nikshep). Other courses
+// use the trainer's own profile title.
+const FDE_TRAINER_TITLE = "ex-Head of Engineering, Organic Mandya";
 
- function CoursesCard({name,courseId,paid,price,badge,backend,audience,frontend,syllabus1,syllabus2}) {
-    let {openEnroll}=useAuth()
-    let batches=useBatches()
-    let nextBatch=getNextBatchForCourse(name,batches)
-    let enroll=()=>openEnroll({courseId,name,paid,price})
+const norm = (s) => String(s || "").trim().toLowerCase();
+function initials(name = "") {
+  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+}
+
+function Check({ filled }) {
   return (
-    <Card sx={{ }} className='card'>
-        <Box className="course-header">
-            {badge && <Box component="span" className="course-badge">{badge}</Box>}
-            <TypoGraphyComponent
-            variant="h5"
-            sx={{mb:".3rem"}}
-            component="h5"
-            text={name}
-        />
-        <Box component="span" className="next-batch-tag">
-            {nextBatch ? `Next batch · ${formatBatchDateShort(nextBatch.date)}` : "New dates coming soon"}
-        </Box>
-        {paid && (
-          <Box component="span" className="course-price">
-            ₹{Number(price).toLocaleString("en-IN")} <span className="course-emi">· EMI available</span>
-          </Box>
-        )}
-         <TypoGraphyComponent
-            variant="text"
-            sx={{}}
-            component="p"
-            text={audience}
-        />
-        </Box>
-    <CardContent className='card-content'>
-    
-          <List className='links' sx={{listStyleType:"disc"}}>
-          <TypoGraphyComponent
-            variant="h6"
-            sx={{}}
-            component="h6"
-            text={frontend?"Front End":"Syllabus"}
-        />
-              {frontend && frontend.map((link,id)=>
-              {
-               return <ListItem  key={id} sx={{ display: 'list-item',visibility:link?"visible":"hidden"}}>
-                    <ListItemText
-                      primary={link}
-                    />
-              </ListItem>
-          
-          
-              })}
-{/* Syllabus  */}
-        {syllabus1 && syllabus1.map((link,id)=>
-              {
-               return <ListItem  key={id} sx={{ display: 'list-item',visibility:link?"visible":"hidden"}}>
-                    <ListItemText
-                      primary={link}
-                    />
-              </ListItem>
-          
-          
-              })}
-               
-               
-          </List>
-          <List className='links' sx={{listStyleType:"disc"}}>
-    <TypoGraphyComponent
-            variant="h6"
-            sx={{}}
-            component="h6"
-            text={backend?"Backend":"syllabus"}
-        />
-              {backend && backend.map((link,id)=>
-              {
-               return <ListItem  key={id} sx={{ display: link?'list-item':"none" }}>
-                    <ListItemText
-                      primary={link}
-                    />
-              </ListItem>
-          
-              })}
-              {/* Syllabus  */}
-        {syllabus2 && syllabus2.map((link,id)=>
-              {
-               return <ListItem  key={id} sx={{ display: 'list-item',visibility:link?"visible":"hidden"}}>
-                    <ListItemText
-                      primary={link}
-                    />
-              </ListItem>
-          
-          
-              })}
-               
-          </List>
-  {/* <Typography variant="body2" color="text.secondary">
-    Lizards are a widespread group of squamate reptiles, with over 6,000
-    species, ranging across all continents except Antarctica
-  </Typography> */}
-</CardContent>
-<CardActions sx={{}} className='card-actions'>
-  
-  <ButtonComponent size='large' variant={paid?'contained':'outlined'} label='Enroll Now' onBtnClick={enroll}/>
-</CardActions>
-</Card>
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" className="cc-check" aria-hidden="true">
+      <circle cx="12" cy="12" r="11" fill={filled ? "#03084C" : "#EAF0F6"} />
+      <path d="M7.5 12.3l3 3 6-6.3" stroke={filled ? "#FFFFFF" : "#03084C"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 
+// One premium card for every course. The paid flagship (FDE) adds a Flagship
+// pill, the trainer credibility line and highlight chips; every card shares the
+// navy header, check-icon syllabus, price slot ("Fee on request" until priced),
+// equal heights, and "Book your seat" + a counsellor secondary (Abhigna's flow).
+function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, audience, backend, frontend, syllabus1, syllabus2 }) {
+  const { openEnroll, openModal } = useAuth();
+  const { founder } = useFounder();
+  const trainers = useTrainers();
+  const batches = useBatches();
+  const nextBatch = getNextBatchForCourse(name, batches);
 
-export default CoursesCard
+  // Match the course's trainer to a full profile (photo + title) so every card
+  // shows a "Taught by …" credibility block, not just the flagship.
+  const trainerProfile = trainer ? (trainers || []).find((t) => norm(t.name) === norm(trainer)) : null;
+  const trainerTitle = flagship ? FDE_TRAINER_TITLE : (trainerProfile && trainerProfile.title) || "";
+
+  // Clicking a trainer with a profile jumps to the "Our Trainers" section
+  // (their full card — photo, bio, expertise, socials). The card only ever
+  // renders on the homepage, so a direct scroll is enough.
+  const goToTrainers = () => {
+    const el = document.getElementById("Trainers");
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 62; // clear the fixed navbar
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+  const trainerLinkProps = trainerProfile
+    ? {
+        role: "link",
+        tabIndex: 0,
+        title: `See ${trainer}'s profile`,
+        onClick: goToTrainers,
+        onKeyDown: (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            goToTrainers();
+          }
+        },
+      }
+    : {};
+  const modules = (
+    flagship ? [...(syllabus1 || []), ...(syllabus2 || [])] : [...(backend || []), ...(frontend || [])]
+  ).filter(Boolean);
+  const chips = flagship ? ["Project-based", "Live cohort", "Ship to production"] : [];
+
+  const book = () => openEnroll({ courseId, name, paid, price });
+
+  return (
+    <div className={"course-card" + (flagship ? " course-card--flagship" : "")}>
+      <div className="cc-head">
+        {flagship && (
+          <span className="cc-flagship">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2.5l2.85 6.05 6.65.7-4.95 4.5 1.35 6.55L12 17.6 6.1 20.8l1.35-6.55L2.5 9.25l6.65-.7L12 2.5z" fill="#FFB74D" />
+            </svg>
+            Flagship
+          </span>
+        )}
+        <h3 className="cc-title">{name}</h3>
+        <p className="cc-sub">{audience || "For Freshers & Working Professionals"}</p>
+        {trainer && (
+          <div className={"cc-trainer" + (trainerProfile ? " cc-trainer--link" : "")} {...trainerLinkProps}>
+            <span className="cc-avatar">
+              {trainerProfile && trainerProfile.photo_url ? (
+                <img src={trainerProfile.photo_url} alt={trainer} />
+              ) : (
+                initials(trainer)
+              )}
+            </span>
+            <span className="cc-trainer-text">
+              <b>Taught by {trainer}</b>
+              {trainerTitle && <span>{trainerTitle}</span>}
+            </span>
+          </div>
+        )}
+        {flagship && hasFounder(founder) && (
+          <Link className="cc-founder-link" to="/about">Meet the founder →</Link>
+        )}
+      </div>
+
+      <div className="cc-body">
+        <div className="cc-price-row">
+          {paid ? (
+            <span className="cc-price">
+              ₹{Number(price).toLocaleString("en-IN")} <small>· EMI available</small>
+            </span>
+          ) : (
+            <span className="cc-price cc-price--request">Fee on request</span>
+          )}
+        </div>
+
+        <div className={"cc-schedule" + (nextBatch ? "" : " cc-schedule--soon")}>
+          {nextBatch ? (
+            <>
+              <span className="cc-sched-label">Next batch</span>
+              <span className="cc-sched-main">
+                {[nextBatch.day, formatBatchDateShort(nextBatch.date), nextBatch.time].filter(Boolean).join(" · ")}
+              </span>
+              <span className="cc-sched-meta">
+                {[nextBatch.mode, nextBatch.duration].filter(Boolean).join(" · ")}
+              </span>
+            </>
+          ) : (
+            "New dates coming soon"
+          )}
+        </div>
+
+        {chips.length > 0 && (
+          <div className="cc-chips">
+            {chips.map((c, i) => (
+              <span key={i}>{c}</span>
+            ))}
+          </div>
+        )}
+
+        <div className="cc-syllabus">
+          <div className="cc-syllabus-label">What you'll {flagship ? "master" : "learn"}</div>
+          <ul>
+            {modules.map((m, i) => (
+              <li key={i} className={flagship && i === modules.length - 1 ? "cc-capstone" : ""}>
+                <Check filled={flagship && i === modules.length - 1} />
+                <span>{m}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="cc-foot">
+          <button className="cc-book" type="button" onClick={book}>
+            Book your seat
+          </button>
+          <button className="cc-counsellor" type="button" onClick={openModal}>
+            Or talk to a counsellor first
+          </button>
+          <Link className="cc-details" to={`/courses/${slug || courseId}`}>
+            Full syllabus &amp; details →
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CoursesCard;

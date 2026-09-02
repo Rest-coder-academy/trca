@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { onRequestPost as enquiryPost } from "../functions/api/enquiry.js";
 import { onRequestGet as batchesGet } from "../functions/api/batches.js";
 import { onRequestGet as adminGet } from "../functions/admin.js";
@@ -284,7 +284,7 @@ describe("POST /api/enroll/order", () => {
   });
   it("400 for a course that has no online price, even with keys", async () => {
     const env = { DB: makeDB(), RAZORPAY_KEY_ID: "k", RAZORPAY_KEY_SECRET: "s" };
-    const res = await enrollOrder(ctx(jsonReqTo("https://x/api/enroll/order", { course: "java-fs" }), env));
+    const res = await enrollOrder(ctx(jsonReqTo("https://x/api/enroll/order", { course: "unknown-course" }), env));
     expect(res.status).toBe(400);
   });
 });
@@ -293,14 +293,14 @@ describe("POST /api/enroll/register (free interest)", () => {
   it("records a registration (201)", async () => {
     const db = makeDB();
     const res = await enrollRegister(
-      ctx(jsonReqTo("https://x/api/enroll/register", { fullname: "Asha", mobile: "9000000000", course: "java-fs", course_name: "Java Full Stack" }), { DB: db })
+      ctx(jsonReqTo("https://x/api/enroll/register", { mobile: "9000000000", email: "asha@example.com", course: "java-fs", course_name: "Java Full Stack" }), { DB: db })
     );
     expect(res.status).toBe(201);
     expect(db.tables.enrollments).toHaveLength(1);
     expect(db.tables.enrollments[0].status).toBe("registered");
   });
-  it("400 without name/mobile", async () => {
-    const res = await enrollRegister(ctx(jsonReqTo("https://x/api/enroll/register", { fullname: "" }), { DB: makeDB() }));
+  it("400 without phone/email", async () => {
+    const res = await enrollRegister(ctx(jsonReqTo("https://x/api/enroll/register", { mobile: "" }), { DB: makeDB() }));
     expect(res.status).toBe(400);
   });
 });
@@ -331,5 +331,33 @@ describe("POST /api/enroll/verify", () => {
     const r2 = await enrollVerify(ctx(jsonReqTo("https://x/api/enroll/verify", body), env(db)));
     expect(r2.status).toBe(200);
     expect(db.tables.enrollments).toHaveLength(1); // still one — idempotent
+  });
+
+  it("records phone + email pulled from the verified Razorpay payment", async () => {
+    const db = makeDB();
+    const sig = await rzpSign("o9", "p9", "sekret");
+    // Razorpay is where the student entered their details (no form on our side).
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({ email: "student@rzp.test", contact: "+919876500000" }),
+    });
+    const res = await enrollVerify(
+      ctx(
+        jsonReqTo("https://x/api/enroll/verify", {
+          razorpay_order_id: "o9", razorpay_payment_id: "p9", razorpay_signature: sig,
+          course: "java-fs", course_name: "Java Full Stack",
+        }),
+        { DB: db, RAZORPAY_KEY_ID: "rzp_test_x", RAZORPAY_KEY_SECRET: "sekret" }
+      )
+    );
+    expect(res.status).toBe(200);
+    expect(fetchSpy).toHaveBeenCalledWith(
+      "https://api.razorpay.com/v1/payments/p9",
+      expect.objectContaining({ headers: expect.objectContaining({ Authorization: expect.stringMatching(/^Basic /) }) })
+    );
+    expect(db.tables.enrollments[0].email).toBe("student@rzp.test");
+    expect(db.tables.enrollments[0].mobile).toBe("+919876500000");
+    expect(db.tables.enrollments[0].amount).toBe(3500000);
+    fetchSpy.mockRestore();
   });
 });

@@ -63,13 +63,13 @@ function ClientsCard() {
     <>
       <section className="slider-container">
       <Slider {...settings} className="ss">
-      {clients.map(({image}, id) => {
-        return ( 
+      {clients.map(({image, name}, id) => {
+        return (
           // <CardGridItem xs={12} sm={12} md={6} lg={4}>
           <Card sx={{}} className="card" key={id}>
             <CardContent className="card-content">
-              <img src={image} />
-          
+              <img src={image} alt={name} />
+
               </CardContent>
           </Card>
           // </CardGridItem>

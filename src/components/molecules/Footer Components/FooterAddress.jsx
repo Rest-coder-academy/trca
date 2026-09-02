@@ -13,7 +13,7 @@ let email=`Email: enquiry@restcoderacademy.com`;
 
   return (
     <>
-        <TypoGraphyComponent variant='h5' component='h5'  text="Address"/>
+        <TypoGraphyComponent variant='h5' component='h2'  text="Address"/>
         <TypoGraphyComponent variant='body2' component='p' text={address}/>
         <TypoGraphyComponent variant='body2' component='p' text={contact}/>
         <TypoGraphyComponent variant='body2' component='p' text={email}/>

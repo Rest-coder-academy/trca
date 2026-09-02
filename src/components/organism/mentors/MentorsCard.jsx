@@ -43,7 +43,7 @@ function MentorsCard({ trainers = [] }) {
                 <TypoGraphyComponent
                   variant="h6"
                   text={t.name}
-                  component="h6"
+                  component="h3"
                   sx={{ fontWeight: "bold" }}
                 />
                 {t.title && <p className="trainer-title">{t.title}</p>}

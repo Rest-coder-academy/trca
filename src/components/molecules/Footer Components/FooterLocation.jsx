@@ -6,7 +6,7 @@ import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyCompo
 function FooterLocation() {
   return (
     <>
-        <TypoGraphyComponent variant='h5' component='h5'  text="Location"/>
+        <TypoGraphyComponent variant='h5' component='h2'  text="Location"/>
        <a href="https://maps.app.goo.gl/XdZWt3oDzGUCL5KWA?g_st=iw" 
        target='_blank'>
                <LocationOnIcon className='map-icon' fontSize='large'/>

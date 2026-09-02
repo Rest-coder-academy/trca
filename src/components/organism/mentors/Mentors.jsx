@@ -12,7 +12,7 @@ function Mentors() {
     if (!trainers || trainers.length === 0) return null;
     return (
         <Box className='mentors rca-section' id="Trainers">
-            <TypoGraphyComponent variant='h3' text='Our Trainers' component='h3' sx={{ textAlign: "center", fontWeight: "bold" }} />
+            <TypoGraphyComponent variant='h3' text='Our Trainers' component='h2' sx={{ textAlign: "center", fontWeight: "bold" }} />
             <hr />
             <CardGrid>
                 <MentorsCard trainers={trainers} />

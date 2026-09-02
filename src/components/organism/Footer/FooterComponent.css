@@ -13,11 +13,11 @@
   /* border: 1px solid white; */
     text-align: left;
 }
-.footer .grid-content-box h5
+.footer .grid-content-box h2
 {
     margin-bottom: 10px;
 }
-.footer .grid-content-box h5,.footer .grid-content-box p
+.footer .grid-content-box h2,.footer .grid-content-box p
 {
     font-family: var(--rca-font);
 }

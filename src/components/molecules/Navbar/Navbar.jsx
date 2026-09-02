@@ -48,7 +48,7 @@ function Navbar(props) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2,fontFamily:"tilt neon" }}>
+      <Typography variant="h6" component="div" sx={{ my: 2,fontFamily:"tilt neon" }}>
         Rest Coder Academy
       </Typography>
       <Divider />

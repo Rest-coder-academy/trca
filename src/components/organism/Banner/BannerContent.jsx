@@ -12,7 +12,7 @@ function BannerContent() {
       <TypoGraphyComponent
         variant="h2"
         sx={{mb:".6rem"}}
-        component="h2"
+        component="h1"
         text={`Code Your Dreams Into Reality`}
       />
       {/* <TypoGraphyComponent

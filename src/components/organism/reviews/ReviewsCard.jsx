@@ -69,12 +69,12 @@ function ReviewsCard() {
           // <CardGridItem xs={12} sm={12} md={6} lg={4}>
           <Card sx={{}} className="card" key={id}>
             <CardContent className="card-content">
-              <img src={image} />
-          
+              <img src={image} alt={name} />
+
               <TypoGraphyComponent
                 variant="h6"
                 text={name}
-                component="h6"
+                component="h3"
                 sx={{fontWeight: "bold" }}
               />
               <TypoGraphyComponent

@@ -11,9 +11,12 @@ import { List, ListItem, ListItemText } from '@mui/material';
 import { useAuth } from '../../../App';
 import { useBatches } from '../Batches/useBatches';
 import { getNextBatchForCourse, formatBatchDateShort } from '../Batches/batchDateUtils';
+import FdeCard from './FdeCard';
 
 
- function CoursesCard({name,courseId,paid,price,badge,backend,audience,frontend,syllabus1,syllabus2}) {
+ function CoursesCard({name,courseId,paid,price,badge,trainer,backend,audience,frontend,syllabus1,syllabus2}) {
+    // The paid/flagship course (FDE) gets its own premium card.
+    if (paid) return <FdeCard courseId={courseId} name={name} price={price} trainer={trainer} syllabus1={syllabus1} syllabus2={syllabus2} />;
     let {openEnroll}=useAuth()
     let batches=useBatches()
     let nextBatch=getNextBatchForCourse(name,batches)

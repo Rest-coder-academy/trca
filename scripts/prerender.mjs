@@ -20,7 +20,10 @@ const routes = [
   { path: "/", out: "index.html", waitFor: "#Courses" },
   ...courses.map((c) => {
     const slug = c.slug || c.courseId;
-    return { path: `/courses/${slug}`, out: `courses/${slug}/index.html`, waitFor: "main.cd" };
+    // Flat `.html` (not `<slug>/index.html`) so Cloudflare Pages serves the
+    // clean, no-trailing-slash URL directly (200) — matching the canonical +
+    // sitemap and avoiding a 308 redirect hop.
+    return { path: `/courses/${slug}`, out: `courses/${slug}.html`, waitFor: "main.cd" };
   }),
 ];
 

@@ -17,9 +17,9 @@ test("/admin is password-protected (401)", async ({ request }) => {
   expect((await request.get("/admin/batches")).status()).toBe(401);
 });
 
-test("enroll CTA opens the enrolment form", async ({ page }) => {
+test("book-a-seat CTA opens the enrolment form", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: /enroll now/i }).first().click();
+  await page.getByRole("button", { name: /book your seat/i }).first().click();
   await expect(page.getByRole("button", { name: /pay ₹|register my seat/i })).toBeVisible();
 });
 

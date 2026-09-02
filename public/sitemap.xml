@@ -12,4 +12,7 @@
   <url><loc>https://restcoderacademy.in/courses/java-full-stack</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://restcoderacademy.in/courses/python-full-stack</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://restcoderacademy.in/courses/mern-stack</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://restcoderacademy.in/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://restcoderacademy.in/blog/java-vs-python-full-stack</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://restcoderacademy.in/blog/is-a-coding-course-worth-it-2026</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

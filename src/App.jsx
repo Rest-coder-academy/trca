@@ -10,6 +10,8 @@ import About from "./components/Pages/About";
 import PlacementsPage from "./components/Pages/PlacementsPage";
 import Contact from "./components/Pages/Contact";
 import FAQ from "./components/Pages/FAQ";
+import Blog from "./components/Pages/Blog";
+import BlogPost from "./components/Pages/BlogPost";
 import ScrollToTop from "./components/ScrollToTop";
 import Modal from 'react-modal';
 import EnquiryForm from './components/forms/Enquiry Form/EnquiryForm';
@@ -89,6 +91,8 @@ function App() {
         <Route path="/placements" element={<PlacementsPage />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQ />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <FloatingIcons/>

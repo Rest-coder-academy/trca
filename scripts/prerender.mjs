@@ -19,6 +19,7 @@ const HOST = "127.0.0.1";
 const routes = [
   { path: "/", out: "index.html", waitFor: "#Courses" },
   { path: "/for-parents", out: "for-parents.html", waitFor: "main.fp" },
+  { path: "/about", out: "about.html", waitFor: "main.ab" },
   ...courses.map((c) => {
     const slug = c.slug || c.courseId;
     // Flat `.html` (not `<slug>/index.html`) so Cloudflare Pages serves the

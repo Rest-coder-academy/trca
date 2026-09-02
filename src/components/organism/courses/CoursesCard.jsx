@@ -58,6 +58,9 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
             </span>
           </div>
         )}
+        {flagship && (
+          <Link className="cc-founder-link" to="/about">Meet the founder →</Link>
+        )}
       </div>
 
       <div className="cc-body">

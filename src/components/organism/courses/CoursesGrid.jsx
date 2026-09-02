@@ -9,7 +9,7 @@ function CoursesGrid({xs=12,sm=6,md=6,lg=3, spacing=1,children="",mapdata=[],bgc
         {mapdata.map((data,id)=>
         {
             return <Fragment key={id}>
-                <Grid item display={"flex"} justifyContent={"center"} alignItems={"stretch"}  xs={xs} sm={sm} md={md} lg={lg}>
+                <Grid item display={"flex"} justifyContent={"center"} alignItems={"flex-start"}  xs={xs} sm={sm} md={md} lg={lg}>
                    <CoursesCard {...data} />
                 </Grid>
             </Fragment>

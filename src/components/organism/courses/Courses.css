@@ -22,7 +22,7 @@
     /* border: 2px solid green; */
     margin: 0;
     justify-content: center;
-    align-items: stretch;
+    align-items: flex-start;
     padding: .7rem;
 
 }

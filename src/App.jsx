@@ -5,6 +5,8 @@ import Footer from "./components/organism/Footer/FooterComponent"
 import Banner from './components/organism/Banner/Banner'
 import Home from "./components/Pages/Home";
 import CourseDetail from "./components/Pages/CourseDetail";
+import ForParents from "./components/Pages/ForParents";
+import ScrollToTop from "./components/ScrollToTop";
 import Modal from 'react-modal';
 import EnquiryForm from './components/forms/Enquiry Form/EnquiryForm';
 import EnrollForm from './components/forms/EnrollForm/EnrollForm';
@@ -74,9 +76,11 @@ function App() {
       >
         {enrollCourse && <EnrollForm course={enrollCourse} />}
       </Modal>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/courses/:slug" element={<CourseDetail />} />
+        <Route path="/for-parents" element={<ForParents />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <FloatingIcons/>

@@ -97,6 +97,7 @@ function CourseDetail() {
             progress, scores and attendance — every week. You always know exactly how the learning
             is going, so nobody is left guessing.
           </p>
+          <Link className="cd-parents-link" to="/for-parents">See how it works for parents →</Link>
         </section>
 
         <section className="cd-syllabus">
@@ -115,7 +116,7 @@ function CourseDetail() {
             <button className="cd-book" type="button" onClick={() => openEnroll({ courseId: course.courseId, name: course.name, paid: course.paid, price: course.price })}>
               Book your seat
             </button>
-            <Link className="cd-back" to="/">← All courses</Link>
+            <Link className="cd-back" to="/" state={{ scrollTo: "Courses" }}>← All courses</Link>
           </div>
         </section>
       </main>

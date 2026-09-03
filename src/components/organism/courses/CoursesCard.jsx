@@ -41,6 +41,14 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
   const trainerProfile = trainer ? (trainers || []).find((t) => norm(t.name) === norm(trainer)) : null;
   const trainerTitle = flagship ? FDE_TRAINER_TITLE : (trainerProfile && trainerProfile.title) || "";
 
+  // "Meet the founder" belongs on the card whose trainer IS the founder — match
+  // the trainer name against the founder's name (either may be the longer form,
+  // e.g. "Uday Pawar S" vs "Uday Pawar"), not just the flagship.
+  const isFounderCard =
+    hasFounder(founder) &&
+    trainer &&
+    (norm(trainer).includes(norm(founder.name)) || norm(founder.name).includes(norm(trainer)));
+
   // Clicking a trainer with a profile jumps to the "Our Trainers" section
   // (their full card — photo, bio, expertise, socials). The card only ever
   // renders on the homepage, so a direct scroll is enough.
@@ -100,7 +108,7 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
             </span>
           </div>
         )}
-        {flagship && hasFounder(founder) && (
+        {isFounderCard && (
           <Link className="cc-founder-link" to="/about">Meet the founder →</Link>
         )}
       </div>

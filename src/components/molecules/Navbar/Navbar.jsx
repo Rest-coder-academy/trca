@@ -23,6 +23,8 @@ import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 const drawerWidth = 240;
 // const navItems = ['Home', 'Fish', 'Stones','Plants','Food','Lights','Air Pumps','Tanks & Bowls'];
 const navItems = ['Courses',  'Reviews','Clients','Placements'];
+// Real pages added over the SEO push — router links, not homepage-section scrolls.
+const pageItems = [{ label: 'For Parents', to: '/for-parents' }, { label: 'About', to: '/about' }];
 
 
 function Navbar(props) {
@@ -60,6 +62,15 @@ function Navbar(props) {
             </ListItemButton>
           </ListItem>
         ))}
+        {pageItems.map((p) => (
+          <ListItem key={p.to} disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }} onClick={handleDrawerToggle}>
+              <RouterLink to={p.to} style={{ width: '100%' }}>
+                <ListItemText primary={p.label} />
+              </RouterLink>
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
     </Box>
   );
@@ -90,7 +101,14 @@ function Navbar(props) {
               <ButtonComponent key={item} textColor="color-dark-black" variant='text' onBtnClick={() => goToSection(item)}>
                   {item}
                 </ButtonComponent>
-                
+
+            ))}
+            {pageItems.map((p) => (
+              <RouterLink key={p.to} to={p.to}>
+                <ButtonComponent textColor="color-dark-black" variant='text'>
+                  {p.label}
+                </ButtonComponent>
+              </RouterLink>
             ))}
              <ButtonComponent variant='contained' bgColor='bg-btn-blue' borderRadius='0px' paddingX={1.5} paddingY={.7} onBtnClick={openModal}>
                     Apply Now

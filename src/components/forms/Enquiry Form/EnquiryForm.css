@@ -118,12 +118,6 @@
 {
     background-color: var(--rca-success);
 }
-.enquiry-form .enquiry-submit-spinner
-{
-    margin-right: .4rem;
-    vertical-align: middle;
-}
-
 @keyframes enquiry-error-in
 {
     from { opacity: 0; transform: translateY(-4px); }

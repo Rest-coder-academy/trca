@@ -121,3 +121,20 @@
     --rca-control-h: var(--rca-control-h-mobile);
   }
 }
+
+/* --- Keyboard focus, site-wide -------------------------------------------
+   ButtonComponent draws its own ring, and so do the inputs. This is the
+   floor under everything else: links, and any control that arrives from a
+   third-party stylesheet without a focus style of its own.
+
+   react-slick's carousel arrows and dots are the live example — they render
+   as real <button>s, sit in the tab order, and ship with `outline: none`, so
+   before this rule a keyboard user tabbed through eleven controls on the
+   homepage with nothing on screen to show where they were.
+
+   `:focus-visible` (not `:focus`) so a mouse click never paints a ring.      */
+:where(a, button, [role="button"], summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: none;
+  box-shadow: var(--rca-focus-ring);
+  border-radius: var(--rca-radius-sm);
+}

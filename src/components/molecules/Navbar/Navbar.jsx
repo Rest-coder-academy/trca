@@ -105,7 +105,7 @@ function Navbar(props) {
             ))}
             {pageItems.map((p) => (
               <RouterLink key={p.to} to={p.to}>
-                <ButtonComponent textColor="color-dark-black" variant='text'>
+                <ButtonComponent variant='text'>
                   {p.label}
                 </ButtonComponent>
               </RouterLink>

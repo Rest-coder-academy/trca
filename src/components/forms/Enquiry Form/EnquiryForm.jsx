@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useState } from 'react'
 import InputBoxComponent from '../../atoms/InputBoxComponent/InputBoxComponent';
 import TextAreaComponent from '../../atoms/TextAreaComponent/TextAreaComponent';
@@ -244,12 +244,9 @@ const handleSubmit = async (e)=>
             paddingX={1.5}
             paddingY={0.7}
             type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting
-              ? <><CircularProgress size={16} color="inherit" className="enquiry-submit-spinner" /> Sending…</>
-              : "Submit"}
-          </ButtonComponent>
+            label="Submit"
+            loading={isSubmitting}
+          />
         </Box>
       </Box>
 

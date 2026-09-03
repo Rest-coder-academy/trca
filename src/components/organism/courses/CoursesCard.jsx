@@ -80,6 +80,15 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
 
   const book = () => openEnroll({ courseId, name, paid, price });
 
+  /* The syllabus was the only thing making the cards different heights: the
+     three standard courses list 10, 9 and 12 modules, which came out as 753,
+     727 and 805px cards in a row that is meant to read as a set. Capping the
+     list is what makes them match, and the full list is one tap away on the
+     course page — which is where #8 wants the traffic anyway. */
+  const VISIBLE_MODULES = 8;
+  const shownModules = modules.slice(0, VISIBLE_MODULES);
+  const hiddenModules = Math.max(0, modules.length - VISIBLE_MODULES);
+
   return (
     <div className={"course-card" + (flagship ? " course-card--flagship" : "")}>
       <div className="cc-head">
@@ -151,13 +160,26 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
         <div className="cc-syllabus">
           <div className="cc-syllabus-label">What you'll {flagship ? "master" : "learn"}</div>
           <ul>
-            {modules.map((m, i) => (
+            {shownModules.map((m, i) => (
               <li key={i} className={flagship && i === modules.length - 1 ? "cc-capstone" : ""}>
                 <Check filled={flagship && i === modules.length - 1} />
                 <span>{m}</span>
               </li>
             ))}
           </ul>
+          {/* A reserved row, not conditional markup. With extra modules it is a
+              link to the full syllabus; without, it is an empty spacer of the
+              same height — so a course with nine modules and one with twelve
+              produce a card of exactly the same height. */}
+          <div className="cc-syllabus-more">
+            {hiddenModules > 0 ? (
+              <Link to={`/courses/${slug || courseId}`}>
+                +{hiddenModules} more {hiddenModules === 1 ? "module" : "modules"}
+              </Link>
+            ) : (
+              <span aria-hidden="true" />
+            )}
+          </div>
         </div>
 
         <div className="cc-foot">

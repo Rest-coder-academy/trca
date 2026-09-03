@@ -42,6 +42,9 @@ function CourseDetail() {
 
   const url = `${ORIGIN}/courses/${course.slug || course.courseId}`;
   const priceLabel = `₹${Number(course.price).toLocaleString("en-IN")}`;
+  const formatLabel = next
+    ? [next.duration, next.mode].filter(Boolean).join(" · ")
+    : "";
   const nextLabel = next
     ? [next.day, formatBatchDateShort(next.date), next.time].filter(Boolean).join(" · ")
     : "New dates coming soon";
@@ -93,6 +96,14 @@ function CourseDetail() {
           <div className="cd-meta">
             <span className="cd-price">{priceLabel}<small> · EMI available</small></span>
             <span className="cd-batch"><b>Next batch</b> {nextLabel}</span>
+            {/* Duration and mode (#12). They were on the card but not here, so
+                the page a Java Full Stack ad lands on said less about the
+                course than the card the visitor had already scrolled past.
+                Both come off the batch, and the row is only rendered when
+                there is a batch to read them from. */}
+            {formatLabel && (
+              <span className="cd-format"><b>Format</b> {formatLabel}</span>
+            )}
             {course.flagship && course.trainer && (
               <span className="cd-trainer"><b>Trainer</b> {course.trainer}</span>
             )}

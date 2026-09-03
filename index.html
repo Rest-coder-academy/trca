@@ -89,17 +89,10 @@
     }
     </script>
 
-    <link
-      rel="stylesheet"
-      type="text/css"
-      charset="UTF-8"
-      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-    />
+    <!-- slick-carousel CSS is bundled (imported in ClientsCard.jsx, PlacementCard.jsx,
+         ReviewsCard.jsx) — no external cdnjs <link> needed here. Same reasoning as the
+         self-hosted font below: an external stylesheet on the critical path can hang
+         and spike LCP. -->
     <!-- One typeface (#6). Montserrat is self-hosted via @fontsource/montserrat,
          imported in src/main.jsx — no font request leaves the site. -->
   </head>

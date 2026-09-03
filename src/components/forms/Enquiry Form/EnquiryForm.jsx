@@ -12,12 +12,26 @@ import { trackLead } from '../../../lib/analytics';
 import axios from 'axios';
 
 const WHATSAPP_FALLBACK_NUMBERS=["918073762257","919110424403"]
-const WHATSAPP_PREFILL=encodeURIComponent("Hi Rest Coder Academy, I'd like to enquire about a course.")
+const waPrefill=(course)=>encodeURIComponent(
+  course
+    ? `Hi Rest Coder Academy, I'd like to enquire about ${course}.`
+    : "Hi Rest Coder Academy, I'd like to enquire about a course.")
 const SUBMIT_TIMEOUT_MS=10000
 
-function EnquiryForm() {
+/**
+ * `course` is the course the enquiry was opened from — a course card or a
+ * /courses/<slug> page — and is null when it was opened from the navbar.
+ *
+ * It seeds the message rather than adding a field of its own. The enquiries
+ * table has no course column, and adding one would mean a migration against
+ * the live lead pipe for something the message can carry today (#8). Uday
+ * reads the message, so the course reaches him either way.
+ */
+function EnquiryForm({ course = null }) {
 
-  let [enquiryData,setenquiryData]=useState({fullname:"",mobile:"",email:"",experience:"",message:""})
+  const courseLine = course ? `I'd like to enquire about ${course}.` : ""
+
+  let [enquiryData,setenquiryData]=useState({fullname:"",mobile:"",email:"",experience:"",message:courseLine})
   // const { register, handleSubmit, watch, formState: { errors } , control, reset} = useForm();
   let [enquiryErrors,setenquiryErrors]=useState({})
   let [isSubmitting,setIsSubmitting]=useState(false)
@@ -149,8 +163,7 @@ const handleSubmit = async (e)=>
         <TypoGraphyComponent
           component="h6"
           variant="h6"
-            text="Enquire Now"
-        //   text="Login"
+          text={course ? `Enquire — ${course}` : "Enquire Now"}
         />
        <ButtonComponent
        paddingX={1}
@@ -228,7 +241,7 @@ const handleSubmit = async (e)=>
                 <a
                   key={num}
                   className="enquiry-whatsapp-fallback"
-                  href={`https://wa.me/${num}?text=${WHATSAPP_PREFILL}`}
+                  href={`https://wa.me/${num}?text=${waPrefill(course)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

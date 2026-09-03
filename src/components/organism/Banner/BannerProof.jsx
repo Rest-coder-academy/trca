@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
 import hcl from "../../../assets/clients/hcl.jpg";
 import infosys from "../../../assets/clients/infosys.jpg";
-import accenture from "../../../assets/clients/accenture.jpg";
-import wipro from "../../../assets/clients/wipro.jpg";
-import capgemini from "../../../assets/clients/capgemini.jpg";
-import techmahindra from "../../../assets/clients/tech mahindra.jpg";
+import accenture from "../../../assets/clients/accenture.png";
+import wipro from "../../../assets/clients/wipro.png";
+import capgemini from "../../../assets/clients/capgemini.png";
+import techmahindra from "../../../assets/clients/tech mahindra.png";
 import { heroCopy, placedCount } from "./heroCopy";
 
 /**

@@ -31,6 +31,13 @@ export function trackBeginCheckout({ value, courseId, courseName }) {
   });
 }
 
+// Lead: someone gave us a way to reach them (enquiry form) or reached out
+// (WhatsApp / call). `method` distinguishes the source so GA4 can show which
+// channel produces leads. Fires GA4's recommended `generate_lead` event.
+export function trackLead(method) {
+  return emit("generate_lead", { method });
+}
+
 // Revenue: a payment was verified/confirmed by the server. transactionId is the
 // Razorpay payment id (the natural unique key for de-duping conversions).
 export function trackPurchase({ transactionId, value, courseId, courseName }) {

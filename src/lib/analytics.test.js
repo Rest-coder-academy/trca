@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
-import { trackPurchase, trackBeginCheckout } from "./analytics";
+import { trackPurchase, trackBeginCheckout, trackLead } from "./analytics";
 
 // vitest runs in the "node" environment (no global window), so stub it per-test.
 afterEach(() => {
@@ -46,6 +46,23 @@ describe("analytics (GA4 events)", () => {
       const [, , params] = gtag.mock.calls[0];
       expect(params.value).toBe(0);
       expect(params.items[0].price).toBe(0);
+    });
+  });
+
+  describe("trackLead", () => {
+    it("fires a GA4 generate_lead event tagged with the source method", () => {
+      const gtag = vi.fn();
+      vi.stubGlobal("window", { gtag });
+      const ok = trackLead("enquiry_form");
+      expect(ok).toBe(true);
+      expect(gtag).toHaveBeenCalledWith("event", "generate_lead", {
+        method: "enquiry_form",
+      });
+    });
+
+    it("is a safe no-op when gtag is unavailable", () => {
+      vi.stubGlobal("window", {});
+      expect(trackLead("whatsapp_float")).toBe(false);
     });
   });
 

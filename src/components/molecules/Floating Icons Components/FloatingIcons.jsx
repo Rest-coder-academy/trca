@@ -6,6 +6,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import "./FloatingIcons.css"
 import ScrollToHome from './ScrollToHome';
 import {animateScroll as scroll } from 'react-scroll';
+import { trackLead } from '../../../lib/analytics';
 
 
 
@@ -62,10 +63,10 @@ function FloatingIcons() {
 
   return (
     <Box className="floating-icons">
-       <a href="https://wa.me/918073762257?text=Hello!%20Can%20I%20get%20more%20info%20on%20courses%20and%20placements." target='_blank'>
+       <a href="https://wa.me/918073762257?text=Hello!%20Can%20I%20get%20more%20info%20on%20courses%20and%20placements." target='_blank' onClick={() => trackLead("whatsapp_float")}>
        <WhatsAppIcon fontSize='large' className='whatsapp'  style={whatsappStyle}/>
        </a>
-       <a href="tel:+918073762257">
+       <a href="tel:+918073762257" onClick={() => trackLead("call_float")}>
             <CallIcon fontSize='large' className='call'  style={callStyle}/>
        </a>
         <ArrowUpwardIcon fontSize='large' className='arrow'  style={arrowStyle} onClick={scrollToTop}/>

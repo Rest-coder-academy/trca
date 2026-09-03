@@ -79,15 +79,20 @@
 .cc-trainer--link { cursor: pointer; }
 .cc-trainer--link:hover .cc-trainer-text b { text-decoration: underline; }
 .cc-trainer--link:focus-visible { outline: 2px solid #ffb74d; outline-offset: 3px; border-radius: 6px; }
+/* Sits directly under the trainer name (indented past the 36px avatar + 11px
+   gap) so it reads as a sub-action of "Taught by …", not a stray amber line. */
 .cc-founder-link {
-  display: inline-block;
-  margin-top: 12px;
-  font-size: 12.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 5px 0 0 47px;
+  font-size: 12px;
   font-weight: 600;
   color: #ffb74d;
   text-decoration: none;
+  opacity: 0.92;
 }
-.cc-founder-link:hover { text-decoration: underline; }
+.cc-founder-link:hover { opacity: 1; text-decoration: underline; }
 
 /* --- Body --- */
 .cc-body {

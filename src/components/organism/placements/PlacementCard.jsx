@@ -11,14 +11,17 @@ import { CardMedia, colors, List, ListItem, ListItemText } from "@mui/material";
 import { placements } from "./placement";
 import CardGridItem from "../../molecules/Grid/CardGridItem";
 
+import { useRef } from "react";
 import Slider from "react-slick";
+import CarouselControls from "../../molecules/Carousel/CarouselControls";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ClientIcon from "../reviews/ReviewIcon";
 import PlacementIcon from "./PlacementIcon";
-4
 
 function PlacementCard() {
+  const sliderRef = useRef(null);
+
    const settings = {
   
       dots: true,
@@ -26,11 +29,17 @@ function PlacementCard() {
       slidesToShow: 4,
       slidesToScroll: 1,
       autoplay: true,
-      arrows:true,
+      // Slick's arrows are replaced by the control bar under the track
+      // (#106) — they were positioned off the edge of the viewport.
+      arrows: false,
+      appendDots: (dots) => <CarouselControls sliderRef={sliderRef} dots={dots} />,
       // speed: 100,
       autoplaySpeed: 3000,
       cssEase: "linear",
       pauseOnHover: true,
+      // A keyboard user tabbing into the track deserves the same pause a
+      // mouse user gets by hovering it.
+      pauseOnFocus: true,
       lazyLoad: true,
       initialSlide:1,
       responsive: [
@@ -56,7 +65,6 @@ function PlacementCard() {
             settings: {
               slidesToShow: 1,
               slidesToScroll: 1,
-              arrows:false,
             }
           }
         ]
@@ -64,7 +72,7 @@ function PlacementCard() {
   return (
     <>
       <section className="slider-container">
-      <Slider {...settings} className="ss">
+      <Slider ref={sliderRef} {...settings} className="ss">
       {placements.map(({ name, designation, image, company }, id) => {
         return ( 
           // <CardGridItem xs={12} sm={12} md={6} lg={4}>

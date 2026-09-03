@@ -11,12 +11,15 @@ import { CardMedia, colors, List, ListItem, ListItemText } from "@mui/material";
 import { reviews } from "./reviews";
 import CardGridItem from "../../molecules/Grid/CardGridItem";
 import ReviewIcon from "./ReviewIcon";
+import { useRef } from "react";
 import Slider from "react-slick";
+import CarouselControls from "../../molecules/Carousel/CarouselControls";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-4
 
 function ReviewsCard() {
+  const sliderRef = useRef(null);
+
    const settings = {
   
       dots: true,
@@ -24,11 +27,17 @@ function ReviewsCard() {
       slidesToShow: 3,
       slidesToScroll: 1,
       autoplay: true,
-      arrows:true,
+      // Slick's arrows are replaced by the control bar under the track
+      // (#106) — they were positioned off the edge of the viewport.
+      arrows: false,
+      appendDots: (dots) => <CarouselControls sliderRef={sliderRef} dots={dots} />,
       // speed: 100,
       autoplaySpeed: 3000,
       cssEase: "linear",
       pauseOnHover: true,
+      // A keyboard user tabbing into the track deserves the same pause a
+      // mouse user gets by hovering it.
+      pauseOnFocus: true,
       lazyLoad: true,
       initialSlide:1,
       responsive: [
@@ -54,7 +63,6 @@ function ReviewsCard() {
             settings: {
               slidesToShow: 1,
               slidesToScroll: 1,
-              arrows:false,
 
             }
           }
@@ -63,7 +71,7 @@ function ReviewsCard() {
   return (
     <>
       <section className="slider-container">
-      <Slider {...settings} className="ss">
+      <Slider ref={sliderRef} {...settings} className="ss">
       {reviews.map(({ name, branch, image, description, ratings }, id) => {
         return ( 
           // <CardGridItem xs={12} sm={12} md={6} lg={4}>

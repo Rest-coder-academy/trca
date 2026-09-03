@@ -1,0 +1,173 @@
+/* Carousel controls — Reviews and Placements (#106).
+
+   One rule set for both sections. They are the same carousel, so a visitor
+   who learns the control on one already knows it on the other.
+
+   The arrow is a white disc with a navy glyph rather than navy-on-transparent.
+   Reviews sits on white and Placements on a blue-to-navy gradient, and a
+   filled disc is the one treatment that holds its contrast on both without a
+   per-section override. */
+
+.carousel-controls
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--rca-space-4);
+    margin-top: var(--rca-space-5);
+}
+
+.carousel-arrow
+{
+    /* 44px is the floor (#11); it is also enough for the disc to read as a
+       button rather than an icon someone forgot to style. */
+    width: var(--rca-control-h);
+    height: var(--rca-control-h);
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--rca-border);
+    border-radius: 50%;
+    background-color: var(--rca-surface);
+    color: var(--rca-navy);
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(3, 8, 76, 0.12);
+    /* Background only, matching ButtonComponent (#7) — no lift, no scale. */
+    transition: background-color var(--rca-transition),
+                color var(--rca-transition),
+                border-color var(--rca-transition);
+}
+
+.carousel-arrow svg
+{
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+.carousel-arrow:hover
+{
+    background-color: var(--rca-navy);
+    border-color: var(--rca-navy);
+    color: var(--rca-surface);
+}
+
+.carousel-arrow:active
+{
+    background-color: var(--rca-navy-pressed);
+    border-color: var(--rca-navy-pressed);
+    color: var(--rca-surface);
+}
+
+.carousel-arrow:focus-visible
+{
+    outline: none;
+    box-shadow: var(--rca-focus-ring);
+}
+
+/* --- Dots -----------------------------------------------------------------
+   slick renders these; we only restyle them. They were 6px grey circles,
+   which read as decoration rather than as "there are more of these". */
+
+.carousel-controls ul.carousel-dots
+{
+    /* slick-theme.css positions .slick-dots absolutely at the foot of the
+       track. In the control bar it is a flex child, so that is undone here
+       rather than fought with !important. */
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: var(--rca-space-2);
+    width: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    bottom: auto;
+}
+
+.carousel-controls ul.carousel-dots li
+{
+    /* The dot is 10px; the button around it is the 44px target (#11). */
+    width: var(--rca-control-h-mobile);
+    height: var(--rca-control-h-mobile);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-controls ul.carousel-dots li button
+{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    position: relative;
+    text-indent: -9999px;
+    overflow: hidden;
+}
+
+/* slick draws the dot with a "•" glyph in ::before. Replaced with a real
+   shape, so the size is ours and does not depend on a font. */
+.carousel-controls ul.carousel-dots li button:before
+{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 9px;
+    height: 9px;
+    margin: -4.5px 0 0 -4.5px;
+    border-radius: 50%;
+    background-color: var(--rca-border-strong);
+    opacity: 1;
+    transition: background-color var(--rca-transition), width var(--rca-transition);
+}
+
+.carousel-controls ul.carousel-dots li button:hover:before
+{
+    background-color: var(--rca-blue);
+}
+
+/* The active slide is a pill, not just a darker dot — it survives being
+   looked at out of the corner of the eye, and it reads at a glance on a
+   phone where the dots are small. */
+.carousel-controls ul.carousel-dots li.slick-active button:before
+{
+    width: 26px;
+    border-radius: 999px;
+    margin-left: -13px;
+    background-color: var(--rca-navy);
+}
+
+.carousel-controls ul.carousel-dots li button:focus-visible
+{
+    outline: none;
+    box-shadow: var(--rca-focus-ring);
+    border-radius: 50%;
+}
+
+@media (max-width: 479.98px)
+{
+    .carousel-controls
+    {
+        gap: var(--rca-space-2);
+    }
+
+    .carousel-arrow
+    {
+        width: var(--rca-control-h-mobile);
+        height: var(--rca-control-h-mobile);
+    }
+
+    /* Seven 44px dot targets do not fit across 375px. The dots shrink their
+       spacing rather than their hit area, which stays 44px tall. */
+    .carousel-controls ul.carousel-dots li
+    {
+        width: 22px;
+    }
+}

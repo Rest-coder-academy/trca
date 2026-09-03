@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "e2e:serve": "npx wrangler@4 pages dev dist --port 8788 --ip 127.0.0.1"
+    "e2e:serve": "npx wrangler@4 pages dev dist --port 8788 --ip 127.0.0.1",
+    "prerender": "node scripts/prerender.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

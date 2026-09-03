@@ -18,32 +18,56 @@ import "../Navbar/Navbar.css"
 import logo from "../../../assets/new logo1.png";
 import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { useAuth } from '../../../App';
-import { Link, animateScroll as scroll } from 'react-scroll';
+import { scroller } from 'react-scroll';
+import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 const drawerWidth = 240;
 // const navItems = ['Home', 'Fish', 'Stones','Plants','Food','Lights','Air Pumps','Tanks & Bowls'];
-const navItems = ['Courses',  'Reviews','Clients','Placements','Batches'];
+const navItems = ['Courses',  'Reviews','Clients','Placements'];
+// Real pages added over the SEO push — router links, not homepage-section scrolls.
+const pageItems = [{ label: 'For Parents', to: '/for-parents' }, { label: 'About', to: '/about' }];
 
 
 function Navbar(props) {
     let {openModal}=useAuth()
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  // On the homepage, scroll to the section; from any other route, go home and
+  // let Home scroll to it (via location state).
+  const goToSection = (id) => {
+    if (location.pathname === '/') {
+      scroller.scrollTo(id, { smooth: true, offset: -62, duration: 400 });
+    } else {
+      navigate('/', { state: { scrollTo: id } });
+    }
+  };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2,fontFamily:"tilt neon" }}>
+      <Typography variant="h6" component="div" sx={{ my: 2,fontFamily:"tilt neon" }}>
         Rest Coder Academy
       </Typography>
       <Divider />
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={<Link to={item} smooth={true} offset={-62}  onClick={handleDrawerToggle} activeClass='active' spy={true}>{item}</Link>} />
+            <ListItemButton sx={{ textAlign: 'center', minHeight: 44 }}>
+              <ListItemText primary={<span style={{ cursor: 'pointer' }} onClick={() => goToSection(item)}>{item}</span>} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+        {pageItems.map((p) => (
+          <ListItem key={p.to} disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }} onClick={handleDrawerToggle}>
+              <RouterLink to={p.to} style={{ width: '100%' }}>
+                <ListItemText primary={p.label} />
+              </RouterLink>
             </ListItemButton>
           </ListItem>
         ))}
@@ -59,26 +83,32 @@ function Navbar(props) {
       <AppBar component="nav">
         <Toolbar>
 
-        <img src={logo} alt=""  />
+        <RouterLink to="/"><img src={logo} alt="Rest Coder Academy" /></RouterLink>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'block',xs:"block"} }}
+            sx={{ mr: 2, display: { xs: 'block', md: 'none' } }}
           >
-            <MenuIcon  sx={{ color: { sm: 'black' ,xs:"black",lg:"white"} }} />
+            <MenuIcon sx={{ color: '#000' }} />
           </IconButton>
-        
-           
+
+
           {/* </Typography> */}
-          <Box sx={{ display: { xs: 'none', sm: 'block',marginLeft:"auto" } }}>
+          <Box sx={{ display: { xs: 'none', md: 'block' }, marginLeft: "auto" }}>
             {navItems.map((item) => (
-              <ButtonComponent key={item} sx={{ color: 'var(--rca-surface)', }} variant='text'>
-                  <Link to={item} smooth={true} offset={-62} activeClass='active' spy={true}>{item}</Link>
-                  
+              <ButtonComponent key={item} textColor="color-dark-black" variant='text' onBtnClick={() => goToSection(item)}>
+                  {item}
                 </ButtonComponent>
-                
+
+            ))}
+            {pageItems.map((p) => (
+              <RouterLink key={p.to} to={p.to}>
+                <ButtonComponent textColor="color-dark-black" variant='text'>
+                  {p.label}
+                </ButtonComponent>
+              </RouterLink>
             ))}
              <ButtonComponent variant='contained' bgColor='bg-btn-blue' borderRadius='0px' paddingX={1.5} paddingY={.7} onBtnClick={openModal}>
                     Apply Now
@@ -96,7 +126,7 @@ function Navbar(props) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { xs: 'block', md: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >

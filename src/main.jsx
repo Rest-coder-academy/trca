@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 // Montserrat, self-hosted. Five weights, matching --rca-fw-* in tokens.css.
 // Was a fonts.googleapis.com <link>: a third-party request on every page load,
@@ -15,7 +16,9 @@ import App from './App.jsx'
 import theme from './theme.js'
 
 createRoot(document.getElementById('root')).render(
-  <ThemeProvider theme={theme}>
-    <App />
-  </ThemeProvider>,
+  <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
+  </BrowserRouter>,
 )

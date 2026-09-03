@@ -5,6 +5,15 @@
 
 }
 
+.placements-more-link {
+    color: var(--rca-blue, #146389);
+    font-weight: 600;
+    display: inline-block;
+}
+.placements-more-link:hover {
+    color: var(--rca-navy, #03084c);
+}
+
 .placements hr {
     width: 5%;
     margin: 1.5rem auto ;
@@ -147,6 +156,14 @@
     width: 100%;
 
 } */
+.placements .card-content .company .company-name
+{
+    /* Text fallback when a placement has no bundled logo. Sized to sit on the
+       same line the logo would have occupied, so the card height is unchanged. */
+    display: inline-block;
+    font-weight: 600;
+    line-height: 50px;
+}
 .placements .card-content .company  img
 {
     /* border: 2px solid var(--rca-danger)!important; */

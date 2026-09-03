@@ -27,6 +27,28 @@ export async function onRequestPost(context) {
   const courseId = String(b.course || "").trim();
   const amount = priceForCourse(courseId);
 
+  // There is no form on our side — the student enters their phone + email in
+  // Razorpay Checkout — so pull those from the verified payment. Any values in
+  // the body are only a fallback. Best-effort: the payment is already verified,
+  // so a failed lookup must never fail the student.
+  let email = str(b.email);
+  let mobile = str(b.mobile);
+  if (env.RAZORPAY_KEY_ID && keySecret) {
+    try {
+      const pr = await fetch(
+        `https://api.razorpay.com/v1/payments/${encodeURIComponent(paymentId)}`,
+        { headers: { Authorization: "Basic " + btoa(`${env.RAZORPAY_KEY_ID}:${keySecret}`) } }
+      );
+      if (pr.ok) {
+        const p = await pr.json();
+        if (p.email) email = str(p.email);
+        if (p.contact) mobile = str(p.contact);
+      }
+    } catch {
+      /* keep the fallbacks */
+    }
+  }
+
   try {
     const existing = await env.DB.prepare(
       "SELECT id FROM enrollments WHERE razorpay_order_id = ?1"
@@ -39,7 +61,7 @@ export async function onRequestPost(context) {
           "VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,'INR',?10,?11,'paid')"
       )
         .bind(
-          str(b.fullname), str(b.mobile), str(b.email), str(b.experience),
+          str(b.fullname), mobile, email, str(b.experience),
           courseId, str(b.course_name), str(b.batch), str(b.referral),
           amount || null, orderId, paymentId
         )

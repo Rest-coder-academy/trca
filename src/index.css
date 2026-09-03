@@ -74,12 +74,12 @@ a
   }
 }
 
-/* Carousel dots were 20 x 20. slick draws the dot with a ::before glyph inside
-   the button, so the button can be padded out to a real target without the dot
-   itself changing size. */
-/* slick-theme.min.css is a <link> in index.html and this file is injected
-   before it, so matching its specificity loses on order. One extra class
-   wins outright and does not need !important. */
+/* Carousel dots were 20 x 20 — a third of the 44px minimum touch target (#11).
+   slick draws the dot as a ::before glyph inside the button, so the button can
+   be padded out to a real target without the dot itself growing. */
+/* slick-theme.css is bundled (imported from the card components) and this file
+   is injected before it, so matching its specificity loses on source order.
+   One extra class wins outright and avoids !important. */
 .slick-slider ul.slick-dots li
 {
     width: var(--rca-control-h-mobile);

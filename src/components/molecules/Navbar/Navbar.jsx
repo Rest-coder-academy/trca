@@ -57,8 +57,8 @@ function Navbar(props) {
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={<span style={{ cursor: 'pointer' }} onClick={() => { handleDrawerToggle(); goToSection(item); }}>{item}</span>} />
+            <ListItemButton sx={{ textAlign: 'center', minHeight: 44 }}>
+              <ListItemText primary={<span style={{ cursor: 'pointer' }} onClick={() => goToSection(item)}>{item}</span>} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -89,14 +89,14 @@ function Navbar(props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'block',xs:"block"} }}
+            sx={{ mr: 2, display: { xs: 'block', md: 'none' } }}
           >
-            <MenuIcon  sx={{ color: { sm: 'black' ,xs:"black",lg:"white"} }} />
+            <MenuIcon sx={{ color: '#000' }} />
           </IconButton>
-        
-           
+
+
           {/* </Typography> */}
-          <Box sx={{ display: { xs: 'none', sm: 'block',marginLeft:"auto" } }}>
+          <Box sx={{ display: { xs: 'none', md: 'block' }, marginLeft: "auto" }}>
             {navItems.map((item) => (
               <ButtonComponent key={item} textColor="color-dark-black" variant='text' onBtnClick={() => goToSection(item)}>
                   {item}
@@ -126,7 +126,7 @@ function Navbar(props) {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { xs: 'block', md: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >

@@ -8,6 +8,7 @@ import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyCompo
 import ButtonComponent from '../../atoms/ButtonComponent/ButtonComponent';
 import { useAuth } from '../../../App';
 import { regex } from '../../../regex/regex';
+import { trackLead } from '../../../lib/analytics';
 import axios from 'axios';
 
 const WHATSAPP_FALLBACK_NUMBERS=["918073762257","919110424403"]
@@ -72,6 +73,9 @@ const handleSubmit = async (e)=>
       // axios only resolves for 2xx responses by default; anything else (and network
       // errors/timeouts) rejects and is handled in the catch block below.
       await axios.post('/api/enquiry',enquiryData,{timeout:SUBMIT_TIMEOUT_MS})
+
+      // GA4 lead — the enquiry saved, so we have their contact details.
+      trackLead("enquiry_form")
 
       notify(`Enquiry received. We'll call you on ${enquiryData.mobile} within one working day.`)
       closeModal()

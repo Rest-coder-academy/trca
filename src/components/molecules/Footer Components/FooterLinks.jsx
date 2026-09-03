@@ -1,59 +1,53 @@
 import React from 'react'
 import TypoGraphyComponent from '../../atoms/TypoGraphyComponent/TypoGraphyComponent'
-import { Box,List,ListItem,ListItemText } from '@mui/material'
-import { Link, animateScroll as scroll } from 'react-scroll';
-import { Link as RouterLink } from 'react-router-dom';
+import { List, ListItem, ListItemText } from '@mui/material'
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
+import { scroller } from 'react-scroll';
 
+// Real pages (added over the SEO push) get router links; the two homepage
+// sections (Courses, Reviews) route home first, then scroll — so they work
+// from any page, not just "/".
+const pageLinks = [
+  { label: 'About Us', to: '/about' },
+  { label: 'For Parents', to: '/for-parents' },
+  { label: 'Success Stories', to: '/placements' },
+  { label: 'FAQs', to: '/faq' },
+  { label: 'Blog', to: '/blog' },
+  { label: 'Contact', to: '/contact' },
+];
+const sectionLinks = ['Courses', 'Reviews'];
 
 function FooterLinks() {
-  let links=['Placements', 'Reviews','Batches'];
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  let scrollToTop=()=>
-  {
-    scroll.scrollToTop()
-  }
+  // On the homepage scroll to the section; from any other route go home and
+  // let Home scroll to it (via location state) — mirrors the navbar.
+  const goToSection = (id) => {
+    if (location.pathname === '/') {
+      scroller.scrollTo(id, { smooth: true, offset: -62, duration: 400 });
+    } else {
+      navigate('/', { state: { scrollTo: id } });
+    }
+  };
+
   return (
     <>
-        <TypoGraphyComponent variant='h5' component='h2' text='Who Are We'/>
-        <List className='links'>
-        <ListItem onClick={scrollToTop}>
-                
-                    <ListItemText
-                      primary={"About Us"}
-                    />
-            </ListItem>
-              {links.map((link,id)=>
-              {
-               return <ListItem  key={id}>
-                  <Link to={link} smooth={true} offset={-62}>
-                    <ListItemText
-                      primary={link}
-                    />
-                  </Link>
-              </ListItem>
-          
-              })}
-              <ListItem>
-                <RouterLink to="/placements">
-                  <ListItemText primary="Success Stories" />
-                </RouterLink>
-              </ListItem>
-              <ListItem>
-                <RouterLink to="/contact">
-                  <ListItemText primary="Contact" />
-                </RouterLink>
-              </ListItem>
-              <ListItem>
-                <RouterLink to="/faq">
-                  <ListItemText primary="FAQs" />
-                </RouterLink>
-              </ListItem>
-              <ListItem>
-                <RouterLink to="/blog">
-                  <ListItemText primary="Blog" />
-                </RouterLink>
-              </ListItem>
-          </List>
+      <TypoGraphyComponent variant='h5' component='h2' text='Who Are We' />
+      <List className='links'>
+        {pageLinks.map((l) => (
+          <ListItem key={l.to}>
+            <RouterLink to={l.to}>
+              <ListItemText primary={l.label} />
+            </RouterLink>
+          </ListItem>
+        ))}
+        {sectionLinks.map((id) => (
+          <ListItem key={id} onClick={() => goToSection(id)} style={{ cursor: 'pointer' }}>
+            <ListItemText primary={id} />
+          </ListItem>
+        ))}
+      </List>
     </>
   )
 }

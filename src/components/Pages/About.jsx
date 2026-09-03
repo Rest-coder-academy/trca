@@ -10,7 +10,9 @@ function initials(name) {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 }
 function paragraphs(text) {
-  return String(text || "").split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+  // Normalise CRLF (admin textarea / pasted content) before splitting on blank
+  // lines, so multi-paragraph fields render as separate <p>s, not one blob.
+  return String(text || "").replace(/\r\n/g, "\n").split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
 }
 
 // The founder / About page is entirely admin-managed (/admin/founder → D1 →
@@ -80,13 +82,13 @@ function About() {
             {mission && (
               <div className="ab-value">
                 <span className="ab-value-label">Mission</span>
-                <p>{mission}</p>
+                {paragraphs(mission).map((p, i) => <p key={i}>{p}</p>)}
               </div>
             )}
             {vision && (
               <div className="ab-value">
                 <span className="ab-value-label">Vision</span>
-                <p>{vision}</p>
+                {paragraphs(vision).map((p, i) => <p key={i}>{p}</p>)}
               </div>
             )}
           </div>

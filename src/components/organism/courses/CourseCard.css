@@ -46,7 +46,9 @@
 }
 .cc-sub {
   margin: 7px 0 0;
-  font-size: 13px;
+  /* The same sentence as .cd-aud on the course page, which is body copy — so
+     it takes the body size here too, rather than 13px (#11). */
+  font-size: var(--rca-fs-body);
   line-height: 1.5;
   color: #aeb6e0;
 }

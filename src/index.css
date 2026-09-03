@@ -98,3 +98,30 @@ a
     height: 100%;
     line-height: var(--rca-control-h-mobile);
 }
+
+/* --- Minimum touch target for standalone text links (#11) -----------------
+   The ticket's floor is 44px on every tap target. These are the standalone
+   links and link-styled buttons that sit on their own line as a call to
+   action — "Or talk to a counsellor first" was 16px tall, "Full syllabus &
+   details" 19px, "See full success stories" 24px. The glyph stays the size
+   it is; the hit area grows around it.
+
+   Only standalone CTAs are listed. A link inside a running sentence is left
+   alone on purpose: padding one out to 44px would push the lines of the
+   paragraph it sits in apart.                                              */
+.cc-counsellor,
+.cc-details,
+.placements-more-link,
+.cd-parents-link,
+.cd-tr-cert,
+.ct-link,
+.ct-map-link,
+.ct-map-cta,
+.bl-read,
+.bl-back,
+.faq-a-link
+{
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--rca-control-h-mobile);
+}

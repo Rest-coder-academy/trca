@@ -7,7 +7,7 @@
   color: #1b2230;
 }
 .pl h2 { font-size: clamp(19px, 3vw, 22px); font-weight: 800; letter-spacing: -0.01em; color: var(--rca-navy, #03084c); margin: 0 0 4px; }
-.pl p { font-size: 15.5px; line-height: 1.65; color: #37424f; }
+.pl p { font-size: var(--rca-fs-body); line-height: 1.65; color: #37424f; }
 
 /* Hero */
 .pl-hero {
@@ -32,7 +32,7 @@
 .pl-hero p { color: #c3caf0; font-size: 16px; margin: 0; max-width: 60ch; }
 .pl-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
 .pl-btn {
-  font-family: inherit; font-size: 15.5px; font-weight: 600;
+  font-family: inherit; font-size: var(--rca-fs-body); font-weight: 600;
   height: 48px; padding: 0 26px; border: none; border-radius: var(--rca-radius-md, 8px);
   background: #fff; color: var(--rca-navy, #03084c); cursor: pointer;
   text-decoration: none; display: inline-flex; align-items: center;
@@ -53,7 +53,11 @@
 .pl-body { min-width: 0; }
 .pl-role { margin: 0 0 10px; font-size: 13.5px; font-weight: 600; color: #45545d; }
 .pl-logo { display: block; height: 22px; width: auto; max-width: 130px; object-fit: contain; margin-bottom: 12px; }
-.pl-quote { margin: 0; font-size: 14px; font-style: italic; color: #37424f; line-height: 1.6; }
+.pl-quote { margin: 0; font-size: var(--rca-fs-body); font-style: italic; color: #37424f; line-height: 1.6;
+  /* A real quote contains "Springs,Hibernate,SQL,Python,Django." — 36 characters
+     with no break opportunity, which pushed the page 42px wider than a 375px
+     viewport. Testimonials are quoted verbatim, so the CSS gives way. */
+  overflow-wrap: break-word; }
 
 /* Closing */
 .pl-foot {

@@ -209,3 +209,53 @@ app ships to students on rural connections.
   view leads — so form submissions were silently dropped whenever it was asleep.
   It was **replaced** by the D1 + Pages Function setup above (see issues #2, #17,
   #19, #20). `trcabe.onrender.com` is no longer used.
+
+## Student portal (Phase 1)
+
+`/portal/login` and `/portal` are the student portal (#110, #111). They are
+**inert until configured**: with no OAuth secrets set, `/auth/me` reports no
+providers and the login screen says "coming soon" rather than rendering buttons
+that lead to a provider error page. The marketing site is unaffected either way.
+
+Sessions are **stateless** — a signed HS256 JWT in an HttpOnly cookie, no
+`sessions` table, so a request verifies a signature instead of paying a D1 read.
+Logout clears the cookie; it cannot revoke a token server-side before its 30-day
+expiry. See the note at the foot of `schema-users.sql`.
+
+### Owner-provisioned secrets
+
+These cannot be created from the repo. Set them as Cloudflare Pages secrets:
+
+| Secret | Where it comes from |
+|---|---|
+| `SESSION_SECRET` | any long random string — signs the session cookie |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google Cloud Console → OAuth 2.0 Client ID (Web application) |
+| `MS_CLIENT_ID` / `MS_CLIENT_SECRET` | Entra → App registrations → Certificates & secrets |
+| `MS_TENANT` | optional; defaults to `common` (work **and** personal accounts) |
+
+Register these redirect URIs with **both** providers:
+
+```
+https://restcoderacademy.in/auth/google/callback
+https://restcoderacademy.in/auth/microsoft/callback
+```
+
+The redirect is always this site's own origin, never the `rca://` deep link —
+a custom scheme cannot be a registered redirect for a confidential client, and
+the token exchange has to happen server-side. The native shell is handed back
+at the end of the callback.
+
+### Database
+
+```
+npx wrangler d1 execute restcoder-enquiries --file=./schema-users.sql
+```
+
+### The endpoints
+
+| Route | What it does |
+|---|---|
+| `GET /auth/:provider/start` | redirect to consent, with PKCE + state in HttpOnly cookies. **503 when unconfigured.** |
+| `GET /auth/:provider/callback` | exchange the code, **verify the ID token against the provider's JWKS**, upsert into `users`, issue the session cookie |
+| `GET /auth/me` | the current user, or 401. Also reports which providers are configured. |
+| `POST /auth/logout` | clear the session cookie |

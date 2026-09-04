@@ -110,7 +110,7 @@ function Navbar(props) {
                 </ButtonComponent>
               </RouterLink>
             ))}
-             <ButtonComponent variant='contained' bgColor='bg-btn-blue' borderRadius='0px' paddingX={1.5} paddingY={.7} onBtnClick={openModal}>
+             <ButtonComponent variant='contained' onBtnClick={openModal}>
                     Apply Now
                 </ButtonComponent>
           </Box>

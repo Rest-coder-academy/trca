@@ -30,7 +30,7 @@ function BannerContent() {
         At <span className="color-dark-blue">REST CODER ACADEMY</span>{quote}
         </TypoGraphyComponent>
       <Box className="banner-content-btns">
-              <ButtonComponent  sx={{px:"2rem"}} variant='contained' size="large" color="" borderRadius="0" onBtnClick={openModal}>
+              <ButtonComponent sx={{px:"2rem"}} variant='contained' onBtnClick={openModal}>
                     Register Now
                 </ButtonComponent>
       </Box>

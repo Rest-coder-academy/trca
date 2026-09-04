@@ -49,10 +49,6 @@
 
 
 
-.banner-content-btns button:hover
-{
-  background-color: var(--rca-blue)!important;
-}
 
 
 /* .banner-content-btns button:active
@@ -93,11 +89,6 @@
             .banner .banner-image
             {
                 margin-top: 2rem;
-            }
-            .banner .banner-content-btns button
-            {
-                border-radius: 30px!important
-
             }
 
         }

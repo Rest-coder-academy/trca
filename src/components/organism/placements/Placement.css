@@ -193,27 +193,13 @@
     /* border-radius: 100%; */
     /* padding: 9px; */
 }
-.placements .slick-prev
-{
-    left: -50px;
-}
-.placements .slick-next
-{
-    right: -50px;
-}
-.placements .slick-next,.slick-prev
-{
-    height: 3rem;
-    width: 3rem;
-}
+/* The prev/next arrows and the dots now live in the control bar under the
+   track — see molecules/Carousel/CarouselControls (#106).
 
-
-.placements .slick-prev:before, .slick-next:before
-{
-    font-size: 2rem;
-    opacity: 1!important;
-    color: var(--rca-navy);
-}
+   What was here pushed slick's arrows to `left: -50px` / `right: -50px`, i.e.
+   outside the section and off the edge of the viewport, and coloured the glyph
+   `--rca-navy` on a `--rca-blue` ground. Between the clipping and the
+   dark-on-dark, most of the control was neither visible nor reachable. */
 
 /* ? media quries */
 /* Custom, iPhone Retina */

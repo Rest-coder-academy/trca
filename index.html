@@ -41,62 +41,32 @@
     <meta name="twitter:description" content="Live, project-based full-stack courses with placement support and EMI — and progress reports parents can actually see." />
     <meta name="twitter:image" content="https://restcoderacademy.in/favicon.png" />
 
-    <!-- Structured data (JSON-LD): organisation + courses. Ratings are NOT
-         included until we have real, countable review data (tracked in #74). -->
+    <!-- Site-wide organisation node. Course entries were removed and moved to
+         the homepage component (Home.jsx) so Course + Offer schema only appears
+         on / and /courses/<slug> — Google flags Course schema on non-course
+         pages (FAQ, contact, blog, placements) as misplaced structured data. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "EducationalOrganization",
-          "@id": "https://restcoderacademy.in/#org",
-          "name": "Rest Coder Academy",
-          "url": "https://restcoderacademy.in/",
-          "logo": "https://restcoderacademy.in/favicon.png",
-          "image": "https://restcoderacademy.in/favicon.png",
-          "description": "Live, project-based full-stack coding courses (Java, Python, MERN) and a Forward Deployed Engineering program in Bengaluru, with placement support, EMI, and weekly progress reports visible to guardians.",
-          "email": "enquiry@restcoderacademy.com",
-          "telephone": "+91-80737-62257",
-          "hasMap": "https://maps.app.goo.gl/XdZWt3oDzGUCL5KWA",
-          "areaServed": "Bengaluru",
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "#364, 3rd Floor, 16th Main, 4th T Block East, Pattabhirama Nagar, Jayanagar",
-            "addressLocality": "Bengaluru",
-            "addressRegion": "Karnataka",
-            "postalCode": "560041",
-            "addressCountry": "IN"
-          }
-        },
-        {
-          "@type": "Course",
-          "name": "Forward Deployed Engineering (FDE)",
-          "description": "The program a former Head of Engineering used to train his own team — ship production software: full-stack build, CI/CD, cloud, real integrations and a capstone.",
-          "provider": { "@id": "https://restcoderacademy.in/#org" },
-          "offers": { "@type": "Offer", "category": "Paid", "price": "50000", "priceCurrency": "INR" }
-        },
-        {
-          "@type": "Course",
-          "name": "Java Full Stack",
-          "description": "Live, project-based Java full-stack course — Core & Advanced Java, Spring, Hibernate, microservices, REST APIs and a modern front end.",
-          "provider": { "@id": "https://restcoderacademy.in/#org" },
-          "offers": { "@type": "Offer", "category": "Paid", "price": "35000", "priceCurrency": "INR" }
-        },
-        {
-          "@type": "Course",
-          "name": "Python Full Stack",
-          "description": "Live, project-based Python full-stack course — Python, Django, microservices, REST APIs and a modern front end.",
-          "provider": { "@id": "https://restcoderacademy.in/#org" },
-          "offers": { "@type": "Offer", "category": "Paid", "price": "35000", "priceCurrency": "INR" }
-        },
-        {
-          "@type": "Course",
-          "name": "MERN Stack",
-          "description": "Live, project-based MERN full-stack course — MongoDB, Express, React, Node, TypeScript and Next.js.",
-          "provider": { "@id": "https://restcoderacademy.in/#org" },
-          "offers": { "@type": "Offer", "category": "Paid", "price": "35000", "priceCurrency": "INR" }
-        }
-      ]
+      "@type": "EducationalOrganization",
+      "@id": "https://restcoderacademy.in/#org",
+      "name": "Rest Coder Academy",
+      "url": "https://restcoderacademy.in/",
+      "logo": "https://restcoderacademy.in/favicon.png",
+      "image": "https://restcoderacademy.in/favicon.png",
+      "description": "Live, project-based full-stack coding courses (Java, Python, MERN) and a Forward Deployed Engineering program in Bengaluru, with placement support, EMI, and weekly progress reports visible to guardians.",
+      "email": "enquiry@restcoderacademy.com",
+      "telephone": "+91-80737-62257",
+      "hasMap": "https://maps.app.goo.gl/XdZWt3oDzGUCL5KWA",
+      "areaServed": "Bengaluru",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "#364, 3rd Floor, 16th Main, 4th T Block East, Pattabhirama Nagar, Jayanagar",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "postalCode": "560041",
+        "addressCountry": "IN"
+      }
     }
     </script>
 

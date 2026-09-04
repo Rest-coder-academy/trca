@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://restcoderacademy.in/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://restcoderacademy.in/for-parents</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://restcoderacademy.in/about</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://restcoderacademy.in/placements</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://restcoderacademy.in/faq</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://restcoderacademy.in/contact</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://restcoderacademy.in/courses/forward-deployed-engineering</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://restcoderacademy.in/courses/java-full-stack</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://restcoderacademy.in/courses/python-full-stack</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://restcoderacademy.in/courses/mern-stack</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://restcoderacademy.in/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://restcoderacademy.in/blog/java-vs-python-full-stack</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://restcoderacademy.in/blog/is-a-coding-course-worth-it-2026</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://restcoderacademy.in/</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/for-parents</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/about</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/placements</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/faq</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/contact</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/courses/forward-deployed-engineering</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/courses/java-full-stack</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/courses/python-full-stack</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/courses/mern-stack</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/blog</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/blog/choosing-coding-bootcamp-bengaluru-parents-guide</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/blog/non-cs-background-to-full-stack-developer</loc><lastmod>2026-09-04</lastmod></url>
+  <url><loc>https://restcoderacademy.in/blog/live-coding-classes-vs-recorded-videos</loc><lastmod>2026-09-03</lastmod></url>
+  <url><loc>https://restcoderacademy.in/blog/what-placement-support-actually-means</loc><lastmod>2026-09-03</lastmod></url>
+  <url><loc>https://restcoderacademy.in/blog/java-vs-python-full-stack</loc><lastmod>2026-09-02</lastmod></url>
+  <url><loc>https://restcoderacademy.in/blog/is-a-coding-course-worth-it-2026</loc><lastmod>2026-09-01</lastmod></url>
 </urlset>

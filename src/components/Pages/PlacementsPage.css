@@ -70,3 +70,26 @@
 .pl-foot .pl-cta { justify-content: center; }
 .pl-foot .pl-btn { background: var(--rca-navy, #03084c); color: #fff; }
 .pl-foot .pl-btn--ghost { background: transparent; color: var(--rca-navy, #03084c); border: 1px solid var(--line-2, #d0d7e6); }
+
+/* Optional case-study fields — rendered only when the corresponding key is set
+   on a placement record. Compact, quiet visual weight so the quote remains
+   the emotional anchor of the card. */
+.pl-background, .pl-journey {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  color: #45545d;
+  line-height: 1.55;
+}
+.pl-background b, .pl-journey b {
+  color: var(--rca-navy, #03084c);
+  font-weight: 700;
+}
+.pl-verify {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rca-blue, #146389);
+  text-decoration: none;
+}
+.pl-verify:hover { text-decoration: underline; }

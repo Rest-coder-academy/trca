@@ -209,3 +209,75 @@
   line-height: 48px;
 }
 .cd-back:hover { text-decoration: underline; }
+
+/* Extended course-page sections — intro / who-for / prerequisites / outcomes /
+   projects / careers / FAQ / related. Same visual language as the existing
+   sections (navy heading, grey card, ✓ list treatment). */
+.cd-intro { margin-top: 20px; }
+.cd-intro p { margin: 0; color: #37424f; font-size: var(--rca-fs-body); line-height: 1.7; }
+
+.cd-whofor, .cd-prereq, .cd-outcomes, .cd-projects, .cd-careers, .cd-faq, .cd-related {
+  margin-top: 34px;
+}
+.cd-whofor h2, .cd-prereq h2, .cd-outcomes h2, .cd-projects h2,
+.cd-careers h2, .cd-faq h2, .cd-related h2 {
+  font-size: 13px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--rca-blue, #146389);
+  margin: 0 0 16px;
+}
+
+.cd-whofor ul, .cd-outcomes ul, .cd-careers ul, .cd-related ul {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: 1fr; gap: 10px;
+}
+@media (min-width: 620px) {
+  .cd-whofor ul, .cd-outcomes ul { grid-template-columns: 1fr 1fr; }
+}
+.cd-whofor li, .cd-outcomes li, .cd-careers li, .cd-related li {
+  position: relative;
+  padding: 12px 14px 12px 40px;
+  background: #f5f7fb;
+  border: 1px solid #e6e9f2;
+  border-radius: var(--rca-radius-md, 8px);
+  font-size: var(--rca-fs-body);
+  color: #333;
+  line-height: 1.55;
+}
+.cd-whofor li::before, .cd-outcomes li::before, .cd-careers li::before {
+  content: "✓";
+  position: absolute; left: 14px; top: 12px;
+  color: var(--rca-navy, #03084c); font-weight: 800;
+}
+.cd-related li::before { content: "→"; position: absolute; left: 14px; top: 12px; color: var(--rca-blue, #146389); font-weight: 800; }
+.cd-related a { color: var(--rca-navy, #03084c); text-decoration: none; font-weight: 600; }
+.cd-related a:hover { text-decoration: underline; color: var(--rca-blue, #146389); }
+
+.cd-prereq p { margin: 0; color: #37424f; font-size: var(--rca-fs-body); line-height: 1.7; }
+
+.cd-projects ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.cd-projects li {
+  padding: 16px 18px;
+  background: #f5f7fb;
+  border: 1px solid #e6e9f2;
+  border-radius: var(--rca-radius-md, 8px);
+  color: #37424f;
+  font-size: var(--rca-fs-body);
+  line-height: 1.6;
+}
+.cd-projects li strong { color: var(--rca-navy, #03084c); }
+
+.cd-careers p { margin: 14px 0 0; font-size: 13.5px; color: #6b7280; font-style: italic; }
+.cd-careers p a { color: var(--rca-blue, #146389); font-weight: 600; text-decoration: none; }
+.cd-careers p a:hover { text-decoration: underline; }
+
+.cd-faq dl { margin: 0; padding: 0; display: grid; gap: 12px; }
+.cd-faq-item {
+  padding: 16px 18px;
+  background: #fff;
+  border: 1px solid #e6e9f2;
+  border-radius: var(--rca-radius-md, 8px);
+}
+.cd-faq dt { margin: 0 0 6px; font-weight: 700; font-size: 15.5px; color: var(--rca-navy, #03084c); line-height: 1.4; }
+.cd-faq dd { margin: 0; color: #45545d; font-size: var(--rca-fs-body); line-height: 1.65; }

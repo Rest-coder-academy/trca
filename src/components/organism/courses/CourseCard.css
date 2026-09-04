@@ -104,7 +104,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--rca-space-3);
+  /* A reserved slot, not conditional markup (#12). "₹35,000 · EMI available"
+     is set at 27px and "Fee on request" at 18px, so without a floor the row
+     collapsed by ~14px and a course whose price is not public produced a
+     shorter card than the one beside it. The row holds either answer at the
+     same height, so pricing can be turned on per course without the grid
+     moving. */
+  min-height: 41px;
 }
 .cc-price {
   font-size: 27px;
@@ -112,12 +119,12 @@
   color: var(--rca-navy, #03084c);
   letter-spacing: -0.5px;
 }
-.cc-price small { font-size: 12px; font-weight: 400; color: #45545d; }
+.cc-price small { font-size: var(--rca-fs-caption); font-weight: 400; color: var(--rca-ink-soft); }
 .cc-price--request {
   font-size: var(--rca-fs-lead, 18px);
   font-weight: 500;
   letter-spacing: 0;
-  color: #45545d;
+  color: var(--rca-ink-soft);
 }
 .cc-tag {
   flex-shrink: 0;
@@ -182,7 +189,12 @@
   border-radius: var(--rca-radius-pill, 999px);
 }
 
-.cc-syllabus { margin-top: 18px; }
+.cc-syllabus {
+  margin-top: var(--rca-space-4);
+  /* Push the foot to the bottom of the card so every CTA in the row sits on
+     the same line, whatever the syllabus above it came to. */
+  flex: 1 1 auto;
+}
 .cc-syllabus-label {
   font-size: 10.5px;
   font-weight: 700;
@@ -244,3 +256,31 @@
   text-decoration: none;
 }
 .cc-details:hover { text-decoration: underline; }
+
+/* The reserved "+N more" row (#12). It is always rendered — as a link when
+   modules are hidden, as an empty box of the same height when they are not —
+   so the card height does not depend on how long a syllabus happens to be. */
+.cc-syllabus-more {
+  display: flex;
+  align-items: center;
+  min-height: var(--rca-control-h-mobile);
+  margin-top: var(--rca-space-2);
+}
+
+.cc-syllabus-more a {
+  font-size: var(--rca-fs-small);
+  font-weight: var(--rca-fw-semibold);
+  color: var(--rca-blue);
+  text-decoration: none;
+}
+
+.cc-syllabus-more a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cc-syllabus-more a:focus-visible {
+  outline: none;
+  box-shadow: var(--rca-focus-ring);
+  border-radius: var(--rca-radius-sm);
+}

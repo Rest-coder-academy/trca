@@ -57,7 +57,7 @@
 }
 .cd-price { font-size: 30px; font-weight: 800; letter-spacing: -0.5px; }
 .cd-price small { font-size: 13px; font-weight: 400; color: #aeb6e0; }
-.cd-batch, .cd-trainer { font-size: 14px; color: #dfe3f7; }
+.cd-batch, .cd-trainer, .cd-format { font-size: 14px; color: #dfe3f7; }
 .cd-batch b, .cd-trainer b {
   display: block;
   font-size: 10px;

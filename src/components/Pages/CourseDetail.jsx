@@ -2,6 +2,7 @@ import React from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { useAuth } from "../../App";
 import { courses } from "../organism/courses/courses";
+import { getCourseContent } from "../organism/courses/courseContent";
 import { useBatches } from "../organism/Batches/useBatches";
 import { getNextBatchForCourse, formatBatchDateShort } from "../organism/Batches/batchDateUtils";
 import { useTrainers } from "../organism/mentors/useTrainers";
@@ -26,6 +27,7 @@ function CourseDetail() {
   // a real /courses/<garbage>).
   if (!course) return <Navigate to="/" replace />;
 
+  const content = getCourseContent(course.slug || course.courseId);
   const next = getNextBatchForCourse(course.name, batches);
   // The course's trainer (course.trainer, else the next batch's) matched to a
   // full profile from /admin/trainers, so students can verify credibility.
@@ -53,7 +55,7 @@ function CourseDetail() {
     `with placement support and EMI (${priceLabel}).` +
     (next ? ` Next batch: ${next.day}, ${formatBatchDateShort(next.date)}.` : "");
 
-  const jsonLd = {
+  const courseSchema = {
     "@context": "https://schema.org",
     "@type": "Course",
     name: course.name,
@@ -72,13 +74,31 @@ function CourseDetail() {
     },
   };
 
+  // FAQPage schema — Google/Bing surface these as rich results in SERPs and
+  // AI answer engines (ChatGPT, Claude, Perplexity) cite FAQ answers heavily.
+  // Only emitted when the course has hand-written FAQ content.
+  const faqSchema = content && content.faq && content.faq.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: content.faq.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      }
+    : null;
+
   return (
     <>
       {/* React 19 hoists these to <head>. */}
       <title>{`${course.name} Course in Bengaluru — Rest Coder Academy`}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }} />
+      {faqSchema && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      )}
 
       <main className="cd">
         <nav className="cd-crumb" aria-label="Breadcrumb">
@@ -116,6 +136,12 @@ function CourseDetail() {
           </div>
         </header>
 
+        {content?.intro && (
+          <section className="cd-intro">
+            <p>{content.intro}</p>
+          </section>
+        )}
+
         <section className="cd-accountability">
           <h2>Accountability your family can see</h2>
           <p>
@@ -126,6 +152,24 @@ function CourseDetail() {
           <Link className="cd-parents-link" to="/for-parents">See how it works for parents →</Link>
         </section>
 
+        {content?.whoFor && (
+          <section className="cd-whofor">
+            <h2>Who this course is for</h2>
+            <ul>
+              {content.whoFor.map((w, i) => (
+                <li key={i}>{w}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {content?.prerequisites && (
+          <section className="cd-prereq">
+            <h2>Prerequisites</h2>
+            <p>{content.prerequisites}</p>
+          </section>
+        )}
+
         <section className="cd-syllabus">
           <h2>What you'll {course.flagship ? "master" : "learn"}</h2>
           <ul>
@@ -134,6 +178,45 @@ function CourseDetail() {
             ))}
           </ul>
         </section>
+
+        {content?.outcomes && (
+          <section className="cd-outcomes">
+            <h2>What you can do after this course</h2>
+            <ul>
+              {content.outcomes.map((o, i) => (
+                <li key={i}>{o}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {content?.projects && (
+          <section className="cd-projects">
+            <h2>Projects you&rsquo;ll ship</h2>
+            <ul>
+              {content.projects.map((p, i) => (
+                <li key={i}>
+                  <strong>{p.name}.</strong> {p.detail}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {content?.careerPaths && (
+          <section className="cd-careers">
+            <h2>Career paths this course opens</h2>
+            <ul>
+              {content.careerPaths.map((c, i) => (
+                <li key={i}>{c}</li>
+              ))}
+            </ul>
+            <p>
+              Placement support is real, not a promise — see named graduates and the companies
+              they joined on our <Link to="/placements">Placements page</Link>.
+            </p>
+          </section>
+        )}
 
         {trainer && (
           <section className="cd-trainer">
@@ -171,6 +254,30 @@ function CourseDetail() {
             </div>
           </section>
         )}
+
+        {content?.faq && (
+          <section className="cd-faq">
+            <h2>Frequently asked questions</h2>
+            <dl>
+              {content.faq.map((item, i) => (
+                <div className="cd-faq-item" key={i}>
+                  <dt>{item.q}</dt>
+                  <dd>{item.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+
+        <section className="cd-related">
+          <h2>Related reading</h2>
+          <ul>
+            <li><Link to="/for-parents">Guardian dashboard — what parents actually see</Link></li>
+            <li><Link to="/placements">Placements — named graduates and where they joined</Link></li>
+            <li><Link to="/blog/java-vs-python-full-stack">Java vs Python for full-stack: which should you learn first?</Link></li>
+            <li><Link to="/blog/is-a-coding-course-worth-it-2026">Is a coding course worth it in 2026? An honest look</Link></li>
+          </ul>
+        </section>
 
         <section className="cd-foot">
           <h2>Ready to join {course.name}?</h2>

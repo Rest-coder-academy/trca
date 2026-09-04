@@ -19,6 +19,12 @@ nav a
     text-transform: capitalize;
     font-family: var(--rca-font);
     font-size: 1rem!important;
+    /* The anchor is the target, and it was 28px tall — the button around it
+       gave it width but not height, so the actual hit area was a text-height
+       strip (#11). Padding it out changes nothing visually. */
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--rca-control-h-mobile);
 }
 nav button:last-child a
 {

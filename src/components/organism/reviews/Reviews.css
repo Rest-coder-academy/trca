@@ -84,7 +84,9 @@
     line-height: 1.1rem;
     /* text-align: justify; */
     margin-top: 1rem;
-    font-size: 13px;
+    /* Body copy never goes below --rca-fs-body; this is a testimonial, the
+       thing a visitor actually reads (#11). */
+    font-size: var(--rca-fs-body);
     
 }
 

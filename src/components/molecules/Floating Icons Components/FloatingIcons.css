@@ -1,6 +1,5 @@
 .floating-icons
 {
-    /* border: 2px solid red; */
     padding: 0.3rem;
     position: fixed;
     bottom: 2rem;
@@ -8,7 +7,21 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: var(--rca-space-3);
     z-index: 999;
+}
+
+/* These were 35 x 42 and 35 x 58 — under the minimum on both axes, on the two
+   controls a shopkeeper on a phone is most likely to reach for (#11). The link
+   is the target, not the glyph inside it. */
+.floating-icons > a,
+.floating-icons > .arrow
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--rca-control-h-mobile);
+    min-height: var(--rca-control-h-mobile);
 }
 
 .floating-icons .whatsapp
@@ -25,7 +38,6 @@
 {
     color: blue;
     border-radius: 100%;
-    margin-top: 1rem;
     padding: 0.1rem;
     cursor: pointer;
     animation: call 1s linear 2s infinite alternate;
@@ -34,7 +46,6 @@
 .floating-icons .arrow
 {
     color: white;
-    margin-top: 1rem;
     padding: 0.1rem;
     border-radius: 100%;
     cursor: pointer;

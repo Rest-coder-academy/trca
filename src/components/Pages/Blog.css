@@ -29,7 +29,7 @@
 .bl-item h2 { margin: 8px 0 8px; font-size: 21px; line-height: 1.25; }
 .bl-item h2 a { color: var(--rca-navy, #03084c); text-decoration: none; }
 .bl-item h2 a:hover { color: var(--rca-blue, #146389); }
-.bl-item p { margin: 0 0 12px; font-size: 15px; line-height: 1.6; color: #45545d; }
+.bl-item p { margin: 0 0 12px; font-size: var(--rca-fs-body); line-height: 1.6; color: #45545d; }
 .bl-read { font-size: 14px; font-weight: 600; color: var(--rca-blue, #146389); text-decoration: none; }
 .bl-read:hover { text-decoration: underline; }
 
@@ -64,10 +64,10 @@
   background: #f5f7fb; border: 1px solid #e6e9f2; border-radius: var(--rca-radius-lg, 12px);
 }
 .bl-cta h2 { margin: 0 0 8px; font-size: 21px; color: var(--rca-navy, #03084c); }
-.bl-cta p { margin: 0 auto 20px; max-width: 50ch; color: #45545d; font-size: 14.5px; }
+.bl-cta p { margin: 0 auto 20px; max-width: 50ch; color: #45545d; font-size: var(--rca-fs-body); }
 .bl-cta-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; }
 .bl-btn {
-  font-family: inherit; font-size: 15px; font-weight: 600;
+  font-family: inherit; font-size: var(--rca-fs-body); font-weight: 600;
   height: 46px; padding: 0 24px; border: none; border-radius: var(--rca-radius-md, 8px);
   background: var(--rca-navy, #03084c); color: #fff; cursor: pointer;
   text-decoration: none; display: inline-flex; align-items: center;
@@ -77,3 +77,12 @@
 .bl-btn--ghost:hover { background: #eef2f9; }
 .bl-back { font-size: 14px; font-weight: 600; color: var(--rca-blue, #146389); text-decoration: none; padding: 0 6px; }
 .bl-back:hover { text-decoration: underline; }
+
+/* The post title is the whole target for a blog row, and the anchor inside the
+   heading was 25px tall (#11). */
+.bl-item h2 a
+{
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--rca-control-h-mobile);
+}

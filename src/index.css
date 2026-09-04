@@ -73,3 +73,55 @@ a
     padding-inline: var(--rca-gutter-mobile);
   }
 }
+
+/* Carousel dots were 20 x 20 — a third of the 44px minimum touch target (#11).
+   slick draws the dot as a ::before glyph inside the button, so the button can
+   be padded out to a real target without the dot itself growing. */
+/* slick-theme.css is bundled (imported from the card components) and this file
+   is injected before it, so matching its specificity loses on source order.
+   One extra class wins outright and avoids !important. */
+.slick-slider ul.slick-dots li
+{
+    width: var(--rca-control-h-mobile);
+    height: var(--rca-control-h-mobile);
+}
+
+.slick-slider ul.slick-dots li button
+{
+    width: 100%;
+    height: 100%;
+}
+
+.slick-slider ul.slick-dots li button:before
+{
+    width: 100%;
+    height: 100%;
+    line-height: var(--rca-control-h-mobile);
+}
+
+/* --- Minimum touch target for standalone text links (#11) -----------------
+   The ticket's floor is 44px on every tap target. These are the standalone
+   links and link-styled buttons that sit on their own line as a call to
+   action — "Or talk to a counsellor first" was 16px tall, "Full syllabus &
+   details" 19px, "See full success stories" 24px. The glyph stays the size
+   it is; the hit area grows around it.
+
+   Only standalone CTAs are listed. A link inside a running sentence is left
+   alone on purpose: padding one out to 44px would push the lines of the
+   paragraph it sits in apart.                                              */
+.cc-counsellor,
+.cc-details,
+.placements-more-link,
+.cd-parents-link,
+.cd-tr-cert,
+.ct-link,
+.ct-map-link,
+.ct-map-cta,
+.bl-read,
+.bl-back,
+.faq-a-link
+{
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--rca-control-h-mobile);
+}

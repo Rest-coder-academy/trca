@@ -64,8 +64,14 @@ function Navbar(props) {
         ))}
         {pageItems.map((p) => (
           <ListItem key={p.to} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }} onClick={handleDrawerToggle}>
-              <RouterLink to={p.to} style={{ width: '100%' }}>
+            <ListItemButton sx={{ textAlign: 'center', minHeight: 44, p: 0 }} onClick={handleDrawerToggle}>
+              {/* The link is the tap target, not the row around it — so it
+                  fills the row rather than sitting 32px tall inside it (#11). */}
+              <RouterLink
+                to={p.to}
+                style={{ width: '100%', minHeight: 44, display: 'flex',
+                         alignItems: 'center', justifyContent: 'center' }}
+              >
                 <ListItemText primary={p.label} />
               </RouterLink>
             </ListItemButton>
@@ -89,7 +95,14 @@ function Navbar(props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { xs: 'block', md: 'none' } }}
+            /* Was 40 x 46 — under the 44px floor on the narrow axis, on the
+               one control that opens navigation for every phone visitor (#11). */
+            sx={{
+              mr: 2,
+              display: { xs: 'block', md: 'none' },
+              minWidth: 'var(--rca-control-h-mobile)',
+              minHeight: 'var(--rca-control-h-mobile)',
+            }}
           >
             <MenuIcon sx={{ color: '#000' }} />
           </IconButton>

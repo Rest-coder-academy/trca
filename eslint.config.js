@@ -5,7 +5,9 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
-  { ignores: ['dist'] },
+  // android/ is the generated native shell; app/src/main/assets/public is
+  // just a copy of dist that `cap sync` writes.
+  { ignores: ['dist', 'android'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {

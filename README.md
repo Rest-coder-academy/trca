@@ -145,6 +145,63 @@ Enroll Now (other) ->            POST /api/enroll/register (free interest, statu
 3. `npx wrangler d1 execute restcoder-enquiries --remote --file=schema-enrollments.sql`
    to create the `enrollments` table.
 
+## Android app (Capacitor shell)
+
+The student portal ships as an installable Android app. It is the **same React
+build** the website serves, wrapped by [Capacitor](https://capacitorjs.com) —
+there is no second codebase, and nothing about the marketing site changes.
+
+`npm run build` writes `dist/`, and `cap sync` copies that into
+`android/app/src/main/assets/public`. So the app is only ever as fresh as the
+last sync — editing `src/` alone does not change what the installed app shows.
+
+```bash
+npm run app:sync    # build the web app + copy it into the native project
+npm run app:open    # open android/ in Android Studio
+npm run app:apk     # build a debug APK (needs the Android SDK, see below)
+npm run app:assets  # regenerate launcher icons + splash from assets/
+```
+
+The debug APK lands at
+`android/app/build/outputs/apk/debug/app-debug.apk` — install it with
+`adb install -r <that path>`, or press Run in Android Studio.
+
+### What you need installed
+
+Android Studio (which brings the SDK and an emulator) or, headless, the
+command-line tools plus a platform and build-tools. `./gradlew` will tell you
+which SDK component is missing. JDK 21 works.
+
+### Icons and splash
+
+`assets/` holds the sources — `icon.png`, `icon-foreground.png`,
+`icon-background.png`, `splash.png`, `splash-dark.png` — all generated from
+`src/assets/new logo.svg` on the brand navy `#03084C`. The launcher icon uses
+the **mark alone**: the full lockup's wordmark is unreadable at 48dp, and
+Android's adaptive-icon mask crops the outer quarter of the canvas anyway.
+
+`npm run app:assets` regenerates the 136 density variants under
+`android/app/src/main/res/`. Edit the files in `assets/`, never those.
+
+### The OAuth deep link
+
+The app registers the **`rca://` scheme** (`AndroidManifest.xml`, host `auth`),
+so a provider can redirect to `rca://auth/callback` and land back inside the
+running app rather than in a browser tab. `MainActivity` uses
+`launchMode="singleTask"`, so that redirect resumes the existing task instead of
+starting a second copy of the app.
+
+Nothing consumes that callback yet — the auth endpoints are #113 and the login
+screen is #110. This ticket (#109) only guarantees the scheme is registered and
+the shell builds.
+
+### Known gap
+
+`index.html` still pulls the slick-carousel stylesheets from cdnjs. On the web
+that is a render-blocking third-party request (#105); **inside the app it also
+means those styles simply do not exist offline.** Worth closing #105 before the
+app ships to students on rural connections.
+
 ## History / context
 
 - The previous backend (`trcabe.onrender.com`) was a separate repo by the prior

@@ -212,7 +212,8 @@ app ships to students on rural connections.
 
 ## Student portal (Phase 1)
 
-`/portal/login` and `/portal` are the student portal (#110, #111). They are
+`/portal/login`, `/portal` and `/portal/courses/:slug` are the student portal
+(#110, #111, #137). They are
 **inert until configured**: with no OAuth secrets set, `/auth/me` reports no
 providers and the login screen says "coming soon" rather than rendering buttons
 that lead to a provider error page. The marketing site is unaffected either way.

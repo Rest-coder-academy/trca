@@ -25,9 +25,12 @@ const routes = [
   { path: "/faq", out: "faq.html", waitFor: "main.faq" },
   { path: "/blog", out: "blog.html", waitFor: "main.bl" },
   ...posts.map((p) => ({ path: `/blog/${p.slug}`, out: `blog/${p.slug}.html`, waitFor: "article.bl-post" })),
-  // /about is intentionally NOT prerendered: it's admin-managed (/api/founder)
-  // and hides itself until content exists, so there's nothing static to snapshot.
-  // It renders client-side (Googlebot executes JS) once a founder is set.
+  // /about renders either the founder story (when /api/founder returns one) or
+  // a school-level fallback. Both paths end in <main class="ab">, so the same
+  // waitFor works. Snapshotting is essential — without a dist/about.html, CF
+  // Pages served dist/index.html for /about, making it a byte-identical
+  // duplicate of the homepage.
+  { path: "/about", out: "about.html", waitFor: "main.ab" },
   ...courses.map((c) => {
     const slug = c.slug || c.courseId;
     // Flat `.html` (not `<slug>/index.html`) so Cloudflare Pages serves the

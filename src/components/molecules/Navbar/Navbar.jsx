@@ -98,19 +98,19 @@ function Navbar(props) {
           {/* </Typography> */}
           <Box sx={{ display: { xs: 'none', md: 'block' }, marginLeft: "auto" }}>
             {navItems.map((item) => (
-              <ButtonComponent key={item} textColor="color-dark-black" variant='text' onBtnClick={() => goToSection(item)}>
+              <ButtonComponent key={item} variant='text' onBtnClick={() => goToSection(item)}>
                   {item}
                 </ButtonComponent>
 
             ))}
             {pageItems.map((p) => (
               <RouterLink key={p.to} to={p.to}>
-                <ButtonComponent textColor="color-dark-black" variant='text'>
+                <ButtonComponent variant='text'>
                   {p.label}
                 </ButtonComponent>
               </RouterLink>
             ))}
-             <ButtonComponent variant='contained' bgColor='bg-btn-blue' borderRadius='0px' paddingX={1.5} paddingY={.7} onBtnClick={openModal}>
+             <ButtonComponent variant='contained' paddingX={1.5} paddingY={.7} onBtnClick={openModal}>
                     Apply Now
                 </ButtonComponent>
           </Box>

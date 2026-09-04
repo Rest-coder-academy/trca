@@ -66,8 +66,6 @@ import { courses } from '../courses/courses';
           size="large"
           variant={canEnroll && course.paid ? "contained" : "outlined"}
           label={ctaLabel}
-          borderRadius="0"
-          sx={{}}
           onBtnClick={onCta}
         />
       </CardActions>

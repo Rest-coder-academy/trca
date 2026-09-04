@@ -11,9 +11,14 @@ export default defineConfig({
   reporter: process.env.CI ? "list" : "line",
   use: { baseURL: "http://127.0.0.1:8788", trace: "on-first-retry" },
   webServer: {
-    command: "npm run build && npx wrangler@4 pages dev dist --port 8788 --ip 127.0.0.1",
+    // wrangler is a devDependency (pinned in package.json) so `npm ci` caches
+    // it — no `npx wrangler@4` runtime download that used to eat 60-120s of
+    // the 180s webServer wait and made CI intermittently fail with
+    // "Timed out waiting 180000ms from config.webServer". `wrangler` here
+    // resolves to node_modules/.bin/wrangler through npm's script env.
+    command: "npm run build && npm run e2e:serve",
     url: "http://127.0.0.1:8788",
-    timeout: 180000,
+    timeout: 240000,
     reuseExistingServer: !process.env.CI,
   },
   projects: [{ name: "chromium", use: { browserName: "chromium" } }],

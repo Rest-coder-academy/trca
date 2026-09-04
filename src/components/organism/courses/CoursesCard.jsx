@@ -164,7 +164,7 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
           <button className="cc-book" type="button" onClick={book}>
             Book your seat
           </button>
-          <button className="cc-counsellor" type="button" onClick={openModal}>
+          <button className="cc-counsellor" type="button" onClick={() => openModal(name)}>
             Or talk to a counsellor first
           </button>
           <Link className="cc-details" to={`/courses/${slug || courseId}`}>

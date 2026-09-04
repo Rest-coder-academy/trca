@@ -25,13 +25,21 @@ import { ToastContainer, toast } from 'react-toastify';
 function App() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [enrollCourse, setEnrollCourse] = useState(null);
+  // Which course the enquiry was opened from, so the form can say so and the
+  // lead arrives with the course attached. `null` when opened from the navbar
+  // or anywhere else that isn't about one course in particular.
+  const [enquiryCourse, setEnquiryCourse] = useState(null);
 
-  let openModal=()=> {
+  let openModal=(course)=> {
+    // Guards against a click handler being passed straight in as `onClick`,
+    // which would otherwise put a SyntheticEvent in here.
+    setEnquiryCourse(typeof course === "string" ? course : course?.name || null);
     setIsOpen(true);
   }
 
   let closeModal=()=> {
     setIsOpen(false);
+    setEnquiryCourse(null);
   }
 
   // Enrolment modal — opened per course (paid → checkout, else → register).
@@ -62,7 +70,7 @@ function App() {
   
 
   return (
-    <AuthContext.Provider className="app" value={{ openModal, closeModal, openEnroll, closeEnroll, notify }}>
+    <AuthContext.Provider className="app" value={{ openModal, closeModal, openEnroll, closeEnroll, notify, enquiryCourse }}>
       <Navbar />
       <ToastContainer className={"toast"} autoClose={2500}/>
       <Modal
@@ -72,7 +80,7 @@ function App() {
         style={customStyles}
 
       >
-        <EnquiryForm />
+        <EnquiryForm course={enquiryCourse} />
       </Modal>
       <Modal
         isOpen={!!enrollCourse}

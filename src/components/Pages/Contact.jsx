@@ -17,7 +17,11 @@ const ADDRESS = {
 };
 const PHONE_DISPLAY = "+91 80737 62257";
 const PHONE_TEL = "+918073762257";
-const EMAIL = "enquiry@restcoderacademy.com";
+// The old enquiry@restcoderacademy.com address hard-bounces (.com is expired
+// at GoDaddy per README; the .in domain has no MX). Until we set up mail on
+// restcoderacademy.in, use the working Gmail address. Everyone who copies
+// this from the site actually reaches an inbox we check.
+const EMAIL = "restcoderacademy@gmail.com";
 
 function Contact() {
   const { openModal } = useAuth();

@@ -217,6 +217,11 @@ app ships to students on rural connections.
 providers and the login screen says "coming soon" rather than rendering buttons
 that lead to a provider error page. The marketing site is unaffected either way.
 
+Sessions are **stateless** — a signed HS256 JWT in an HttpOnly cookie, no
+`sessions` table, so a request verifies a signature instead of paying a D1 read.
+Logout clears the cookie; it cannot revoke a token server-side before its 30-day
+expiry. See the note at the foot of `schema-users.sql`.
+
 ### Owner-provisioned secrets
 
 These cannot be created from the repo. Set them as Cloudflare Pages secrets:

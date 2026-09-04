@@ -15,3 +15,15 @@ CREATE TABLE IF NOT EXISTS users (
 -- One account per (provider, subject) — the login upsert matches on this.
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_provider_subject
   ON users (provider, subject);
+
+-- Looked up when an admin searches for a student by address.
+CREATE INDEX IF NOT EXISTS idx_users_email ON users (email);
+
+-- No `sessions` table on purpose: the portal is stateless. The session is a
+-- signed HS256 JWT in an HttpOnly cookie (shared/auth.js), so a normal request
+-- verifies a signature instead of paying a D1 read. The trade-off is that
+-- logout clears the cookie rather than revoking a row, so a stolen token stays
+-- valid for the rest of its 30-day TTL and cannot be killed server-side. That
+-- is acceptable while the portal only shows a student their own course pages.
+-- Add this table (and shorten the TTL) before it holds anything heavier --
+-- payments, instructor grading, anything an admin role can reach.

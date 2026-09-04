@@ -16,22 +16,52 @@ function PlacementsPage() {
     "Real students, real companies, real roles. See where Rest Coder Academy graduates work — " +
     "SAP Hybris, HCL Technologies, SKAD IT Solutions and more.";
 
-  // Review schema built from the same named, real placements rendered below —
-  // nothing here is invented. No parent quotes: the repo has none on record,
-  // and a plausible-looking guess is exactly the kind of claim a visitor
-  // holds you to (same principle #9's hero copy followed for placedCount).
-  // No reviewRating either, for the same reason: the placements data has no
-  // rating field, so a numeric star score would be a fabricated one — and
-  // an identical 5/5 on every review reads as exactly that to both readers
-  // and Google's structured-data spam checks.
+  // Structured data graph. Every entry here is derived from real, named
+  // placements in placement.js — nothing is invented. Emits:
+  //  - Review (existing) — reads as reviews of the org, not disconnected.
+  //  - Person + alumniOf (new) — makes the alumni relationship explicit,
+  //    which Google's SGE and AI answer engines pick up when asked
+  //    "where do Rest Coder Academy graduates work". `sameAs` is added
+  //    only when a placement carries a LinkedIn URL (verifiable).
+  //  - ItemList (new) — declares this page as a curated list of alumni
+  //    so search understands the shape.
+  // No aggregateRating and no invented star scores: the placements data
+  // has no rating field, so anything numeric would be fabricated and an
+  // identical 5/5 on every review is exactly what Google's structured-
+  // data spam checks flag.
   const jsonLd = {
     "@context": "https://schema.org",
-    "@graph": placements.map((p) => ({
-      "@type": "Review",
-      itemReviewed: { "@id": ORG_ID },
-      author: { "@type": "Person", name: p.name },
-      reviewBody: p.description,
-    })),
+    "@graph": [
+      ...placements.map((p) => ({
+        "@type": "Review",
+        itemReviewed: { "@id": ORG_ID },
+        author: { "@type": "Person", name: p.name },
+        reviewBody: p.description,
+      })),
+      ...placements.map((p) => ({
+        "@type": "Person",
+        name: p.name,
+        jobTitle: p.designation,
+        alumniOf: { "@id": ORG_ID },
+        worksFor: p.company?.name
+          ? {
+              "@type": "Organization",
+              name: p.company.name,
+              ...(p.journey ? { description: p.journey } : {}),
+            }
+          : undefined,
+        ...(p.linkedin ? { sameAs: [p.linkedin] } : {}),
+      })),
+      {
+        "@type": "ItemList",
+        name: "Rest Coder Academy — placed graduates",
+        itemListElement: placements.map((p, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          item: { "@type": "Person", name: p.name, jobTitle: p.designation },
+        })),
+      },
+    ],
   };
 
   return (
@@ -65,7 +95,18 @@ function PlacementsPage() {
                 {p.company?.logo && (
                   <img className="pl-logo" src={p.company.logo} alt={`${p.company.name} logo`} />
                 )}
+                {p.background && (
+                  <p className="pl-background"><b>Background:</b> {p.background}</p>
+                )}
+                {p.journey && (
+                  <p className="pl-journey"><b>Journey:</b> {p.journey}</p>
+                )}
                 <p className="pl-quote">&ldquo;{p.description}&rdquo;</p>
+                {p.linkedin && (
+                  <a className="pl-verify" href={p.linkedin} target="_blank" rel="noopener noreferrer">
+                    Verify on LinkedIn &rarr;
+                  </a>
+                )}
               </div>
             </article>
           ))}

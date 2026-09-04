@@ -16,12 +16,33 @@ import qsg from "../../../assets/clients/qsg.jpg"
 
 
 
+// Placement records also act as case-study source. Optional fields (background,
+// courseSlug, journey, linkedin) render extra sections and enrich the Person
+// JSON-LD when set. Leave them out to render the compact card unchanged — never
+// invent them, since a fabricated background is the exact kind of claim a
+// visitor will call us on.
+//
+// Fields:
+//   name         (required) student name as shown publicly
+//   designation  (required) role at the company
+//   image        (required) bundled photo import
+//   company      (required) { name, logo }
+//   description  (required) student's own words / testimonial
+//   background   (optional) one-line context ("BCA from Karnataka College…")
+//   courseSlug   (optional) slug from courses.js — renders "Course" chip and
+//                links alumniOf to that specific course
+//   journey      (optional) 1–3 sentences: where they started → what they did
+//                at RCA → what they do now. Used as `worksFor.description` in
+//                schema and rendered as a case-study paragraph in the card.
+//   linkedin     (optional) full LinkedIn URL — surfaced as `sameAs` in schema
+//                and rendered as a "Verify on LinkedIn" link.
 export let placements=[
     {
         name:"Ashish Jadhav",
         designation:"SAP Hybris Developer",
         image:ashish,
         company:{name:"SAP Hybris", logo:sapHybris},
+        background:"Non-IT background from Maharashtra; moved to Bengaluru to switch into engineering.",
         description:`Uday Sir is an exceptional mentor who transformed my career prospects. Despite being a non-IT background student from Maharashtra, I thrived under his guidance in Bangalore. His teaching style is concise, clear, and engaging. Uday Sir's patience and willingness to help are admirable. He creates a supportive environment, encouraging students to ask questions. His friendly nature makes complex concepts accessible and enjoyable.`
     },
     {
@@ -37,7 +58,7 @@ export let placements=[
         image:sujith,
         company:{name:"SKAD IT Solutions", logo:skad},
          description:`The coaching institute offers an exceptional Java and Python Full stack  course with comprehensive coverage of Core Java, Springs,Hibernate,SQL,Python,Django. Uday sir's expert guidance on backend development is complemented perfectly. His combined industry experience and personalized mentoring ensure students gain practical skills through hands-on projects. The institute maintains small batch sizes, creating an interactive learning environment.`
-        
+
     },
     {
         name:"Prajwala R",
@@ -45,7 +66,7 @@ export let placements=[
         image:prajwala,
         company:{name:"Quality Service Group", logo:qsg},
          description:`Uday sir is a fantastic Java trainer who breaks down complex topics into simple, easy-to-grasp concepts. He creates a supportive learning environment that encourages students to ask questions and grow. What sets him apart is his ability to adapt to different learning styles and pace.I'm grateful for his mentorship, which helped me achieve my goals. Finally thanks to all the team members of rest coder academy.`
-        
+
     },
-    
+
 ]

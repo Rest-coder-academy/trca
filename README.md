@@ -259,3 +259,19 @@ npx wrangler d1 execute restcoder-enquiries --file=./schema-users.sql
 | `GET /auth/:provider/callback` | exchange the code, **verify the ID token against the provider's JWKS**, upsert into `users`, issue the session cookie |
 | `GET /auth/me` | the current user, or 401. Also reports which providers are configured. |
 | `POST /auth/logout` | clear the session cookie |
+| `GET /api/portal/courses` | the signed-in student's enrolled courses, or 401 |
+| `GET /api/portal/courses/:slug` | one enrolled course with its published lessons. **404 when the student is not enrolled**, so slugs cannot be probed. |
+
+### Course content (Phase 2)
+
+Courses and lessons live in the same D1 database as `users`:
+
+```
+npx wrangler d1 execute restcoder-enquiries --file=./schema-courses.sql
+```
+
+`enrolments_users` is the resolved link between a portal account and a course.
+The older `enrollments` table cannot serve that role: it identifies a person by
+the email typed into the enquiry form and a course by free text, and its rows
+predate any sign-in. The backfill that maps one to the other is at the foot of
+`schema-courses.sql`.

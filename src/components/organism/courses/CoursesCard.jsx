@@ -25,10 +25,10 @@ function Check({ filled }) {
   );
 }
 
-// One premium card for every course. The paid flagship (FDE) adds a Flagship
-// pill, the trainer credibility line and highlight chips; every card shares the
-// navy header, check-icon syllabus, price slot ("Fee on request" until priced),
-// equal heights, and "Book your seat" + a counsellor secondary (Abhigna's flow).
+// Uniform card for every course (Abhigna §5). flagship prop is data-only:
+// selects the right syllabus arrays and trainer credibility line — no visual
+// difference. Navy header, price slot, equal heights, "Book your seat" primary
+// + counsellor secondary on every card.
 function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, audience, backend, frontend, syllabus1, syllabus2 }) {
   const { openEnroll, openModal } = useAuth();
   const { founder } = useFounder();

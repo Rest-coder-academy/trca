@@ -1,7 +1,7 @@
 // Tests for shared/portalAuth.js — session validation middleware.
 // Uses a fake D1 that mirrors the portal_sessions + portal_users schema.
 import { describe, it, expect } from "vitest";
-import { parseCookie, requirePortalAuth, requireRole, requireParentScope, clearSessionCookie } from "./portalAuth.js";
+import { parseCookie, requirePortalAuth, requireRole, requireInstructor, requireParentScope, clearSessionCookie } from "./portalAuth.js";
 
 // ---------------------------------------------------------------------------
 // Fake D1 for portal tables
@@ -176,6 +176,49 @@ describe("requireRole", () => {
     const db = makePortalDB({});
     const req = makeRequest(null);
     const result = await requireRole(req, { DB: db }, "admin");
+    expect(result.status).toBe(401);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// requireInstructor
+// ---------------------------------------------------------------------------
+describe("requireInstructor", () => {
+  it("returns 403 for a student session", async () => {
+    const student = { ...USER, id: "user-student", role: "student" };
+    const sess = { id: "sess-student", user_id: "user-student", expires_at: FUTURE, revoked_at: null };
+    const db = makePortalDB({ users: [student], sessions: [sess] });
+    const req = makeRequest("sess-student");
+    const result = await requireInstructor(req, { DB: db });
+    expect(result).toBeInstanceOf(Response);
+    expect(result.status).toBe(403);
+  });
+
+  it("allows an instructor session", async () => {
+    const instructor = { ...USER, id: "user-instructor", role: "instructor" };
+    const sess = { id: "sess-instructor", user_id: "user-instructor", expires_at: FUTURE, revoked_at: null };
+    const db = makePortalDB({ users: [instructor], sessions: [sess] });
+    const req = makeRequest("sess-instructor");
+    const result = await requireInstructor(req, { DB: db });
+    expect(result).not.toBeInstanceOf(Response);
+    expect(result.role).toBe("instructor");
+  });
+
+  it("allows an admin session", async () => {
+    const admin = { ...USER, id: "user-admin", role: "admin" };
+    const sess = { id: "sess-admin2", user_id: "user-admin", expires_at: FUTURE, revoked_at: null };
+    const db = makePortalDB({ users: [admin], sessions: [sess] });
+    const req = makeRequest("sess-admin2");
+    const result = await requireInstructor(req, { DB: db });
+    expect(result).not.toBeInstanceOf(Response);
+    expect(result.role).toBe("admin");
+  });
+
+  it("returns 401 for missing session", async () => {
+    const db = makePortalDB({});
+    const req = makeRequest(null);
+    const result = await requireInstructor(req, { DB: db });
+    expect(result).toBeInstanceOf(Response);
     expect(result.status).toBe(401);
   });
 });

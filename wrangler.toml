@@ -13,3 +13,12 @@ database_id = "1c557470-b96a-4005-8dd8-6baa2ebb21e8"
 # same database — apply schema-portal.sql to add them:
 #   local:  npx wrangler d1 execute restcoder-enquiries --local --file=schema-portal.sql
 #   remote: npx wrangler d1 execute restcoder-enquiries --remote --file=schema-portal.sql
+
+# Lesson video storage. `env.LESSONS` is available in every Pages Function.
+# Create the bucket before deploying:
+#   npx wrangler r2 bucket create lessons-videos
+# CORS (required for Android WebView at https://localhost and production at
+# https://restcoderacademy.in) must be set separately — see instructions below.
+[[r2_buckets]]
+binding = "LESSONS"
+bucket_name = "lessons-videos"

@@ -29,11 +29,14 @@ export async function onRequestGet(context) {
   const courseId = Number(params.courseId);
   if (!courseId) return json({ error: "not_found" }, 404, cors);
 
-  const course = await getCourseById(env.DB, courseId);
-  if (!course) return json({ error: "not_found" }, 404, cors);
-
-  const lessons = await listLessonsForInstructor(env.DB, courseId);
-  return json({ lessons }, 200, cors);
+  try {
+    const course = await getCourseById(env.DB, courseId);
+    if (!course) return json({ error: "not_found" }, 404, cors);
+    const lessons = await listLessonsForInstructor(env.DB, courseId);
+    return json({ lessons }, 200, cors);
+  } catch {
+    return json({ error: "unavailable" }, 503, cors);
+  }
 }
 
 export async function onRequestPost(context) {
@@ -46,9 +49,6 @@ export async function onRequestPost(context) {
 
   const courseId = Number(params.courseId);
   if (!courseId) return json({ error: "not_found" }, 404, cors);
-
-  const course = await getCourseById(env.DB, courseId);
-  if (!course) return json({ error: "not_found" }, 404, cors);
 
   let body;
   try {
@@ -63,7 +63,13 @@ export async function onRequestPost(context) {
 
   const notes = typeof body.notes === "string" ? body.notes : null;
 
-  const lessonId = await createLesson(env.DB, courseId, { title, notes });
-  const lesson = await getLessonById(env.DB, lessonId);
-  return json({ lesson }, 201, cors);
+  try {
+    const course = await getCourseById(env.DB, courseId);
+    if (!course) return json({ error: "not_found" }, 404, cors);
+    const lessonId = await createLesson(env.DB, courseId, { title, notes });
+    const lesson = await getLessonById(env.DB, lessonId);
+    return json({ lesson }, 201, cors);
+  } catch {
+    return json({ error: "unavailable" }, 503, cors);
+  }
 }

@@ -27,15 +27,18 @@ export async function onRequestPost(context) {
   const lessonId = Number(params.lessonId);
   if (!lessonId) return json({ error: "not_found" }, 404, cors);
 
-  const lesson = await getLessonById(env.DB, lessonId);
-  if (!lesson) return json({ error: "not_found" }, 404, cors);
+  try {
+    const lesson = await getLessonById(env.DB, lessonId);
+    if (!lesson) return json({ error: "not_found" }, 404, cors);
 
-  // Stable key per lesson — re-uploading replaces the previous video.
-  const key = `lessons/${lessonId}.mp4`;
+    // Stable key per lesson — re-uploading replaces the previous video.
+    const key = `lessons/${lessonId}.mp4`;
+    const multipart = await env.LESSONS.createMultipartUpload(key, {
+      httpMetadata: { contentType: "video/mp4" },
+    });
 
-  const multipart = await env.LESSONS.createMultipartUpload(key, {
-    httpMetadata: { contentType: "video/mp4" },
-  });
-
-  return json({ uploadId: multipart.uploadId, key }, 200, cors);
+    return json({ uploadId: multipart.uploadId, key }, 200, cors);
+  } catch {
+    return json({ error: "unavailable" }, 503, cors);
+  }
 }

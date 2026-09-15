@@ -108,19 +108,23 @@ export async function createLesson(db, courseId, { title, notes = null }) {
   return result.meta.last_row_id;
 }
 
-// Updates only the fields present in `fields`; ignores unknown keys.
+// Updates only the fields present in `fields`; silently ignores unknown keys.
+// Column names are whitelisted to prevent SQL injection even if the caller is
+// ever refactored to pass user-supplied keys.
+const LESSON_UPDATABLE = { title: true, notes: true, published: true };
+
 export async function updateLesson(db, lessonId, fields) {
   const updates = [];
   const binds = [];
-  if (fields.title !== undefined) {
+  if (fields.title !== undefined && LESSON_UPDATABLE.title) {
     updates.push(`title = ?${binds.length + 1}`);
     binds.push(fields.title);
   }
-  if (fields.notes !== undefined) {
+  if (fields.notes !== undefined && LESSON_UPDATABLE.notes) {
     updates.push(`notes = ?${binds.length + 1}`);
     binds.push(fields.notes ?? null);
   }
-  if (fields.published !== undefined) {
+  if (fields.published !== undefined && LESSON_UPDATABLE.published) {
     updates.push(`published = ?${binds.length + 1}`);
     binds.push(fields.published ? 1 : 0);
   }

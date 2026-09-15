@@ -28,9 +28,6 @@ export async function onRequestPost(context) {
   const courseId = Number(params.courseId);
   if (!courseId) return json({ error: "not_found" }, 404, cors);
 
-  const course = await getCourseById(env.DB, courseId);
-  if (!course) return json({ error: "not_found" }, 404, cors);
-
   let body;
   try {
     body = await request.json();
@@ -47,29 +44,36 @@ export async function onRequestPost(context) {
     );
   }
 
-  const existing = await listLessonsForInstructor(env.DB, courseId);
-  const existingIds = new Set(existing.map((l) => l.id));
+  try {
+    const course = await getCourseById(env.DB, courseId);
+    if (!course) return json({ error: "not_found" }, 404, cors);
 
-  if (order.length !== existing.length) {
-    return json(
-      { error: "bad_request", reason: "order must contain every lesson ID for this course" },
-      400,
-      cors
-    );
-  }
-  if (new Set(order).size !== order.length) {
-    return json({ error: "bad_request", reason: "order contains duplicate IDs" }, 400, cors);
-  }
-  for (const id of order) {
-    if (!existingIds.has(id)) {
+    const existing = await listLessonsForInstructor(env.DB, courseId);
+    const existingIds = new Set(existing.map((l) => l.id));
+
+    if (order.length !== existing.length) {
       return json(
-        { error: "bad_request", reason: `lesson ${id} does not belong to this course` },
+        { error: "bad_request", reason: "order must contain every lesson ID for this course" },
         400,
         cors
       );
     }
-  }
+    if (new Set(order).size !== order.length) {
+      return json({ error: "bad_request", reason: "order contains duplicate IDs" }, 400, cors);
+    }
+    for (const id of order) {
+      if (!existingIds.has(id)) {
+        return json(
+          { error: "bad_request", reason: `lesson ${id} does not belong to this course` },
+          400,
+          cors
+        );
+      }
+    }
 
-  await reorderLessons(env.DB, courseId, order);
-  return json({ ok: true }, 200, cors);
+    await reorderLessons(env.DB, courseId, order);
+    return json({ ok: true }, 200, cors);
+  } catch {
+    return json({ error: "unavailable" }, 503, cors);
+  }
 }

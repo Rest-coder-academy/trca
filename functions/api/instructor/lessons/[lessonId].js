@@ -49,9 +49,13 @@ export async function onRequestPatch(context) {
     return json({ error: "bad_request", reason: "no updatable fields provided" }, 400, cors);
   }
 
-  await updateLesson(env.DB, lessonId, fields);
-  const updated = await getLessonById(env.DB, lessonId);
-  return json({ lesson: updated }, 200, cors);
+  try {
+    await updateLesson(env.DB, lessonId, fields);
+    const updated = await getLessonById(env.DB, lessonId);
+    return json({ lesson: updated }, 200, cors);
+  } catch {
+    return json({ error: "unavailable" }, 503, cors);
+  }
 }
 
 export async function onRequestDelete(context) {
@@ -68,6 +72,10 @@ export async function onRequestDelete(context) {
   const lesson = await getLessonById(env.DB, lessonId);
   if (!lesson) return json({ error: "not_found" }, 404, cors);
 
-  await deleteLesson(env.DB, lessonId);
-  return json({ ok: true }, 200, cors);
+  try {
+    await deleteLesson(env.DB, lessonId);
+    return json({ ok: true }, 200, cors);
+  } catch {
+    return json({ error: "unavailable" }, 503, cors);
+  }
 }

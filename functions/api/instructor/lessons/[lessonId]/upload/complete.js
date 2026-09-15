@@ -27,7 +27,12 @@ export async function onRequestPost(context) {
   const lessonId = Number(params.lessonId);
   if (!lessonId) return json({ error: "not_found" }, 404, cors);
 
-  const lesson = await getLessonById(env.DB, lessonId);
+  let lesson;
+  try {
+    lesson = await getLessonById(env.DB, lessonId);
+  } catch {
+    return json({ error: "unavailable" }, 503, cors);
+  }
   if (!lesson) return json({ error: "not_found" }, 404, cors);
 
   let body;
@@ -56,16 +61,31 @@ export async function onRequestPost(context) {
   }
 
   const key = `lessons/${lessonId}.mp4`;
-  const upload = env.LESSONS.resumeMultipartUpload(key, uploadId);
-  await upload.complete(parts);
+
+  // Complete the R2 upload first. If this fails, the DB is not touched and the
+  // client can retry. If R2 succeeds but the DB write below fails, the video
+  // exists in R2 but is unreachable until the client calls complete again — R2
+  // allows completing the same multipart upload multiple times safely.
+  try {
+    const upload = env.LESSONS.resumeMultipartUpload(key, uploadId);
+    await upload.complete(parts);
+  } catch {
+    return json({ error: "unavailable", reason: "storage error — retry" }, 503, cors);
+  }
 
   // R2 key stored as video_url; the stream API (#187) resolves it to a response.
   const dur =
     typeof durationSeconds === "number" && durationSeconds > 0
       ? Math.round(durationSeconds)
       : null;
-  await setLessonVideo(env.DB, lessonId, key, dur);
 
-  const updated = await getLessonById(env.DB, lessonId);
-  return json({ lesson: updated }, 200, cors);
+  try {
+    await setLessonVideo(env.DB, lessonId, key, dur);
+    const updated = await getLessonById(env.DB, lessonId);
+    return json({ lesson: updated }, 200, cors);
+  } catch {
+    // R2 upload is committed. DB write failed — video is in R2 but lesson row
+    // not yet updated. Client should retry complete() with the same uploadId.
+    return json({ error: "unavailable", reason: "storage committed, db write failed — retry" }, 503, cors);
+  }
 }

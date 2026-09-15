@@ -28,7 +28,12 @@ export async function onRequestPut(context) {
   const lessonId = Number(params.lessonId);
   if (!lessonId) return json({ error: "not_found" }, 404, cors);
 
-  const lesson = await getLessonById(env.DB, lessonId);
+  let lesson;
+  try {
+    lesson = await getLessonById(env.DB, lessonId);
+  } catch {
+    return json({ error: "unavailable" }, 503, cors);
+  }
   if (!lesson) return json({ error: "not_found" }, 404, cors);
 
   const url = new URL(request.url);
@@ -40,9 +45,12 @@ export async function onRequestPut(context) {
     return json({ error: "bad_request", reason: "part must be between 1 and 10000" }, 400, cors);
   }
 
-  const key = `lessons/${lessonId}.mp4`;
-  const upload = env.LESSONS.resumeMultipartUpload(key, uploadId);
-  const uploaded = await upload.uploadPart(partNumber, request.body);
-
-  return json({ etag: uploaded.etag, partNumber: uploaded.partNumber }, 200, cors);
+  try {
+    const key = `lessons/${lessonId}.mp4`;
+    const upload = env.LESSONS.resumeMultipartUpload(key, uploadId);
+    const uploaded = await upload.uploadPart(partNumber, request.body);
+    return json({ etag: uploaded.etag, partNumber: uploaded.partNumber }, 200, cors);
+  } catch {
+    return json({ error: "unavailable" }, 503, cors);
+  }
 }

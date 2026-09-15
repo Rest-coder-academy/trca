@@ -151,6 +151,26 @@ export async function reorderLessons(db, courseId, orderedIds) {
   await db.batch(stmts);
 }
 
+// Verifies that a student is enrolled in the course that owns lesson `lessonId`,
+// and that both the course and the lesson are published.
+//
+// Returns { id, title, video_url } when access is allowed, or null otherwise.
+// Returns null for every failure mode (not enrolled, not published, unknown ID)
+// so the caller can return a uniform 404 with no information leakage about
+// whether the resource exists or is merely inaccessible.
+export async function getLessonForStream(db, userId, lessonId) {
+  return db
+    .prepare(
+      "SELECT l.id, l.title, l.video_url " +
+        "FROM lessons l " +
+        "JOIN courses c ON c.id = l.course_id " +
+        "JOIN enrolments_users eu ON eu.course_id = c.id " +
+        "WHERE eu.user_id = ?1 AND l.id = ?2 AND c.published = 1 AND l.published = 1"
+    )
+    .bind(userId, lessonId)
+    .first();
+}
+
 // Called after a multipart upload completes. Stores the R2 key as video_url.
 export async function setLessonVideo(db, lessonId, videoUrl, durationSeconds = null) {
   await db

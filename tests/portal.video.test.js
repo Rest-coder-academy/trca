@@ -70,8 +70,15 @@ function fakeR2(opts = {}) {
       // Simulate R2 range response
       if (rangeOpts?.range) {
         const r = rangeOpts.range;
-        const offset = r.offset ?? 0;
-        const length = r.length ?? (object.size - offset);
+        let offset, length;
+        if (r.suffix !== undefined) {
+          // Suffix form: last N bytes
+          offset = object.size - r.suffix;
+          length = r.suffix;
+        } else {
+          offset = r.offset ?? 0;
+          length = r.length ?? (object.size - offset);
+        }
         return {
           body: object.body,
           size: object.size,
@@ -286,6 +293,55 @@ describe("GET /api/portal/lessons/:id/video — range requests", () => {
       params: { lessonId: "5" },
     });
     expect(res.status).toBe(206);
+    expect(res.headers.get("Content-Range")).toBe("bytes 9999500-9999999/10000000");
+    expect(res.headers.get("Content-Length")).toBe("500");
+  });
+
+  it("returns 416 for bytes=-0 (suffix of zero not satisfiable)", async () => {
+    const t = await token();
+    const db = fakeDB([["enrolments_users", [LESSON]]]);
+    const res = await videoGet({
+      request: req("https://x/api/portal/lessons/5/video", t, { Range: "bytes=-0" }),
+      env: { DB: db, SESSION_SECRET: SECRET, LESSONS: fakeR2({ object: r2Object }) },
+      params: { lessonId: "5" },
+    });
+    expect(res.status).toBe(416);
+  });
+
+  it("returns 416 for open-ended range starting at or beyond file size", async () => {
+    const t = await token();
+    const db = fakeDB([["enrolments_users", [LESSON]]]);
+    const res = await videoGet({
+      request: req("https://x/api/portal/lessons/5/video", t, { Range: "bytes=10000000-" }),
+      env: { DB: db, SESSION_SECRET: SECRET, LESSONS: fakeR2({ object: r2Object }) },
+      params: { lessonId: "5" },
+    });
+    expect(res.status).toBe(416);
+    expect(res.headers.get("Content-Range")).toBe("bytes */10000000");
+  });
+
+  it("returns 200 for multi-range header (server ignores, serves full content)", async () => {
+    const t = await token();
+    const db = fakeDB([["enrolments_users", [LESSON]]]);
+    const res = await videoGet({
+      request: req("https://x/api/portal/lessons/5/video", t, { Range: "bytes=0-100,200-300" }),
+      env: { DB: db, SESSION_SECRET: SECRET, LESSONS: fakeR2({ object: r2Object }) },
+      params: { lessonId: "5" },
+    });
+    expect(res.status).toBe(200);
+  });
+
+  it("returns 206 for single-byte range bytes=0-0", async () => {
+    const t = await token();
+    const db = fakeDB([["enrolments_users", [LESSON]]]);
+    const res = await videoGet({
+      request: req("https://x/api/portal/lessons/5/video", t, { Range: "bytes=0-0" }),
+      env: { DB: db, SESSION_SECRET: SECRET, LESSONS: fakeR2({ object: r2Object }) },
+      params: { lessonId: "5" },
+    });
+    expect(res.status).toBe(206);
+    expect(res.headers.get("Content-Range")).toBe("bytes 0-0/10000000");
+    expect(res.headers.get("Content-Length")).toBe("1");
   });
 });
 

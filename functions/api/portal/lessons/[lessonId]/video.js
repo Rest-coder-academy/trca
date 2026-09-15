@@ -15,22 +15,33 @@ import { getLessonForStream } from "../../../../../shared/courses.js";
 import { nativeCorsHeaders, nativeCorsPreflight } from "../../../../../shared/nativeCors.js";
 
 // Parses an HTTP Range header into an R2-compatible range option.
-// Returns null for malformed or unsatisfiable headers (caller should 416).
+// Returns:
+//   false    → malformed single-range header (caller should 416)
+//   null     → no header or multi-range (caller should serve full 200)
+//   { ... }  → valid single-range option to pass to R2
 function parseRangeHeader(header) {
   if (!header) return null;
 
+  // Multi-range (e.g. "bytes=0-100,200-300"): server does not support it —
+  // per RFC 7233 the server MAY ignore the Range header and serve 200.
+  if (header.includes(",")) return null;
+
   // Suffix form: bytes=-N  (last N bytes)
   const suffix = header.match(/^bytes=-(\d+)$/);
-  if (suffix) return { suffix: parseInt(suffix[1]) };
+  if (suffix) {
+    const n = parseInt(suffix[1], 10);
+    if (n === 0) return false; // bytes=-0 is not satisfiable
+    return { suffix: n };
+  }
 
   // Offset form: bytes=X-  or  bytes=X-Y
   const range = header.match(/^bytes=(\d+)-(\d*)$/);
-  if (!range) return null;
+  if (!range) return false;
 
-  const offset = parseInt(range[1]);
+  const offset = parseInt(range[1], 10);
   if (range[2] === "") return { offset }; // open-ended: X to end
-  const end = parseInt(range[2]);
-  if (end < offset) return null; // invalid: end before start
+  const end = parseInt(range[2], 10);
+  if (end < offset) return false; // invalid: end before start
   return { offset, length: end - offset + 1 };
 }
 
@@ -103,8 +114,9 @@ export async function onRequestGet(context) {
   const rangeHeader = request.headers.get("Range");
   const rangeOption = parseRangeHeader(rangeHeader);
 
-  // Validate range before hitting R2: suffix of 0 or negative offset is nonsense.
-  if (rangeHeader && !rangeOption) {
+  // Malformed single-range header (false) → 416 Range Not Satisfiable.
+  // null means "no header" or "multi-range" — both continue to serve full 200.
+  if (rangeOption === false) {
     return new Response(null, {
       status: 416,
       headers: {
@@ -135,21 +147,42 @@ export async function onRequestGet(context) {
     });
   }
 
-  const totalSize = object.size;
-
   if (rangeOption) {
-    // R2 tells us exactly what range it served via object.range.
+    // Open-ended range (bytes=X-): validate offset is within the file.
+    if ("offset" in rangeOption && !("length" in rangeOption) && rangeOption.offset >= object.size) {
+      return new Response(null, {
+        status: 416,
+        headers: {
+          "Content-Range": `bytes */${object.size}`,
+          "Accept-Ranges": "bytes",
+          ...cors,
+        },
+      });
+    }
+
+    // R2 reports what it actually served via object.range.
+    // For suffix ranges R2 may omit object.range — derive from rangeOption.
     const served = object.range;
-    const start = served?.offset ?? 0;
-    const length = served?.length ?? totalSize;
+    let start, length;
+    if (served?.offset !== undefined) {
+      start = served.offset;
+      length = served.length ?? (object.size - start);
+    } else if (rangeOption.suffix !== undefined) {
+      start = object.size - rangeOption.suffix;
+      length = rangeOption.suffix;
+    } else {
+      start = rangeOption.offset ?? 0;
+      length = rangeOption.length ?? (object.size - start);
+    }
     const end = start + length - 1;
+    const contentType = object.httpMetadata?.contentType ?? "video/mp4";
 
     return new Response(object.body, {
       status: 206,
       headers: {
-        "Content-Type": "video/mp4",
+        "Content-Type": contentType,
         "Content-Length": String(length),
-        "Content-Range": `bytes ${start}-${end}/${totalSize}`,
+        "Content-Range": `bytes ${start}-${end}/${object.size}`,
         "Accept-Ranges": "bytes",
         "Cache-Control": "private, no-store",
         ...cors,
@@ -157,11 +190,13 @@ export async function onRequestGet(context) {
     });
   }
 
+  const contentType = object.httpMetadata?.contentType ?? "video/mp4";
+
   return new Response(object.body, {
     status: 200,
     headers: {
-      "Content-Type": "video/mp4",
-      "Content-Length": String(totalSize),
+      "Content-Type": contentType,
+      "Content-Length": String(object.size),
       "Accept-Ranges": "bytes",
       "Cache-Control": "private, no-store",
       ...cors,

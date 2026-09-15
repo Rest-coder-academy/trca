@@ -185,30 +185,40 @@ describe("requireRole", () => {
 // ---------------------------------------------------------------------------
 describe("requireInstructor", () => {
   it("returns 403 for a student session", async () => {
-    const student = { ...USER, id: "user-student", role: "student" };
-    const sess = { id: "sess-student", user_id: "user-student", expires_at: FUTURE, revoked_at: null };
+    const student = { ...USER, id: "ri-student", role: "student" };
+    const sess = { id: "ri-sess-student", user_id: "ri-student", expires_at: FUTURE, revoked_at: null };
     const db = makePortalDB({ users: [student], sessions: [sess] });
-    const req = makeRequest("sess-student");
+    const req = makeRequest("ri-sess-student");
+    const result = await requireInstructor(req, { DB: db });
+    expect(result).toBeInstanceOf(Response);
+    expect(result.status).toBe(403);
+  });
+
+  it("returns 403 for a parent session", async () => {
+    const parent = { ...USER, id: "ri-parent", role: "parent" };
+    const sess = { id: "ri-sess-parent", user_id: "ri-parent", expires_at: FUTURE, revoked_at: null };
+    const db = makePortalDB({ users: [parent], sessions: [sess] });
+    const req = makeRequest("ri-sess-parent");
     const result = await requireInstructor(req, { DB: db });
     expect(result).toBeInstanceOf(Response);
     expect(result.status).toBe(403);
   });
 
   it("allows an instructor session", async () => {
-    const instructor = { ...USER, id: "user-instructor", role: "instructor" };
-    const sess = { id: "sess-instructor", user_id: "user-instructor", expires_at: FUTURE, revoked_at: null };
+    const instructor = { ...USER, id: "ri-instructor", role: "instructor" };
+    const sess = { id: "ri-sess-instructor", user_id: "ri-instructor", expires_at: FUTURE, revoked_at: null };
     const db = makePortalDB({ users: [instructor], sessions: [sess] });
-    const req = makeRequest("sess-instructor");
+    const req = makeRequest("ri-sess-instructor");
     const result = await requireInstructor(req, { DB: db });
     expect(result).not.toBeInstanceOf(Response);
     expect(result.role).toBe("instructor");
   });
 
   it("allows an admin session", async () => {
-    const admin = { ...USER, id: "user-admin", role: "admin" };
-    const sess = { id: "sess-admin2", user_id: "user-admin", expires_at: FUTURE, revoked_at: null };
+    const admin = { ...USER, id: "ri-admin", role: "admin" };
+    const sess = { id: "ri-sess-admin", user_id: "ri-admin", expires_at: FUTURE, revoked_at: null };
     const db = makePortalDB({ users: [admin], sessions: [sess] });
-    const req = makeRequest("sess-admin2");
+    const req = makeRequest("ri-sess-admin");
     const result = await requireInstructor(req, { DB: db });
     expect(result).not.toBeInstanceOf(Response);
     expect(result.role).toBe("admin");
@@ -220,6 +230,13 @@ describe("requireInstructor", () => {
     const result = await requireInstructor(req, { DB: db });
     expect(result).toBeInstanceOf(Response);
     expect(result.status).toBe(401);
+  });
+
+  it("returns 503 when DB is not configured", async () => {
+    const req = makeRequest("ri-sess-any");
+    const result = await requireInstructor(req, {});
+    expect(result).toBeInstanceOf(Response);
+    expect(result.status).toBe(503);
   });
 });
 

@@ -80,7 +80,7 @@ export async function requireRole(request, env, ...allowedRoles) {
 // requireInstructor
 // ---------------------------------------------------------------------------
 // Convenience guard for instructor-only endpoints (upload, lesson management).
-// Allows role 'instructor' or 'admin'; returns 403 for anything else.
+// Allows role 'instructor' or 'admin'; blocks 'student' and 'parent' with 403.
 //
 //   const auth = await requireInstructor(request, env);
 //   if (auth instanceof Response) return auth;

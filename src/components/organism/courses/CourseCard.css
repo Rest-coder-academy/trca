@@ -143,6 +143,27 @@
   font-size: 13px;
   font-style: italic;
 }
+.cc-sched-cta {
+  /* Button reset — sit inside cc-schedule--soon looking like the old italic
+     line, but clickable. The colour lift signals it is actionable without
+     shouting louder than the "Book your seat" primary CTA on the same card. */
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: var(--rca-blue, #146389);
+  font-weight: 600;
+  font-style: normal;
+  text-align: left;
+  cursor: pointer;
+}
+.cc-sched-cta:hover,
+.cc-sched-cta:focus-visible {
+  color: var(--rca-navy, #03084c);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 .cc-syllabus {
   margin-top: var(--rca-space-4);

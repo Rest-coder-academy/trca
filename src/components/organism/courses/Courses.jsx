@@ -14,7 +14,7 @@ function Courses() {
         <TypoGraphyComponent variant='h3' text='Courses' component='h2' sx={{textAlign:"center",fontWeight:"bold"}} />
         <hr />
            
-            <CoursesGrid xs={12} sm={12} md={6} lg={4}  mapdata={courses} />
+            <CoursesGrid xs={12} sm={12} md={6} lg={3}  mapdata={courses} />
           
     </Box>
   )

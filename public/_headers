@@ -29,3 +29,55 @@
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Frame-Options: DENY
   Permissions-Policy: camera=(), microphone=(), geolocation=(), usb=(), payment=(), xr-spatial-tracking=()
+
+# Edge caching (#210).
+#
+# Cloudflare Pages ships `.html` with `cache-control: public, max-age=0,
+# must-revalidate`, which yields `cf-cache-status: DYNAMIC` on every request
+# and pushes every visit + every crawler round trip through to origin. The
+# marketing HTML on this site is prerendered and identical for every viewer,
+# so caching it at the edge is free — the only cost is a max-age worth of
+# lag on a fresh deploy, mitigated by `stale-while-revalidate` and the manual
+# purge in the CF dashboard when we ship something time-sensitive.
+#
+# One hour edge TTL + 24h stale-while-revalidate: a redeploy is visible in ≤1h
+# without a purge; a purge clears immediately. Extend if a page grows a
+# per-request piece (currently none do — even the batch date on the course
+# cards is fetched via /api/batches on the client, so the shell is static).
+
+/
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+/about
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+/for-parents
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+/placements
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+/faq
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+/contact
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+/apply
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+/blog
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+/blog/*
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+/courses/*
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+
+# Vite hashes every asset filename (see dist/assets/*.js|css|woff2 in a
+# production build), so a change means a new URL — the old URL will never
+# be re-requested by a fresh page load. Cache them for a year, immutable.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Anything that reads or writes user state must never be served stale.
+# The Function code already sets no-store on its JSON responses; this is
+# belt-and-suspenders in case a route ever returns a Response without one.
+/api/*
+  Cache-Control: no-store
+/auth/*
+  Cache-Control: no-store
+/portal/*
+  Cache-Control: no-store

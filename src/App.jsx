@@ -12,6 +12,7 @@ import Contact from "./components/Pages/Contact";
 import FAQ from "./components/Pages/FAQ";
 import Blog from "./components/Pages/Blog";
 import BlogPost from "./components/Pages/BlogPost";
+import Apply from "./components/Pages/Apply";
 import ScrollToTop from "./components/ScrollToTop";
 import PortalRoute from "./components/portal/PortalRoute";
 import PortalLogin from "./components/portal/PortalLogin";
@@ -112,6 +113,7 @@ function App() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/apply" element={<Apply />} />
         {/* Student portal (#110, #111). The login screen is public; everything
             else under /portal goes through the guard, which reads /auth/me. */}
         <Route path="/portal/login" element={<PortalLogin />} />

@@ -1,0 +1,350 @@
+/* /apply — Apply to the AI-FDE cohort.
+ *
+ * Layout follows the Contact/FAQ pages: a hero, a signal section (the three
+ * hiring patterns from Nikshep's LinkedIn post), an inline form card, and a
+ * "talk first" fallback. Colour tokens are read from :root — same source as
+ * every other page, no local hex.
+ */
+
+main.ap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  color: var(--rca-ink, #0f172a);
+  font-family: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.55;
+}
+
+.ap-hero {
+  padding: 2rem 0 2.5rem;
+  border-bottom: 1px solid var(--rca-hairline, #e5e7eb);
+  margin-bottom: 2.5rem;
+}
+
+.ap-eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rca-brand, #03084c);
+  background: var(--rca-brand-tint, rgba(3, 8, 76, 0.08));
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.ap-hero h1 {
+  font-family: "Montserrat", "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+  letter-spacing: -0.01em;
+  margin: 0 0 0.9rem;
+  text-wrap: balance;
+  color: var(--rca-brand, #03084c);
+}
+
+.ap-lede {
+  font-size: 1.05rem;
+  color: var(--rca-ink-soft, #334155);
+  max-width: 60ch;
+  margin: 0 0 1.6rem;
+}
+
+.ap-hero-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.ap-fact {
+  border: 1px solid var(--rca-hairline, #e5e7eb);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  background: var(--rca-surface, #fff);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.ap-fact-k {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rca-ink-mute, #64748b);
+}
+
+.ap-fact-v {
+  font-weight: 600;
+  font-size: 0.96rem;
+  color: var(--rca-ink, #0f172a);
+}
+
+/* --- Hiring signals section --- */
+
+.ap-signals {
+  padding: 1rem 0 2.5rem;
+}
+
+.ap-signals h2 {
+  font-family: "Montserrat", "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+  color: var(--rca-brand, #03084c);
+  margin: 0 0 1.5rem;
+  text-wrap: balance;
+}
+
+.ap-signals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.1rem;
+}
+
+.ap-signal {
+  border: 1px solid var(--rca-hairline, #e5e7eb);
+  border-radius: 12px;
+  padding: 1.2rem 1.2rem 1.3rem;
+  background: var(--rca-surface, #fff);
+  position: relative;
+}
+
+.ap-signal-n {
+  font-family: "Montserrat", "Roboto", sans-serif;
+  font-weight: 700;
+  color: var(--rca-brand, #03084c);
+  opacity: 0.35;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+}
+
+.ap-signal h3 {
+  margin: 0.4rem 0 0.5rem;
+  font-family: "Montserrat", "Roboto", sans-serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--rca-ink, #0f172a);
+}
+
+.ap-signal p {
+  margin: 0;
+  color: var(--rca-ink-soft, #334155);
+  font-size: 0.95rem;
+}
+
+.ap-signals-foot {
+  margin: 1.7rem 0 0;
+  color: var(--rca-ink-soft, #334155);
+  font-size: 0.98rem;
+  max-width: 62ch;
+}
+
+/* --- Form card --- */
+
+.ap-form-wrap {
+  margin: 2.5rem 0 2rem;
+}
+
+.ap-form-card {
+  border: 1px solid var(--rca-hairline, #e5e7eb);
+  border-radius: 14px;
+  padding: 1.8rem 1.5rem 1.5rem;
+  background: var(--rca-surface, #fff);
+  box-shadow: 0 4px 18px rgba(3, 8, 76, 0.05);
+}
+
+.ap-form-card h2 {
+  font-family: "Montserrat", "Roboto", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--rca-brand, #03084c);
+  margin: 0 0 0.4rem;
+}
+
+.ap-form-lede {
+  color: var(--rca-ink-soft, #334155);
+  margin: 0 0 1.4rem;
+  font-size: 0.98rem;
+}
+
+.ap-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.2rem;
+}
+
+.ap-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.ap-field--wide {
+  grid-column: 1 / -1;
+}
+
+.ap-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--rca-ink, #0f172a);
+}
+
+.ap-label-hint {
+  color: var(--rca-ink-mute, #64748b);
+  font-weight: 400;
+}
+
+.ap-input {
+  font: inherit;
+  font-size: 0.98rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--rca-hairline-strong, #cbd5e1);
+  border-radius: 8px;
+  background: var(--rca-surface, #fff);
+  color: var(--rca-ink, #0f172a);
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.ap-input:focus {
+  outline: none;
+  border-color: var(--rca-brand, #03084c);
+  box-shadow: 0 0 0 3px rgba(3, 8, 76, 0.15);
+}
+
+.ap-input--err {
+  border-color: #b91c1c;
+  background: rgba(185, 28, 28, 0.04);
+}
+
+.ap-textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.ap-err {
+  color: #b91c1c;
+  font-size: 0.85rem;
+  margin-top: 0.1rem;
+}
+
+.ap-fail {
+  grid-column: 1 / -1;
+  padding: 0.8rem 0.9rem;
+  border-radius: 8px;
+  background: rgba(185, 28, 28, 0.08);
+  border: 1px solid rgba(185, 28, 28, 0.25);
+  color: #7f1d1d;
+  font-size: 0.94rem;
+}
+
+.ap-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.6rem;
+}
+
+.ap-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Montserrat", "Roboto", sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  padding: 0.7rem 1.2rem;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.06s ease, background 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ap-btn:active {
+  transform: translateY(1px);
+}
+
+.ap-btn--primary {
+  background: var(--rca-brand, #03084c);
+  color: #fff;
+}
+
+.ap-btn--primary:hover {
+  background: var(--rca-brand-strong, #050c78);
+}
+
+.ap-btn--primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ap-btn--ghost {
+  background: transparent;
+  color: var(--rca-brand, #03084c);
+  border-color: var(--rca-hairline-strong, #cbd5e1);
+}
+
+.ap-btn--ghost:hover {
+  border-color: var(--rca-brand, #03084c);
+  background: var(--rca-brand-tint, rgba(3, 8, 76, 0.05));
+}
+
+.ap-fine {
+  grid-column: 1 / -1;
+  color: var(--rca-ink-mute, #64748b);
+  font-size: 0.82rem;
+  margin: 0.4rem 0 0;
+}
+
+.ap-thanks {
+  padding: 0.5rem 0.2rem 0.4rem;
+}
+
+.ap-thanks h2 {
+  font-family: "Montserrat", "Roboto", sans-serif;
+  font-size: 1.4rem;
+  color: var(--rca-brand, #03084c);
+  margin: 0 0 0.6rem;
+}
+
+.ap-thanks p {
+  color: var(--rca-ink-soft, #334155);
+  max-width: 55ch;
+  margin: 0 0 1.2rem;
+}
+
+/* --- Help section --- */
+
+.ap-help {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rca-hairline, #e5e7eb);
+}
+
+.ap-help h2 {
+  font-family: "Montserrat", "Roboto", sans-serif;
+  font-size: 1.25rem;
+  color: var(--rca-brand, #03084c);
+  margin: 0 0 0.5rem;
+}
+
+.ap-help p {
+  color: var(--rca-ink-soft, #334155);
+  margin: 0 0 1rem;
+  max-width: 60ch;
+}
+
+/* Stack the form on narrow screens. */
+@media (max-width: 640px) {
+  main.ap {
+    padding: 2rem 1rem 3rem;
+  }
+  .ap-form {
+    grid-template-columns: 1fr;
+  }
+}

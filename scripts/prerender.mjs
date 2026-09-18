@@ -24,6 +24,7 @@ const routes = [
   { path: "/contact", out: "contact.html", waitFor: "main.ct" },
   { path: "/faq", out: "faq.html", waitFor: "main.faq" },
   { path: "/blog", out: "blog.html", waitFor: "main.bl" },
+  { path: "/apply", out: "apply.html", waitFor: "main.ap" },
   ...posts.map((p) => ({ path: `/blog/${p.slug}`, out: `blog/${p.slug}.html`, waitFor: "article.bl-post" })),
   // /about renders either the founder story (when /api/founder returns one) or
   // a school-level fallback. Both paths end in <main class="ab">, so the same

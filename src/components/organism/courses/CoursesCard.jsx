@@ -135,7 +135,19 @@ function CoursesCard({ name, courseId, slug, paid, flagship, price, trainer, aud
               </span>
             </>
           ) : (
-            "New dates coming soon"
+            // No batch scheduled yet for this course. The old text "New dates
+            // coming soon" left a warm homepage visitor with nothing to do —
+            // the ~12 real prospect visits/day the site sees deserve better
+            // than a dead-end line. Convert it into a lead capture: opens the
+            // enquiry modal preseeded with the course, so Uday sees the intent
+            // and can call back with a batch date.
+            <button
+              type="button"
+              className="cc-sched-cta"
+              onClick={() => openModal(name)}
+            >
+              Register interest — next batch <span aria-hidden="true">→</span>
+            </button>
           )}
         </div>
 

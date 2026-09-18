@@ -1,4 +1,5 @@
-// Course + lesson reads for the student portal (#136).
+// Course + lesson reads for the student portal (#136), and instructor
+// CRUD helpers for Phase 2 (#186).
 //
 // These take the D1 binding rather than reaching for it, so the API routes stay
 // thin and the query shapes are unit-testable against a fake database.
@@ -48,4 +49,112 @@ export async function getEnrolledCourse(db, userId, slug) {
     .all();
 
   return { ...course, lessons: results || [] };
+}
+
+// ---------------------------------------------------------------------------
+// Instructor: course reads
+// ---------------------------------------------------------------------------
+
+export async function getCourseById(db, courseId) {
+  return db
+    .prepare("SELECT id, slug, title, summary, cover_url, published FROM courses WHERE id = ?1")
+    .bind(courseId)
+    .first();
+}
+
+// ---------------------------------------------------------------------------
+// Instructor: lesson reads (includes unpublished)
+// ---------------------------------------------------------------------------
+
+export async function listLessonsForInstructor(db, courseId) {
+  const { results } = await db
+    .prepare(
+      "SELECT id, course_id, position, title, notes, video_url, duration_seconds, published " +
+        "FROM lessons WHERE course_id = ?1 ORDER BY position ASC"
+    )
+    .bind(courseId)
+    .all();
+  return results || [];
+}
+
+export async function getLessonById(db, lessonId) {
+  return db
+    .prepare(
+      "SELECT id, course_id, position, title, notes, video_url, duration_seconds, published " +
+        "FROM lessons WHERE id = ?1"
+    )
+    .bind(lessonId)
+    .first();
+}
+
+// ---------------------------------------------------------------------------
+// Instructor: lesson writes
+// ---------------------------------------------------------------------------
+
+// Creates a lesson appended at the end of the course (max position + 1).
+// Returns the new lesson's id.
+export async function createLesson(db, courseId, { title, notes = null }) {
+  const maxRow = await db
+    .prepare("SELECT COALESCE(MAX(position), 0) AS m FROM lessons WHERE course_id = ?1")
+    .bind(courseId)
+    .first();
+  const position = (maxRow?.m ?? 0) + 1;
+  const result = await db
+    .prepare(
+      "INSERT INTO lessons (course_id, position, title, notes) VALUES (?1, ?2, ?3, ?4)"
+    )
+    .bind(courseId, position, title.trim(), notes || null)
+    .run();
+  return result.meta.last_row_id;
+}
+
+// Updates only the fields present in `fields`; silently ignores unknown keys.
+// Column names are whitelisted to prevent SQL injection even if the caller is
+// ever refactored to pass user-supplied keys.
+const LESSON_UPDATABLE = { title: true, notes: true, published: true };
+
+export async function updateLesson(db, lessonId, fields) {
+  const updates = [];
+  const binds = [];
+  if (fields.title !== undefined && LESSON_UPDATABLE.title) {
+    updates.push(`title = ?${binds.length + 1}`);
+    binds.push(fields.title);
+  }
+  if (fields.notes !== undefined && LESSON_UPDATABLE.notes) {
+    updates.push(`notes = ?${binds.length + 1}`);
+    binds.push(fields.notes ?? null);
+  }
+  if (fields.published !== undefined && LESSON_UPDATABLE.published) {
+    updates.push(`published = ?${binds.length + 1}`);
+    binds.push(fields.published ? 1 : 0);
+  }
+  if (!updates.length) return;
+  binds.push(lessonId);
+  await db
+    .prepare(`UPDATE lessons SET ${updates.join(", ")} WHERE id = ?${binds.length}`)
+    .bind(...binds)
+    .run();
+}
+
+export async function deleteLesson(db, lessonId) {
+  await db.prepare("DELETE FROM lessons WHERE id = ?1").bind(lessonId).run();
+}
+
+// Full position replacement: `orderedIds` is the desired lesson order (1-based
+// positions are assigned by array index). All IDs must belong to `courseId`.
+export async function reorderLessons(db, courseId, orderedIds) {
+  const stmts = orderedIds.map((id, index) =>
+    db
+      .prepare("UPDATE lessons SET position = ?1 WHERE id = ?2 AND course_id = ?3")
+      .bind(index + 1, id, courseId)
+  );
+  await db.batch(stmts);
+}
+
+// Called after a multipart upload completes. Stores the R2 key as video_url.
+export async function setLessonVideo(db, lessonId, videoUrl, durationSeconds = null) {
+  await db
+    .prepare("UPDATE lessons SET video_url = ?1, duration_seconds = ?2 WHERE id = ?3")
+    .bind(videoUrl, durationSeconds, lessonId)
+    .run();
 }

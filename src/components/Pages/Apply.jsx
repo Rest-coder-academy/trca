@@ -5,6 +5,13 @@ import SocialMeta from "../atoms/SocialMeta/SocialMeta";
 import { useAuth } from "../../App";
 import { regex } from "../../regex/regex";
 import { trackLead } from "../../lib/analytics";
+
+// A name in Bengaluru can carry a dot ("S.V. Rao"), a hyphen ("Sharma-Iyengar"),
+// or an apostrophe ("D'Souza"). The site's `regex.nameWithSpaces` rejects all
+// three and would refuse a legitimate application on the surname alone, so this
+// page uses a more forgiving check: any Unicode letter (covers Latin with
+// diacritics and native-script transliterations) plus spaces and .-'
+const APPLY_NAME_RE = /^[\p{L}\p{M}][\p{L}\p{M}\s.'\-]{0,79}$/u;
 import "./Apply.css";
 
 const ORIGIN = "https://restcoderacademy.in";
@@ -84,8 +91,8 @@ function Apply() {
   const validate = () => {
     const e = {};
     if (!form.fullname.trim()) e.fullname = "Full name is required.";
-    else if (!regex.nameWithSpaces.test(form.fullname.trim()))
-      e.fullname = "Letters and spaces only.";
+    else if (!APPLY_NAME_RE.test(form.fullname.trim()))
+      e.fullname = "Letters, spaces, and . - ' only.";
     if (!form.mobile.trim()) e.mobile = "Mobile number is required.";
     else if (!regex.mobileRegex.test(form.mobile.trim()))
       e.mobile = "Enter a valid mobile number.";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import SocialMeta from "../atoms/SocialMeta/SocialMeta";
@@ -66,6 +66,28 @@ function Apply() {
   const [status, setStatus] = useState("idle"); // idle | submitting | done | failed
   const [failReason, setFailReason] = useState("");
 
+  // Ad attribution: capture whatever UTMs the visitor arrived with, once, at
+  // mount. Meta and Google Ads both hydrate their tracking URLs with these
+  // parameters; storing them on the enquiry row is what lets us tell whether
+  // a signed enrolment came from a paid ad or a WhatsApp forward. Missing
+  // parameters are empty strings, which the backend stores as NULL.
+  const [utms, setUtms] = useState({
+    utm_source: "",
+    utm_medium: "",
+    utm_campaign: "",
+    utm_content: "",
+  });
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const p = new URLSearchParams(window.location.search);
+    setUtms({
+      utm_source: (p.get("utm_source") || "").slice(0, 100),
+      utm_medium: (p.get("utm_medium") || "").slice(0, 100),
+      utm_campaign: (p.get("utm_campaign") || "").slice(0, 100),
+      utm_content: (p.get("utm_content") || "").slice(0, 100),
+    });
+  }, []);
+
   const url = `${ORIGIN}/apply`;
   const title = "Apply — AI-FDE cohort at Rest Coder Academy, Jayanagar";
   const description =
@@ -123,6 +145,12 @@ function Apply() {
         message:
           `[apply · AI-FDE] ` +
           (form.message.trim() || "Applied via /apply for the next AI-FDE cohort."),
+        // Ad attribution — the backend accepts these as optional and stores
+        // whatever is present. Empty strings become NULL in the row.
+        utm_source: utms.utm_source,
+        utm_medium: utms.utm_medium,
+        utm_campaign: utms.utm_campaign,
+        utm_content: utms.utm_content,
       };
       const res = await axios.post("/api/enquiry", payload, {
         timeout: SUBMIT_TIMEOUT_MS,

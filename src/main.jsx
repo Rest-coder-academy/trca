@@ -14,6 +14,13 @@ import './index.css'
 import './styles/colors.css'
 import App from './App.jsx'
 import theme from './theme.js'
+import { initTracking } from './lib/tracking-init.js'
+
+// Initialise Meta Pixel + Google Ads gtag once, at boot. GA4 is already
+// installed statically in index.html; this file adds the paid-ads pixels
+// when their IDs are configured in Vite env. Missing env = silent no-op,
+// so a preview build never fires against the real ad accounts.
+initTracking()
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>

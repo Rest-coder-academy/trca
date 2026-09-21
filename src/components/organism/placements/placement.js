@@ -1,7 +1,7 @@
-import ashish from "../../../assets/placements/ashish.png"
-import sakshi from "../../../assets/placements/sakshi.png"
-import sujith from "../../../assets/placements/sujith.png"
-import prajwala from "../../../assets/placements/prajwala.png"
+import ashish from "../../../assets/placements/ashish.webp"
+import sakshi from "../../../assets/placements/sakshi.webp"
+import sujith from "../../../assets/placements/sujith.webp"
+import prajwala from "../../../assets/placements/prajwala.webp"
 
 // Company logos are bundled, never hotlinked (#10). Every one of these used to
 // be a URL on someone else's server — a 2016 SAP blog attachment, an unrelated

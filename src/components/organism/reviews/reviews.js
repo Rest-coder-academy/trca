@@ -1,10 +1,10 @@
-import subhash from "../../../assets/reviews/subhash.png"
-import naseema from "../../../assets/reviews/naseema.png"
-import maaz from "../../../assets/reviews/maaz.png"
-import ashish from "../../../assets/reviews/ashish.png"
-import sakshi from "../../../assets/reviews/sakshi.png"
-import sujith from "../../../assets/reviews/sujith.png"
-import prajwala from "../../../assets/reviews/prajwala.png"
+import subhash from "../../../assets/reviews/subhash.webp"
+import naseema from "../../../assets/reviews/naseema.webp"
+import maaz from "../../../assets/reviews/maaz.webp"
+import ashish from "../../../assets/reviews/ashish.webp"
+import sakshi from "../../../assets/reviews/sakshi.webp"
+import sujith from "../../../assets/reviews/sujith.webp"
+import prajwala from "../../../assets/reviews/prajwala.webp"
 
 
 

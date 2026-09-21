@@ -55,8 +55,24 @@ describe("analytics (GA4 events)", () => {
       vi.stubGlobal("window", { gtag });
       const ok = trackLead("enquiry_form");
       expect(ok).toBe(true);
+      // Currency + value were added when Meta Pixel + Google Ads conversion
+      // targets started reading this event: paid-campaign ROAS needs a real
+      // rupee amount on every lead, so the default matches the AI-FDE price.
       expect(gtag).toHaveBeenCalledWith("event", "generate_lead", {
         method: "enquiry_form",
+        currency: "INR",
+        value: 50000,
+      });
+    });
+
+    it("passes an override value through when the caller supplies one", () => {
+      const gtag = vi.fn();
+      vi.stubGlobal("window", { gtag });
+      trackLead("enquiry_form", 15000);
+      expect(gtag).toHaveBeenCalledWith("event", "generate_lead", {
+        method: "enquiry_form",
+        currency: "INR",
+        value: 15000,
       });
     });
 

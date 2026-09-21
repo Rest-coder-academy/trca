@@ -1,4 +1,3 @@
-import React from 'react'
 import tech from "../../../assets/tech-logo.webp"
 import { Box } from '@mui/material'
 
@@ -9,7 +8,7 @@ import { Box } from '@mui/material'
  * at 8.1s on 20% of sessions before this change. Four things now make it fast:
  *
  *   - The asset is WebP, not PNG (82KB → 31KB, 62% smaller).
- *   - `fetchpriority="high"` tells the browser to skip its default lower
+ *   - `fetchPriority="high"` tells the browser to skip its default lower
  *     priority for images below the very top of the page.
  *   - `decoding="async"` keeps the main thread free while the image decodes.
  *   - Explicit width/height reserves the layout box before the pixels arrive,
@@ -24,7 +23,7 @@ function BannerImage() {
         alt="Rest Coder Academy — mentor-led coding training"
         width="503"
         height="502"
-        fetchpriority="high"
+        fetchPriority="high"
         loading="eager"
         decoding="async"
       />

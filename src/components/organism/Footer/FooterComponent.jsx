@@ -58,6 +58,13 @@ const LINK_GROUPS = [
       { label: "Contact", to: "/contact" },
     ],
   },
+  {
+    heading: "Legal",
+    items: [
+      { label: "Privacy policy", to: "/privacy-policy" },
+      { label: "Terms of use", to: "/terms" },
+    ],
+  },
 ];
 
 /* Keyed by SOCIAL_PROFILES[].id. data/contact.js stays JSX-free, so the icon

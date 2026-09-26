@@ -13,6 +13,8 @@ import FAQ from "./components/Pages/FAQ";
 import Blog from "./components/Pages/Blog";
 import BlogPost from "./components/Pages/BlogPost";
 import Apply from "./components/Pages/Apply";
+import PrivacyPolicy from "./components/Pages/PrivacyPolicy";
+import Terms from "./components/Pages/Terms";
 import ScrollToTop from "./components/ScrollToTop";
 import PortalRoute from "./components/portal/PortalRoute";
 import PortalLogin from "./components/portal/PortalLogin";
@@ -114,6 +116,10 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/apply" element={<Apply />} />
+        {/* Legal pages. Feed Meta app review (#80) and the DPDP Act
+            requirement to publish a data-handling notice. */}
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<Terms />} />
         {/* Student portal (#110, #111). The login screen is public; everything
             else under /portal goes through the guard, which reads /auth/me. */}
         <Route path="/portal/login" element={<PortalLogin />} />

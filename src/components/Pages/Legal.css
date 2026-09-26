@@ -1,0 +1,98 @@
+/* Shared layout for /privacy-policy and /terms.
+ *
+ * Long-form legal prose that has to render legibly on both a phone and a
+ * laptop. Constrains the reading column to ~68ch so lines don't run
+ * across a widescreen and become unreadable, uses the same type stack
+ * as the rest of the site, and keeps headings scannable without turning
+ * them into marketing headlines. Explicitly matches other page-level
+ * containers (.ab, .faq) so a visitor moving from About or FAQ into
+ * this page doesn't perceive a visual jump.
+ */
+
+.legal {
+  max-width: 68ch;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+  color: var(--rca-ink, #1a1a1a);
+  line-height: 1.65;
+}
+
+.legal-eyebrow {
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--rca-muted, #6a6a6a);
+  margin-bottom: 0.5rem;
+}
+
+.legal h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+}
+
+.legal .legal-meta {
+  color: var(--rca-muted, #6a6a6a);
+  font-size: 0.9rem;
+  margin: 0 0 2rem;
+}
+
+.legal h2 {
+  font-size: 1.25rem;
+  margin: 2rem 0 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.legal h3 {
+  font-size: 1.05rem;
+  margin: 1.25rem 0 0.5rem;
+  color: var(--rca-ink-soft, #2a2a2a);
+}
+
+.legal p,
+.legal ul,
+.legal ol {
+  margin: 0 0 1rem;
+}
+
+.legal ul,
+.legal ol {
+  padding-left: 1.5rem;
+}
+
+.legal li + li {
+  margin-top: 0.35rem;
+}
+
+.legal a {
+  color: var(--rca-link, #005fbf);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legal .legal-contact {
+  margin-top: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--rca-panel, #f6f7f9);
+  border-radius: 8px;
+  border-left: 4px solid var(--rca-accent, #f4a020);
+}
+
+.legal .legal-contact p {
+  margin-bottom: 0.35rem;
+}
+
+.legal .legal-toc {
+  margin: 1rem 0 2rem;
+  padding: 1rem 1.25rem;
+  background: var(--rca-panel, #f6f7f9);
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.legal .legal-toc ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}

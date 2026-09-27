@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" role="img">
+  <defs>
+    <linearGradient id="navyField" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#03084C"/>
+      <stop offset="100%" stop-color="#01062F"/>
+    </linearGradient></defs>
+
+  <rect width="1080" height="1080" fill="url(#navyField)"/>
+
+  <!-- Mark and name, where the placement template puts its mark and label. -->
+  
+    <g transform="translate(96 72)">
+      <circle cx="38" cy="38" r="38" fill="none" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="2.5"/>
+      <text x="38" y="38" dy="0.36em" font-family="Montserrat, 'Segoe UI', system-ui, sans-serif" font-size="39.52" font-weight="700" fill="#FFFFFF" text-anchor="middle">R</text>
+    </g>
+  <text x="192" y="120" font-family="Montserrat, 'Segoe UI', system-ui, sans-serif" font-size="26" font-weight="600" fill="#FFFFFF" fill-opacity="0.85" letter-spacing="1">Rest Coder Academy</text>
+
+  <text x="96" y="333" font-family="Montserrat, 'Segoe UI', system-ui, sans-serif" font-size="27" font-weight="700" fill="#FF9800" letter-spacing="6">TEACHING MOMENT</text>
+
+  <text x="96" y="431" font-family="Montserrat, 'Segoe UI', system-ui, sans-serif" font-size="72" font-weight="700" fill="#FFFFFF" text-anchor="start"><tspan x="96" dy="0">A hash map finds a</tspan><tspan x="96" dy="82.1">value without</tspan><tspan x="96" dy="82.1">searching for it</tspan></text>
+
+  <rect x="96" y="639" width="120" height="3" fill="#FF9800" fill-opacity="0.8"/>
+
+  <text x="96" y="705" font-family="Montserrat, 'Segoe UI', system-ui, sans-serif" font-size="32" font-weight="400" fill="#FFFFFF" text-anchor="start"><tspan x="96" dy="0">The key is turned into an index, so a lookup costs</tspan><tspan x="96" dy="46.4">the same with ten entries or ten million.</tspan></text>
+
+  <!-- Cohort: small, above the bar, so it reads as a byline not a headline. -->
+  <circle cx="102" cy="912" r="6" fill="#FF9800"/>
+  <text x="120" y="920" font-family="Montserrat, 'Segoe UI', system-ui, sans-serif" font-size="24" font-weight="500" fill="#FFFFFF" fill-opacity="0.75">Python Full Stack Batch 7</text>
+
+  <!-- Bottom bar: phone and handle left, URL right. -->
+  <rect x="0" y="968" width="1080" height="112" fill="#01062F"/>
+  <rect x="0" y="968" width="1080" height="4" fill="#FF9800"/>
+  <text x="96" y="1034" font-family="Montserrat, 'Segoe UI', system-ui, sans-serif" font-size="25" font-weight="600" fill="#FFFFFF" fill-opacity="0.9">8073762257 · @restcoderacademy</text>
+  <text x="984" y="1034" font-family="Montserrat, 'Segoe UI', system-ui, sans-serif" font-size="27" font-weight="600" fill="#FFFFFF" fill-opacity="0.92" text-anchor="end" letter-spacing="0.4">restcoderacademy.in</text>
+</svg>

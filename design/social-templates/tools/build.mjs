@@ -42,14 +42,20 @@ function audit(id, svg) {
 const mods = await templates();
 if (!mods.length) throw new Error("no templates found");
 
-const built = mods.map((m) => {
-  const svg = m.render();
-  audit(m.meta.id, svg);
-  return { ...m.meta, svg };
-});
+/* A template with `samples` (teaching-moment, #296) is built once per sample,
+   to out/<id>-<key>.svg, because one worked example cannot show how it wraps.
+   The rest build their defaults to out/<id>.svg as before. */
+const built = mods.flatMap((m) =>
+  Object.entries(m.samples ?? { "": undefined }).map(([key, data]) => {
+    const id = key ? `${m.meta.id}-${key}` : m.meta.id;
+    const svg = m.render(data);
+    audit(id, svg);
+    return { ...m.meta, id, svg };
+  }),
+);
 
 if (checkOnly) {
-  console.log(`✓ ${built.length} templates carry ${SITE_URL} and no dead URL`);
+  console.log(`✓ ${built.length} graphics carry ${SITE_URL} and no dead URL`);
   process.exit(0);
 }
 

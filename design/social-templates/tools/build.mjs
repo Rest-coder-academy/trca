@@ -10,9 +10,9 @@
  * the graphic. PNG needs a browser and is only for eyeballing a proof, so it
  * is opt-in and not committed.
  */
-import { mkdir, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { SITE_URL } from "../brand.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -29,7 +29,8 @@ const checkOnly = process.argv.includes("--check");
 async function templates() {
   const dir = join(ROOT, "templates");
   const files = (await readdir(dir)).filter((f) => f.endsWith(".js") && !f.startsWith("_")).sort();
-  return Promise.all(files.map((f) => import(join(dir, f))));
+  // A file URL, not a path: import("C:\…") is a URL with scheme "c:" on Windows.
+  return Promise.all(files.map((f) => import(pathToFileURL(join(dir, f)).href)));
 }
 
 function audit(id, svg) {
@@ -65,9 +66,14 @@ if (png) {
   // the real face instead of silently falling back to Helvetica.
   const { chromium } = await import("playwright");
   const fontDir = resolve(ROOT, "../../node_modules/@fontsource/montserrat/files");
-  const face = (w) =>
-    `@font-face{font-family:Montserrat;font-weight:${w};font-style:normal;src:url("file://${fontDir}/montserrat-latin-${w}-normal.woff2") format("woff2");}`;
-  const css = [400, 500, 600, 700].map(face).join("");
+  // Inlined as data: URLs. setContent() leaves the page on about:blank, which
+  // may not load file:// fonts, and when it cannot the proof silently falls
+  // back to the system sans instead of Montserrat.
+  const face = async (w) => {
+    const b64 = (await readFile(join(fontDir, `montserrat-latin-${w}-normal.woff2`))).toString("base64");
+    return `@font-face{font-family:Montserrat;font-weight:${w};font-style:normal;src:url("data:font/woff2;base64,${b64}") format("woff2");}`;
+  };
+  const css = (await Promise.all([400, 500, 600, 700].map(face))).join("");
 
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1080, height: 1080 }, deviceScaleFactor: 1 });

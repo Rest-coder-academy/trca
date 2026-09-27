@@ -1,12 +1,13 @@
 # Social templates
 
-The three recurring graphics RCA publishes, as source you can diff.
+The recurring graphics RCA publishes, as source you can diff.
 
 | Template | File | Used for |
 |---|---|---|
 | Placement Testimonial | `templates/placement-testimonial.js` | every placement announcement |
 | Festival Greeting | `templates/festival-greeting.js` | Ugadi, Deepavali, Sankranti, … |
 | Batch / Course Launch | `templates/batch-launch.js` | new batch and course posts |
+| Teaching Moment | `templates/teaching-moment.js` | mid-week "one thing this cohort learned" posts (#296) |
 
 ## Why these live here
 
@@ -63,6 +64,31 @@ Every field is optional — a missing salary collapses the badge rather than
 leaving an empty box, and long text wraps and truncates instead of running off
 the canvas. Drop the real photograph into the dashed `PHOTO` slot in any
 editor; the composition around it is already final.
+
+## Teaching moment
+
+```js
+import { render } from "./templates/teaching-moment.js";
+
+const svg = render({
+  concept: "Recursion is a function calling itself",
+  expansion: "It is how tree walks and JSON parsers work: solve the small case, then trust the call.",
+  cohort: "Java Full Stack Batch 12",
+  variant: "ig", // or "linkedin"
+});
+```
+
+Unlike the other templates it throws instead of truncating: a clipped
+definition is a wrong definition. The concept steps down from 72px to 56px to
+fit three lines and the expansion from 32px to 28px to fit two; past that,
+`render()` names the field to shorten. It also throws on the playbook's banned
+phrases (`BANNED` in the template), and for `variant: "linkedin"` on emoji or
+non-Latin script. Kanglish in Latin letters passes the check — that is still a
+review call.
+
+It has several samples, so the build writes `out/teaching-moment-<key>.svg`
+per sample instead of one `out/teaching-moment.svg`. The cohort names in the
+samples are placeholders.
 
 ## Canvas
 

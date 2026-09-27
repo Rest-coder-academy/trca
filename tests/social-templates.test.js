@@ -10,18 +10,19 @@ import { describe, it, expect } from "vitest";
 import { readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { SITE_URL, PHONE_PRIMARY, PHONE_SECONDARY } from "../design/social-templates/brand.js";
+import { SITE_URL, PHONE_PRIMARY, PHONE_SECONDARY, HANDLE } from "../design/social-templates/brand.js";
 
 const DIR = resolve(dirname(fileURLToPath(import.meta.url)), "../design/social-templates/templates");
 const files = readdirSync(DIR).filter((f) => f.endsWith(".js") && !f.startsWith("_"));
 const mods = await Promise.all(files.map(async (f) => import(join(DIR, f))));
 
 describe("the URL on every social graphic", () => {
-  it("finds all three recurring templates", () => {
+  it("finds every recurring template", () => {
     expect(mods.map((m) => m.meta.id).sort()).toEqual([
       "batch-launch",
       "festival-greeting",
       "placement-testimonial",
+      "teaching-moment",
     ]);
   });
 
@@ -81,5 +82,47 @@ describe("templates survive the data they will actually be given", () => {
     expect(three).toContain(">A</text>");
     expect(three).toContain(">C</text>");
     expect(three).not.toContain(">D</text>");
+  });
+});
+
+describe("teaching moment (#296)", () => {
+  const tm = mods.find((m) => m.meta.id === "teaching-moment");
+
+  it("renders every sample with the phone, handle and live URL", () => {
+    for (const data of Object.values(tm.samples)) {
+      const svg = tm.render(data);
+      expect(svg).toContain("TEACHING MOMENT");
+      expect(svg).toContain(SITE_URL);
+      expect(svg).toContain(PHONE_PRIMARY);
+      expect(svg).toContain(HANDLE);
+      expect(svg).toContain(data.cohort);
+    }
+  });
+
+  it("steps the headline down before giving up on a long concept", () => {
+    const short = tm.render({ concept: "Recursion" });
+    const long = tm.render({ concept: "A LEFT JOIN keeps every row on the left table, matched or not, always" });
+    expect(short).toContain('font-size="72"');
+    expect(long).not.toContain('font-size="72"');
+  });
+
+  it("refuses a concept or expansion too long to fit, rather than truncating it", () => {
+    expect(() => tm.render({ concept: "word ".repeat(40) })).toThrow(/concept needs/);
+    expect(() => tm.render({ expansion: "word ".repeat(60) })).toThrow(/expansion needs/);
+  });
+
+  it.each(["passionate", "Driven", "thought leader", "Delighted to announce", "excited to share", "unpack", "DEEP   DIVE"])(
+    "rejects the banned phrase %s",
+    (phrase) => {
+      expect(() => tm.render({ expansion: `We ${phrase} it` })).toThrow(/banned phrase/);
+    },
+  );
+
+  it("keeps LinkedIn English-only and emoji-free, and lets IG have both", () => {
+    expect(() => tm.render({ variant: "linkedin", concept: "Recursion \u{1F680}" })).toThrow(/emoji/);
+    expect(() => tm.render({ variant: "linkedin", concept: "ಕನ್ನಡ recursion" })).toThrow(/non-Latin/);
+    expect(() => tm.render({ variant: "linkedin", concept: "Café — “quoted”" })).not.toThrow();
+    expect(() => tm.render({ variant: "ig", concept: "Recursion \u{1F680} maadi" })).not.toThrow();
+    expect(() => tm.render({ variant: "x" })).toThrow(/variant/);
   });
 });

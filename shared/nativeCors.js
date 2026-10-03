@@ -41,14 +41,14 @@ export function nativeCorsHeaders(request) {
 }
 
 /** Preflight response for the portal routes the app calls. */
-export function nativeCorsPreflight(request) {
+export function nativeCorsPreflight(request, methods = "GET, POST, OPTIONS") {
   const headers = nativeCorsHeaders(request);
   if (!headers["access-control-allow-origin"]) return new Response(null, { status: 403 });
   return new Response(null, {
     status: 204,
     headers: {
       ...headers,
-      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "access-control-allow-methods": methods,
       "access-control-allow-headers": "content-type",
       "access-control-max-age": "86400",
     },
